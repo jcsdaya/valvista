@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <title>Form | ValVista</title>
+    <link rel="stylesheet" href="{% static 'ratingform.css' %}">
+</head>
+<nav>
+    <div class="logo">
+        <img class="logo"src ="..\media\media\valvista logo.png" alt="logo">
+    </div>
+    
+</nav>
+<body>
+    <div class="background">
+        <div class="comment-section">
+            <h2>Leave a Comment</h2>
+            <form id="comment-form">
+                <input type="text" id="username" name="username" placeholder="Your Name" maxlength="50" required>
+                <div class="rating">
+                    <span class="star" data-value="1">&#9733;</span>
+                    <span class="star" data-value="2">&#9733;</span>
+                    <span class="star" data-value="3">&#9733;</span>
+                    <span class="star" data-value="4">&#9733;</span>
+                    <span class="star" data-value="5">&#9733;</span>
+                </div>
+                <textarea id="comment" name="comment" placeholder="Write your comment here..." maxlength="200" required></textarea>
+                <div class="buttons">
+                    <button type="button" class="btn btn-danger">Submit</button>
+                    <button type="button" id="clear">Clear</button>
+                </div>
+            </form>
+            <div id="comments-container"></div>
+            <div id="submission-message" class="hidden">Form was submitted successfully!</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.star');
+            const commentForm = document.getElementById('comment-form');
+            const clearButton = document.getElementById('clear');
+            const commentBox = document.getElementById('comment');
+            const usernameBox = document.getElementById('username');
+            const charCounter = document.getElementById('char-counter');
+            const submissionMessage = document.getElementById('submission-message');
+            let selectedRating = 0;
+
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = this.getAttribute('data-value');
+                    highlightStars(selectedRating);
+                });
+
+                star.addEventListener('mouseover', function() {
+                    highlightStars(this.getAttribute('data-value'));
+                });
+
+                star.addEventListener('mouseout', function() {
+                    highlightStars(selectedRating);
+                });
+            });
+
+            function highlightStars(rating) {
+                stars.forEach(star => {
+                    if (star.getAttribute('data-value') <= rating) {
+                        star.classList.add('selected');
+                    } else {
+                        star.classList.remove('selected');
+                    }
+                });
+            }
+
+            commentForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const commentText = commentBox.value.trim();
+                const username = usernameBox.value.trim();
+                if (username && commentText && selectedRating > 0) {
+                    // Form data processing can be handled here (e.g., send to server)
+                    console.log('Form submitted with data:', {
+                        username,
+                        commentText,
+                        selectedRating
+                    });
+                    submissionMessage.classList.remove('hidden');
+                    commentForm.reset();
+                    charCounter.textContent = '200 characters remaining';
+                    stars.forEach(s => s.classList.remove('selected'));
+                    selectedRating = 0;
+                    setTimeout(() => {
+                        submissionMessage.classList.add('hidden');
+                    }, 3000); // Hide the message after 3 seconds
+                } else {
+                    alert('Please provide a name, rating, and comment.');
+                }
+            });
+
+            clearButton.addEventListener('click', function() {
+                commentForm.reset();
+                charCounter.textContent = '200 characters remaining';
+                stars.forEach(s => s.classList.remove('selected'));
+                selectedRating = 0;
+            });
+
+            commentBox.addEventListener('input', function() {
+                const remaining = 200 - commentBox.value.length;
+                charCounter.textContent = $;{remaining}  remaining;
+            });
+        });
+    </script>
+</body>
+</html>

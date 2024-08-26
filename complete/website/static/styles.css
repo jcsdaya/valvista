@@ -1,0 +1,133 @@
+/* Header styles */
+header {
+    border-style: solid;
+    border-width: 2px;
+    border-color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 20px;
+    background-color: #c80000;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    cursor: pointer;
+    max-height: 100px; /* Adjusted max-height */
+    margin-left: 300px; /* Adjusted margin */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 350px; /* Adjusted margin */
+}
+
+.nav-links li {
+    padding: 0 20px;
+}
+
+.nav-links li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+/* Hover effect for links */
+.nav-links li a:hover {
+    color: black;
+}
+
+/* Centering the search bar */
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px; /* Adjusted height to accommodate header */
+    margin-top: 250px; /* Adjusted margin to push content below the fixed header */
+    position: relative; /* Changed position to relative */
+}
+
+.search-bar {
+    margin-right: 20px;
+    margin-top: -550px;
+}
+
+.search-bar input[type="text"] {
+    padding: 15px;
+    width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-bar button {
+    margin-top: -5px;
+    padding: 15px 25px;
+    background-color: #d80404;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+/* hover search btn */
+.search-bar button:hover {
+    background-color: #ffffff;
+    color: #d80404;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #d80404;
+}
+
+.btn {
+    transition: color 0.3s ease;
+}
+
+
+/* ========================================================================= */
+.checked {
+    color: orange;
+  }
+
+
+h5, h6 {
+    color: black;
+    margin-top: 10px; /* Add some top margin to headings */
+}
+
+/* Carousel container */
+#carousel {
+    width: 100%; /* Adjust the width as needed */
+    margin: auto; /* Center the carousel horizontally */
+    margin-top: -1650px;
+  }
+  
+  /* Adjust the size of carousel images */
+  .carousel-item img {
+    width: 400px; /* Make images fill the container */
+    height: 500px; /* Maintain aspect ratio */
+
+  }
+  
+  /* Customize carousel control buttons */
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: auto; /* Adjust width as needed */
+    color: black; /* Change color as needed */
+    background-color: rgba(255, 255, 255, 0.589); /* Add background color */
+    transition: background-color 0.3s ease; /* Add transition effect */
+  }
+  
+  /* Change color on hover */
+  .carousel-control-prev:hover,
+  .carousel-control-next:hover {
+    background-color: rgba(255, 255, 255, 0.63); /* Darken background on hover */
+  }
+  

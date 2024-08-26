@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    {% load static %}
+    <title>Home | ValVista</title>
+	<link rel="stylesheet" href="{% static 'viewmoros.css' %}">
+</head>
+
+<nav>
+    <div class="logo">
+        <img class="logo"src ="\media\media\valvista logo.png" alt="logo">
+    </div>
+
+    <ul class="nav-links">
+       
+        <li><a href="{%url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
+
+        {% if user.is_authenticated%}
+        <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i>Favorites</a></li>
+        {%else%}
+        <li><a ></i></a></li>
+
+        {%endif%}
+        {% if user.is_authenticated%}
+        <li><a href="{%url 'itinerary' %}"><i class="fa-solid fa-clipboard-list"></i> Itinerary Creation</a></li>
+        {%else%}
+        <li><a ></i></a></li>
+   
+        {%endif%}
+        {% if user.is_authenticated%}
+        <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
+        <li><a><i></i> Welcome {{request.user}}!</a></li>
+        
+        {%else%}
+        <li><a href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+        {%endif%}
+        
+    </ul>
+    
+</nav>
+	<body>
+        <br><br><br><br><br><br><br><br>
+<div class="img-container">
+   
+    
+    <div class="text">
+        <div class="main"><img style= "height: 200px;width: 300px;object-fit: cover;" src="{{business.thumbnail.url}}" alt="Pio Valenzuela"></div>
+        <h3 class="h3">{{business.name}}</h3>
+        <p>{{business.location}}</p>
+        <p>{{business.category}}</p>
+        <p>⭐9.5 Excellent (100 review)</p>
+    </div>
+    
+    <div class="container">
+        <div class="tab-box">
+            <button class="tab-btn active">Description</button>
+            <button class="tab-btn">Photos</button>
+            <button class="tab-btn">Reviews</button>
+            <button class="tab-btn">Location</button>
+            <button class="tab-btn">Announcement</button>
+            <div class="line"></div>
+        </div>
+        <div class="content-box">
+            <div class="content active">
+                <h2>Description</h2>
+                <p>
+                    {{business.description}}
+                </p>
+            </div>
+
+            <div class="content">
+                <h2>Photos</h2>
+                <div class="full-img" id="fullImgBox">
+                    <img src="" id="fullImg">
+                    <span onclick="closeFullImg()">X</span>
+                </div>
+                <div class="img-gallery">
+                    <img src="{{business.photo.url}}" onclick="openFullImg(this.src)">
+                    <img src="{{business.photos.url}}" onclick="openFullImg(this.src)">
+                </div>
+            </div>
+
+            <div class="content">
+                <h2>Reviews</h2>
+                <div class="container__right">
+                    <div class="card">
+                        <div class="card__content">
+                            <span><i class="ri-double-quotes-l"></i></span>
+                            <div class="card__details">
+                                <p>⭐⭐⭐⭐</p>
+                                <p>There's a lot I learned here. About the history of Valenzuela and the life story and achievements of Dr. Pio</p>
+                                <h4>- Timothy Ting</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card__content">
+                            <span><i class="ri-double-quotes-l"></i></span>
+                            <div class="card__details">
+                                <p>⭐⭐⭐⭐</p>
+                                <p>This place is so beautiful, there's a lot of things you can learn here</p>
+                                <h4>- Juan Andaya</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card__content">
+                            <span><i class="ri-double-quotes-l"></i></span>
+                            <div class="card__details">
+                                <p>⭐⭐⭐⭐</p>
+                                <p>I absolutely loved going here. This is the best place so far in Valenzuela City</p>
+                                <h4>- Haries Cos</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <h2>Location</h2>
+                <iframe src="{{business.map}}"  width="500" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+            <div class="content">
+                <h2>Announcement</h2>
+                <p>
+                {{business.announcement}}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const tabs = document.querySelectorAll('.tab-btn');
+    const all_content = document.querySelectorAll('.content');
+
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', (e) => {
+            tabs.forEach(tab => { tab.classList.remove('activate') })
+            tab.classList.add('activate');
+
+            var line = document.querySelector('.line');
+            line.style.width = e.target.offsetWidth + "px";
+            line.style.left = e.target.offsetLeft + "px";
+
+            all_content.forEach(content => { content.classList.remove('active') });
+            all_content[index].classList.add('active');
+        })
+    })
+
+    var fullImgBox = document.getElementById("fullImgBox")
+    var fullImg = document.getElementById("fullImg")
+
+    function openFullImg(pic) {
+        fullImgBox.style.display = "flex";
+        fullImg.src = pic;
+    }
+
+    function closeFullImg() {
+        fullImgBox.style.display = "none";
+    }
+
+    fullImgBox.addEventListener('click', function(event) {
+    if (event.target === fullImgBox) {
+        closeFullImg();
+    }
+});
+</script>
+</body>
+</html>

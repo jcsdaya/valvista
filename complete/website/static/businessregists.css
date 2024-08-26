@@ -1,0 +1,135 @@
+body {
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    border-style: solid;
+    border-width: 2px;
+    border-color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 20px;
+    background-color: #c80000;
+    position: fixed;
+    width: 100%;
+    height: 116px;
+    top: 0px;
+    z-index: 1000;
+    border-bottom: 5px solid black;
+}
+
+.logo {
+    cursor: pointer;
+    max-height: 100px; /* Adjusted max-height */
+    margin-left: 300px; /* Adjusted margin */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 350px; /* Adjusted margin */
+}
+
+.nav-links li {
+    padding: 0 20px;
+}
+
+.nav-links li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+/* Hover effect for links */
+.nav-links li a:hover {
+    color: black;
+}
+
+/* Register form */
+.register-photo {
+    background-image: url('https://thesmartlocal.ph/wp-content/uploads/2022/02/Tagalag-Fishing-Village-The-Fishermans-Point.jpeg');
+    background-size: cover;
+    padding: 140px 0;
+}
+
+.register-photo .form-container {
+    max-width: 600px;
+    width: 100%;
+    margin: auto;
+    background: linear-gradient(to right, #1e90ff, #e60026);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Updated box-shadow */
+}
+
+
+.register-photo form {
+    background-color: rgba(51, 3, 180, 0.363); /* Adjust the last value (0.8) to change the opacity */
+    background-image: url('https://static.vecteezy.com/system/resources/thumbnails/022/576/369/small_2x/image-of-wooden-table-in-front-of-abstract-blurred-background-of-resturant-lights-wood-table-top-on-blur-of-lighting-in-night-cafe-restaurant-background-selective-focus-generative-ai-photo.jpg');
+    background-size: cover;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+
+@media (max-width: 991px) {
+    .register-photo form {
+        padding: 20px;
+    }
+}
+
+.register-photo form h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.register-photo form .form-group {
+    margin-bottom: 20px;
+}
+
+.register-photo form .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    transition: border-color 0.3s ease, transform 0.3s ease; /* Added transform transition */
+}
+
+.register-photo form .form-control:focus {
+    border-color: black;
+    transform: translateY(-3px); /* Added translateY transformation */
+}
+
+.register-photo form label {
+    color: white;
+}
+
+.register-photo form .btn-primary {
+    background: linear-gradient(to right, #1e90ff, #e60026);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Updated transition */
+}
+
+.register-photo form .btn-primary:hover {
+    background-color: #ff6f61;
+    transform: scale(1.1); /* Added scale transformation on hover */
+}
+
+.register-photo form .already {
+    text-align: center;
+    font-size: 12px;
+    color: white;
+    margin-top: 15px;
+}
