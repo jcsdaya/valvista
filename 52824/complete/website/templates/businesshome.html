@@ -38,6 +38,7 @@
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Valenzuela_Seal.svg/768px-Valenzuela_Seal.svg.png" alt="Header Image">
     <h1>Business Profile</h1>
 
+<div class="row">
 <div class="col-6">
 <div  class="content">
                 <h2>{{business.name}} Reviews<h5>⭐4.8 Rating (3 Reviews)</h5></h2>
@@ -74,10 +75,17 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div  class="col-6">
+            <h3> Post Announcement or Promo</h3>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.announcement}}<br>
+                <p><strong> Promo Banner/Picture</strong></p>{{form.promo}}
+                <button type="submit" class="btn btn-danger">Submit</button>
+            </form>
+        </div>
+</div>
 
-</div>
-</div>
-</div>
-</div>
 </body>
 </html>

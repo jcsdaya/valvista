@@ -2,15 +2,33 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User,Group
+import os
 
+
+class Media(models.Model):
+    file = models.FileField(upload_to="media")
+
+@receiver(models.signals.pre_save, sender=Media)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+    """
+    Deletes old file from filesystem
+    when corresponding `MediaFile` object is updated
+    with new file.
+    """
+    if not instance.pk:
+        return False
+
+    try:
+        old_file = Media.objects.get(pk=instance.pk).file
+    except Media.DoesNotExist:
+        return False
+
+    new_file = instance.file
+    if not old_file == new_file:
+        if os.path.isfile(old_file.path):
+            os.remove(old_file.path)
 
 class Business(models.Model):
-        CATEGORY_CHOICES = [
-        ('Leisure', 'Leisure'),
-        ('Educational', 'Educational'),
-        ('Historical', 'Historical'),
-        ('Diner', 'Diner'),
-        ]
         COST_CHOICES = [
         ('0','0'),
         ('1-200','1-200'),
@@ -28,23 +46,14 @@ class Business(models.Model):
         time = models.CharField (max_length=20,blank=True,null=True)
         timeclose = models.CharField (max_length=20,blank=True,null=True)
         cost = models.CharField(max_length=100, blank=True,null=True,choices= COST_CHOICES)
-        photo = models.ImageField(upload_to="media",blank=True,null=True)
-        photos = models.ImageField(upload_to="media", blank=True,null=True)
+        photos = models.ManyToManyField('Media',related_name='businesses',blank=True)
         thumbnail = models.ImageField(upload_to="media",blank=True,null=True)
         promo = models.ImageField(upload_to="media", blank=True,null=True)
         announcement = models.CharField(max_length=5000, blank=True,null=True)
         archived = models.BooleanField(default=False)
         approval = models.BooleanField(default= False,blank=True,null=True)
         map = models.CharField(max_length=2000,blank=True,null=True)
-        created = models.BooleanField(default=False)
-
-        def save(self, *args, **kwargs):
-        # Check if all required fields are filled
-                if self.location and self.photo and self.description and self.categories and self.time and self.timeclose and self.cost and self.photo:  # Add other fields as needed
-                         self.created = True
-                else:
-                        self.created = False
-                super().save(*args, **kwargs)
+        
 
         def __str__(self):
                 return self.username
@@ -64,5 +73,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+    
 
 

@@ -1,0 +1,277 @@
+
+*{
+    font-family: sans-serif;
+  }
+
+  .custom-background{
+    background-image: url(https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/bdcb3b69213341.5b791e43d1b10.jpg);
+    background-repeat: repeat;
+    background-position: center;
+    background-size: contain;
+    justify-content: center;
+    align-items: flex-start;
+    height: 400vh;
+    position: relative;
+
+}
+
+
+nav{
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #c80000;
+    position: fixed;
+    width: 100%;
+    height: 150px;
+    top: 0;
+    left: 0;
+    z-index: 5000;
+    border-bottom: 5px solid black;
+  }
+  
+  .logo{
+    cursor: pointer;
+    padding: 10px;
+    max-height: 350px;
+    max-width: 400px;
+}
+  
+  nav ul{
+      display: flex;
+      margin-right: 200px;
+      margin-top: 10px;
+      gap: 20px;
+      align-items: center;
+      z-index: 1; /* Ensure the menuList is behind the search bar */
+  }
+  
+  nav ul li{
+      list-style-type: none;
+  }
+  
+  nav ul li a{
+      text-decoration: none;
+      color: #fff;
+      font-size: 20px;
+      transition: color 0.3s ease;
+  }
+  
+  nav ul li a:hover{
+      text-decoration: none;
+      color: black;
+  }
+  
+  .menu-icon{
+      display: none;
+  }
+  
+  .menu-icon i{
+      color: #fff;
+      font-size: 30px;
+  }
+  
+  @media (max-width:600px) {
+      nav ul{
+          position: absolute;
+          top: 125px;
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          text-align: center;
+          background: #d80404;
+          gap: 0;
+          overflow: hidden;
+      }
+  
+  
+      nav ul li{
+          padding: 20px;
+          padding-top: 0;
+      }
+      .menu-icon{
+          display: block;
+      }
+      #menuList{
+          transition: all 0.5s;
+      }
+  
+    }h1 {
+	 	  
+        color:#333;
+        font-weight:700;
+        margin-top:50px;	 
+        text-align:center;
+        text-transform:uppercase;
+        letter-spacing:4px;
+        line-height:23px;
+    }
+    
+    /* --- Start progress bar --- */
+    
+    .process-wrapper {
+        position: fixed; /* Fixes the position of the progress bar */
+        left: 0; /* Aligns it to the left side of the screen */
+        top: 59%; /* Centers it vertically on the screen */
+        transform: translateY(-50%); /* Adjusts for perfect centering */
+        width: 100px; /* Adjust as needed to fit your design */
+        height: 800px;
+        background-color: #f8f9fa; /* Optional: adds a background color */
+        padding: 20px;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, .1); /* Optional: adds a shadow effect */
+        border-radius: 10px;
+        z-index: 9999; /* Ensures it stays on top of other elements */
+    }
+    
+    #progress-bar-container {
+        position: relative;
+        width: 100%; /* Full width of the container */
+        height: auto; /* Auto height to fit content */
+        margin: 0; /* No margin needed */
+    }
+    
+    #progress-bar-container ul {
+        padding: 0;
+        margin: 0;
+        z-index: 9999;
+        position: relative;
+        width: 100%; /* Full width of the container */
+        list-style: none;
+    }
+    
+    #progress-bar-container li {
+        list-style: none;
+        text-align: left;
+        color: #aaa;
+        text-transform: uppercase;
+        font-size: 14px;
+        cursor: pointer;
+        font-weight: 700;
+        transition: all ease 0.2s;
+        height: auto;
+        position: relative;
+        padding: 45px 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    #progress-bar-container li:before {
+        content: " ";
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: solid 2px #aaa;
+        margin-right: 10px; /* Space between bullet and text */
+        transition: all ease 0.3s;
+    }
+    
+    #progress-bar-container li.active:before, #progress-bar-container li:hover:before {
+        border: solid 2px #fff;
+        background-color: #d80404;
+    }
+    
+    #progress-bar-container li.active, #progress-bar-container li:hover {
+        color: #444;
+    }
+    
+    #progress-bar-container #line {
+        width: 4px; /* Narrow vertical line */
+        height: 100%; /* Full height of the container */
+        background: #eee;
+        position: absolute;
+        left: 10px; /* Aligns with the bullet points */
+        top: 0;
+        z-index: 1;
+        border-radius: 50px;
+        transition: all ease 0.9s;
+    }
+    
+    #progress-bar-container #line-progress {
+        width: 100%; /* Full width to match the vertical line */
+        height: 0; /* Initially 0 height */
+        background-color: red;
+        position: absolute;
+        z-index: 2;
+        left: 0;
+        top: 0;
+        border-radius: 50px;
+        transition: height 0.3s ease-in-out; /* Smooth transition effect */
+    }
+    
+    #progress-content-section {
+        margin-left: 130px; /* Adjusts the content section to leave space for the fixed progress bar */
+        padding: 20px;
+    }
+
+    
+    #progress-content-section .section-content.active {
+        display: block;
+        margin-bottom: 100px;
+    }
+    
+
+    #progress-content-section .section-content img {
+      max-width: 100%;
+      height: auto; /* This property ensures that the image maintains its aspect ratio */
+    }
+    
+    .selection-wrapper{
+        display: inline;
+        margin-top: 1000px;
+        margin-left:  350px;
+        margin-bottom: 30px;
+    }
+
+
+    .card-body{
+        min-height: 100px;
+        max-height: 200px;
+    }
+
+    .modal-content{
+        display: flex;
+        padding: 0 5px;
+        width: 1000px;
+        justify-content:center;
+    }
+
+    .modal-dialog{
+        display: flex;
+        justify-content:center;
+        align-items: center ;
+    }
+
+  
+    #line-progress {
+        height: 5px; /* Adjust height as needed */
+        background-color: red; /* Default color of progress bar */
+        width: 0; /* Initially, the width will be 0 */
+        transition: width 0.3s ease-in-out; /* Smooth transition effect */
+    }
+
+    .container{
+        width: 1800px;
+        background-color: white;
+        padding: 30px;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, .1);
+        border-radius: 20px;
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+#myTextArea1,#myTextArea2,#myTextArea3,#myTextArea4,#myTextArea{
+    padding: 20;
+    border-radius: 10px;
+}
+
+.inline-input {
+    display: inline-block;
+    margin-right: 10px; /* Space between the input fields */
+}
+
+.inline-input input {
+    margin-left: 5px; /* Space between the label and input */
+}
+     

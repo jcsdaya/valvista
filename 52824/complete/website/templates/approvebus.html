@@ -44,6 +44,8 @@
         <h1> ValVista Approve Place</h1>
         <p> Are you sure you want to Approve {{business}}</p>
 
+        
+
         <form method="post" action="{% url 'approvebus' business.id %} ">
             {% csrf_token %}
                 <input type="submit" name="confirm">

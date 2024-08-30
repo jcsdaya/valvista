@@ -3,14 +3,35 @@ from .models import Place
 from .models import NormalUser,Rating
 from business.models import Business
 from django import forms
-from .models import Place
+from .models import Place,Category
+
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
+class MultipleFileField(forms.FileField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("widget", MultipleFileInput())
+        kwargs.setdefault("required", False)  # Allow empty uploads
+        super().__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+        if isinstance(data, (list, tuple)):
+            result = [super().clean(d, initial) for d in data if d]
+        else:
+            result = [super().clean(data, initial)]
+        return result
 
 class PlaceForm(forms.ModelForm):
+    categories = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=True
+    )
+    photo = MultipleFileField()
     class Meta:
         model = Place
         fields = [
-            'name', 'location', 'description', 'category', 'category2',
-            'category3', 'time', 'timeclose', 'cost', 'photo', 'photos',
+            'name', 'location', 'description', 'categories', 'time', 'timeclose', 'cost', 'photo',
             'thumbnail', 'map','promos','announcement'
         ]
         widgets = {
@@ -33,21 +54,6 @@ class PlaceForm(forms.ModelForm):
                 'name': 'placedescription',
                 'rows': 3
             }),
-            'category': forms.Select(attrs={
-                'class': 'form-control',
-                'id': 'placecategory',
-                'name': 'placecategory'
-            }),
-            'category2': forms.Select(attrs={
-                'class': 'form-control',
-                'id': 'placecategory2',
-                'name': 'placecategory2'
-            }),
-            'category3': forms.Select(attrs={
-                'class': 'form-control',
-                'id': 'placecategory3',
-                'name': 'placecategory3'
-            }),
             'time': forms.TimeInput(attrs={
                 'class': 'form-control',
                 'id': 'placetime',
@@ -65,16 +71,6 @@ class PlaceForm(forms.ModelForm):
                 'id': 'placecost',
                 'name': 'placecost',
                 'placeholder': 'Enter cost'
-            }),
-            'photo': forms.ClearableFileInput(attrs={
-                'class': 'custom-file-input',
-                'id': 'placephoto',
-                'name': 'placephoto'
-            }),
-            'photos': forms.ClearableFileInput(attrs={
-                'class': 'custom-file-input',
-                'id': 'placephotos',
-                'name': 'placephotos'
             }),
             'thumbnail': forms.ClearableFileInput(attrs={
                 'class': 'custom-file-input',
@@ -109,11 +105,6 @@ class SignupForm(forms.ModelForm):
         fields = ['username', 'email', 'password']
 
 
-class BusinessRegForm(forms.ModelForm):
-    class Meta:
-        model = Business
-        fields = ['username','password','email','refid']
-
 class RatingForm(forms.ModelForm):
     class Meta:
         model = Rating
@@ -122,4 +113,45 @@ class RatingForm(forms.ModelForm):
             'score': forms.NumberInput(attrs={'min': 1, 'max': 5}),
         }
 
+class PromoForm(forms.ModelForm):
+ 
+ class Meta:
+        model = Place
+        fields = [
+        'promos','announcement'
+        ]
+        widgets = {
+ 'announcement': forms.Textarea(attrs={
+                'class': 'form-control',
+                'id': 'placeannouncement',
+                'name': 'placeannouncement',
+                'rows': 8,
+                'columns':10
+            }),
+            'promos': forms.ClearableFileInput(attrs={
+                'class': 'custom-file-input',
+                'id': 'placephoto',
+                'name': 'placephoto'
+            }),
+        }
 
+class BusPromoForm(forms.ModelForm):
+ 
+ class Meta:
+        model = Business
+        fields = [
+        'promo','announcement'
+        ]
+        widgets = {
+ 'announcement': forms.Textarea(attrs={
+                'class': 'form-control',
+                'id': 'businessannouncement',
+                'name': 'placeannouncement',
+                'rows': 8,
+            }),
+            'promo': forms.ClearableFileInput(attrs={
+                'class': 'custom-file-input',
+                'id': 'placephoto',
+                'name': 'placephoto'
+            }),
+        }

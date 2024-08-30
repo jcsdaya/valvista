@@ -1,0 +1,279 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* General styles */
+body {
+    background-color: #f4f4f9;
+    font-family: 'Arial', sans-serif;
+    margin: auto;
+    overflow-y: auto;
+}
+
+/* Header styles */
+nav{
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #c80000;
+    position: fixed;
+    width: 100%;
+    height: 150px;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    border-bottom: 5px solid black;
+  }
+  
+  .logo{
+    cursor: pointer;
+    padding: 10px;
+    max-height: 350px;
+    max-width: 400px;
+}
+  
+  nav ul{
+      display: flex;
+      margin-right: 200px;
+      margin-top: 10px;
+      gap: 20px;
+      align-items: center;
+      z-index: 1; /* Ensure the menuList is behind the search bar */
+  }
+  
+  nav ul li{
+      list-style-type: none;
+      margin-left: 0px;
+  }
+  
+  nav ul li a{
+      text-decoration: none;
+      color: #fff;
+      font-size: 20px;
+      transition: color 0.3s ease;
+  }
+  
+  nav ul li a:hover{
+      text-decoration: none;
+      color: black;
+  }
+  
+  .menu-icon{
+      display: none;
+  }
+  
+  .menu-icon i{
+      color: #fff;
+      font-size: 30px;
+  }
+  
+  @media (max-width:600px) {
+      nav ul{
+          position: absolute;
+          top: 125px;
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          text-align: center;
+          background: #d80404;
+          gap: 0;
+          overflow: hidden;
+      }
+  
+  
+      nav ul li{
+          padding: 20px;
+          padding-top: 0;
+      }
+      .menu-icon{
+          display: block;
+      }
+      #menuList{
+          transition: all 0.5s;
+      }
+  }
+/* Right box */
+.right-box {
+    margin: 100px 20px 20px 20px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.header-text {
+    flex: 1;
+}
+.right-box {
+    display: flex;
+    align-items: center; /* Vertically center the items */
+}
+
+.header-text img,
+.header-text h1 {
+    display: inline-block; /* Display elements inline */
+    vertical-align: middle; /* Align elements vertically */
+    margin: 0; /* Remove default margin */
+}
+
+.image-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; /* Add this line */
+}
+
+.image-container img {
+    max-width: 100%;
+    height: 50%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-text h2 {
+    color: #343a40;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.header-text p {
+    color: #6c757d;
+}
+
+.header-text img {
+    width: 100px; /* Adjust size as needed */
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px 10px 10px 15px;
+    margin: 5px 0;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    background-color: #fff;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-size: 16px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #921919;
+    box-shadow: 0 0 8px rgba(23, 162, 184, 0.6);
+    outline: none;
+}
+
+/* Floating label effect */
+.floating-label {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.floating-label input {
+    padding-top: 20px;
+}
+
+.floating-label label {
+    position: absolute;
+    top: 0;;
+    left: 15px;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #921919;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    background-color: white;
+    padding: 0 5px;
+}
+
+.floating-label input:focus + label,
+.floating-label input:not(:placeholder-shown) + label {
+   
+    left: 15px;
+  
+  
+}
+
+
+
+.floating-label input:focus,
+.floating-label input:not(:placeholder-shown) {
+    padding-top: 20px;
+}
+
+/* Custom file input */
+
+
+.custom-file-label {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.custom-file-label:hover {
+    background-color: #dee2e6;
+}
+
+.custom-file-label:after {
+    display: block;
+    margin-left: 10px;
+    color: #6c757d;
+}
+
+/* Submit button */
+.subbut button {
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.subbut button:hover {
+
+    transform: scale(1.05);
+}
+
+#placecategory,#placecategory2,#placecategory3 {
+
+    width: 50%;
+    margin-top: -20px;
+    
+}
+
+
+#placetime,#placetimeclose,#placecost{
+
+    width: 100%;
+    
+}
+
+#placetime,#placetimeclose{
+
+    height:20%
+    
+}
+
+#placeusername, #placepass,#placeemail,#placeid{
+    width: 200%;
+}

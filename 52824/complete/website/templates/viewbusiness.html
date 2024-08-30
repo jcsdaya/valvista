@@ -53,9 +53,13 @@
     <div class="text">
         <div class="main"><img style= "height: 200px;width: 300px;object-fit: cover;" src="{{business.thumbnail.url}}" alt="Pio Valenzuela"></div>
         <h3 class="h3">{{business.name}}</h3>
-        <p>{{business.location}}</p>
-        <p>{{business.category}}</p>
-        <p>⭐9.5 Excellent (100 review)</p>
+        <p><strong>Location: </strong> {{business.location}}</p>
+        <p><strong>Category:</strong>  
+            {% for category in business.categories.all %}
+                {{ category.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+        <p><strong>Ratings:</strong> ⭐9.5 Excellent (100 review)</p>
     </div>
     
     <div class="container">
@@ -82,8 +86,9 @@
                     <span onclick="closeFullImg()">X</span>
                 </div>
                 <div class="img-gallery">
-                    <img src="{{business.photo.url}}" onclick="openFullImg(this.src)">
-                    <img src="{{business.photos.url}}" onclick="openFullImg(this.src)">
+                {% for media in business.photo.all %}
+                <img src="{{media.file.url}}" onclick="openFullImg(this.src)">
+                {% endfor %}
                 </div>
             </div>
 

@@ -1,0 +1,200 @@
+html, body {
+    height: 100%; /* Full viewport height */
+    margin: 0; /* Remove default margin */
+    overflow: hidden; /* Prevent scrolling */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+}
+
+#map {
+    height: 100vh; /* Full viewport height */
+    width: 100vw;  /* Full viewport width */
+    position: relative; /* Ensure map stays visible under positioned elements */
+    z-index: 0; /* Keep the map behind controls and pinned locations */
+}
+
+#controls {
+    position: absolute;
+    bottom: 10px; /* Position from the bottom */
+    right: 10px;  /* Position from the right */
+    background: rgba(255, 255, 255, 0.95); /* Slightly more opaque white background */
+    padding: 20px;
+    border-radius: 12px; /* Slightly larger border radius */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); /* More pronounced shadow */
+    z-index: 1000; /* Ensure controls are above the map */
+    width: 500px; /* Fixed width for the controls box */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+    color: #333; /* Darker text color for better readability */
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    gap: 10px; /* Spacing between elements */
+}
+
+#search-bar {
+    display: flex; /* Flexbox for layout */
+    align-items: center; /* Center items vertically */
+    background: #f8f9fa; /* Light background for the search bar */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    padding: 8px 12px; /* Padding inside the search bar */
+}
+
+#search-bar input[type="text"] {
+    border: none;
+    outline: none;
+    flex: 1; /* Allow input to take available space */
+    padding: 8px;
+    border-radius: 4px; /* Rounded corners for the input */
+    font-size: 16px;
+    color: #333;
+    background: #fff; /* White background for the input */
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Inner shadow for the input */
+}
+
+#search-bar button {
+    background-color: #ff6f61; /* Coral background */
+    border: none;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 8px; /* Space between input and button */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#search-bar button:hover {
+    background-color: #e65b54; /* Darker coral on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+#search-bar button:active {
+    background-color: #d9534f; /* Even darker coral on click */
+    transform: translateY(0); /* Reset lift on click */
+}
+
+#update-location,
+#clear-route {
+    background-color: #ff6f61; /* Coral background */
+    border: none;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#update-location:hover,
+#clear-route:hover {
+    background-color: #e65b54; /* Darker coral on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+#update-location:active,
+#clear-route:active {
+    background-color: #d9534f; /* Even darker coral on click */
+    transform: translateY(0); /* Reset lift on click */
+}
+
+#pinned-locations {
+    position: absolute;
+    top: 150px; /* Adjusted to ensure it’s above the controls */
+    left: 10px;
+    background: rgba(255, 255, 255, 0.9); /* Matching the controls' background */
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Ensure it appears above the map */
+    width: 250px; /* Fixed width for the pinned locations box */
+    max-height: 50vh; /* Prevent overflow with a scroll */
+    overflow-y: auto; /* Enable scrolling if content exceeds height */
+    display: none; /* Initially hidden, toggle visibility with JS */
+}
+
+#pinned-locations h3 {
+    margin-top: 0;
+    color: #ff6f61; /* Coral color matching the controls */
+    font-size: 18px;
+    text-align: center;
+}
+
+#pinned-locations-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#pinned-locations-list li {
+    background-color: #ff6f61; /* Coral background */
+    color: #fff;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    text-align: center;
+}
+
+#pinned-locations-list li:hover {
+    background-color: #e65b54; /* Darker coral on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+#pinned-locations-list li:active {
+    transform: translateY(0); /* Reset lift on click */
+}
+
+#tutorial {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    color: #333;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none; /* Initially hidden */
+    z-index: 2000;
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+}
+
+#pinned-locations-icon {
+    position: absolute;
+    bottom: 20px;
+    left: 10px;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+#pinned-locations-icon img {
+    width: 150px; /* Adjust the size as needed */
+    height: 150px;
+    animation: bounce 2s infinite; /* Apply bounce animation */
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5)); /* Edge shadow */
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5)); /* Shadow at all points */
+    }
+    40% {
+        transform: translateY(-30px);
+        filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.7)); /* Shadow at peak */
+    }
+    60% {
+        transform: translateY(-15px);
+        filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.7)); /* Shadow during bounce */
+    }
+}
+
+
+.leaflet-top leaflet-right {
+
+    margin-top: 50px;
+}
+
+

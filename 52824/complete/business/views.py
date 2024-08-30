@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from .forms import BusinessForm
-from .models import Business
+from .models import Business,Media
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
@@ -30,20 +30,21 @@ def logout_business(request):
      
 
 
-@login_required
 def register_business(request):
-    if not request.user.groups.filter(name='Business').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+    form = BusinessForm()
     if request.POST:
-        form = BusinessForm(request.POST, request.FILES)
+        form = BusinessForm(request.POST,request.FILES)
         if form.is_valid():
-            business_details = form.save(commit=False)
-            business_owner = Business.objects.get(username=request.user.username)
-            business_details.businessowner = business_owner
-            business_details.save()
-        return redirect('businesslist')
-    else:
-        form = BusinessForm()
+            business = form.save(commit=False)
+            business.save()
+            print("Form cleaned data:", form.cleaned_data)
+            form.instance.categories.set(form.cleaned_data['categories'])
+            photo= request.FILES.getlist('photo')
+            for photo in photo:
+                photo_instance = Media(file=photo)
+                photo_instance.save()
+                business.photo.add(photo_instance)
+                business.save()
+        return redirect('login')
     return render(request, 'authentication/register_business.html',{'form':form})
-
   

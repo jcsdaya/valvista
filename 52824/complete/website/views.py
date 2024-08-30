@@ -2,10 +2,10 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.shortcuts import redirect, render,get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .forms import SignupForm,PlaceForm,BusinessRegForm
-from business.forms import BusinessForm
-from .models import Place,NormalUser,Visitor,Favorite,ItineraryState
-from business.models import Business
+from .forms import SignupForm,PlaceForm,PromoForm,BusPromoForm
+from business.forms import BusinessForm,BusinessUpdForm
+from .models import Place,NormalUser,Visitor,Favorite,ItineraryState,PlaceMedia
+from business.models import Business,Media
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User,Group
 from django.http import HttpResponseForbidden
@@ -100,13 +100,21 @@ def register(request):
 def addplace(request):
     if not request.user.groups.filter(name='Admin').exists():
         return HttpResponseForbidden("You don't have permission to access this page.")
+    form = PlaceForm()
     if request.POST:
         form = PlaceForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            place = form.save(commit=False)
+            place.save()
+            print("Form cleaned data:", form.cleaned_data)
+            form.instance.categories.set(form.cleaned_data['categories'])
+            photo= request.FILES.getlist('photo')
+            for photo in photo:
+                photo_instance = PlaceMedia(file=photo)
+                photo_instance.save()
+                place.photo.add(photo_instance)
+                place.save()
         return redirect('placelist')
-    else:
-        form = PlaceForm()
     return render(request, 'addplace.html',{'form':form})
 
 @login_required
@@ -130,12 +138,26 @@ def userhome(request):
 def businesshome(request):
     if not request.user.groups.filter(name='Business').exists():
         return HttpResponseForbidden("You don't have permission to access this page.")
-    else:
-       current_user_business = Business.objects.get(username=request.user.username)
-       all_bus = Business.objects.filter(businessowner=current_user_business)
-       context = {'all_bus':all_bus}
-       return render(request, 'businesshome.html',context)
     
+    # Fetch the Business instance related to the current user
+    try:
+        business = Business.objects.get(username=request.user.username)
+    except Business.DoesNotExist:
+        # Handle the case where the Business instance does not exist
+        return HttpResponseForbidden("No associated business found.")
+    
+    if request.method == 'POST':
+        form = BusPromoForm(request.POST, request.FILES, instance=business)
+        if form.is_valid():
+            form.save()
+            return redirect('businesshome')
+    else:
+        form = BusPromoForm(instance=business)
+
+    context = {'form': form}
+    return render(request, 'businesshome.html', context)
+
+
 @login_required
 def viewrating(request,pk):
     if not request.user.groups.filter(name='Business').exists():
@@ -143,7 +165,7 @@ def viewrating(request,pk):
     else:
        business = get_object_or_404(Business, pk=pk)
        current_user_business = Business.objects.get(username=request.user.username)
-       all_bus = Business.objects.filter(businessowner=current_user_business)
+       all_bus = Business.objects.filter(username=current_user_business)
        context = {'all_bus':all_bus,'business':business}
        return render(request, 'viewrating.html',context)
 
@@ -154,7 +176,7 @@ def businesslist(request):
         return HttpResponseForbidden("You don't have permission to access this page.")
     else:
         current_user_business = Business.objects.get(username=request.user.username)
-        all_bus = Business.objects.filter(businessowner=current_user_business)
+        all_bus = Business.objects.filter(username=current_user_business)
         context = {'all_bus':all_bus}
         return render(request, 'businesslist.html',context) 
 
@@ -209,15 +231,13 @@ def dashboard(request):
         all_businesses = Business.objects.all()
         all_users = NormalUser.objects.all()
         total_visitors = Visitor.objects.count()
-        business_owner_count = Business.objects.count()
         user_count = NormalUser.objects.count()
-        business_count = Business.objects.exclude(archived=True).count()
+        business_count = Business.objects.filter(archived=False,approval=True).count()
         place_count = Place.objects.exclude(archived=True).count()
 
         context = {
             'business_count': business_count,
             'user_count': user_count,
-            'business_owner_count': business_owner_count,
             'place_count': place_count,
             'total_visitors': total_visitors,
             'all_businesses': all_businesses,
@@ -233,19 +253,41 @@ def updatebusiness(request, pk):
         return HttpResponseForbidden("You don't have permission to access this page.")
     else:
         business = get_object_or_404(Business, pk=pk)
-        form = BusinessForm(instance=business)
 
-        if request.POST:
-            form = BusinessForm(request.POST, request.FILES, instance=business)
+        if request.POST:  # Use request.method == 'POST' for clarity
+            form = BusinessUpdForm(request.POST, request.FILES, instance=business)
             if form.is_valid():
-                form.save()
+                business = form.save(commit=False)
+                form.instance.categories.set(form.cleaned_data['categories'])
+                business.save()
+
+                if 'photos' in request.FILES:
+                    if business.photos.exists():
+                        for old_photos in business.photos.all():
+                            old_photos.file.delete(save=False)  # Optionally delete files from filesystem
+                            old_photos.delete()  # Remove photo
+                    photos = request.FILES.getlist('photos')
+                    for photos in photos:
+                        photo_instance = Media(file=photos)
+                        photo_instance.save()
+                        business.photos.add(photo_instance)
+                        business.save()
+
+                # Check for user groups and redirect accordingly
                 if request.user.groups.filter(name='Admin').exists():
                     return redirect('businessadmin')
                 else:
                     return redirect('businesslist')
+            else:
+                # Debugging output if form is not valid
+                print("Form errors:", form.errors)
+        else:
+            form = BusinessUpdForm(instance=business)
 
         context = {'form': form, 'business': business}
-        return render(request, 'updatebusiness.html', context)
+    return render(request, 'updatebusiness.html', context)
+
+
     
 @login_required
 def  deletebusiness(request,pk):
@@ -268,7 +310,7 @@ def  deletebusiness(request,pk):
 
 def businesssign(request):
     if request.method == 'POST':
-        form = BusinessRegForm(request.POST or  None)
+        form = BusinessForm(request.POST or  None)
         if form.is_valid():
             form.save()
         return redirect('login')
@@ -289,16 +331,33 @@ def updatePlace(request,pk):
         return HttpResponseForbidden("You don't have permission to access this page.")
     else:
         place = get_object_or_404(Place, pk=pk)
-        form = PlaceForm(instance=place)
+        
 
         if request.POST:
             form = PlaceForm(request.POST, request.FILES, instance=place)
             if form.is_valid():
-                form.save()
-                return redirect('placelist')
-        context = {'form': form, 'place': place} 
-        return render(request, 'updateplace.html', context) 
+                place = form.save(commit=False)
+                form.instance.categories.set(form.cleaned_data['categories'])
+                place.save()
 
+                if 'photo' in request.FILES:
+                # Remove old photos if needed
+                    if place.photo.exists():
+                        for old_photo in place.photo.all():
+                            old_photo.file.delete(save=False)  # Optionally delete files from filesystem
+                            old_photo.delete()  # Remove photo
+                    photos = request.FILES.getlist('photo')
+                    for photo in photos:
+                        photo_instance = PlaceMedia(file=photo)
+                        photo_instance.save()
+                        place.photo.add(photo_instance)
+
+                return redirect('placelist')
+        else:
+            form = PlaceForm(instance=place)
+
+        context = {'form': form, 'place': place} 
+        return render(request, 'updateplace.html', context)
 @login_required
 def  deleteplace(request,pk):
     if not request.user.groups.filter(name='Admin').exists():
@@ -359,6 +418,18 @@ def viewbusiness(request,pk):
        business = get_object_or_404(Business, pk=pk)
        context = {'business':business}
        return render(request, 'viewbusiness.html',context)
+
+def bussdeets(request,pk):
+    business = get_object_or_404(Business, pk=pk)
+    photos = request.FILES.getlist('photo')
+    for photo in photos:
+            photo_instance = Media(file=photo)
+            photo_instance.save()
+            business.photo.add(photo_instance)
+    form = BusinessUpdForm(instance=business)
+    context = {'business':business,'form':form}
+    return render(request, 'bussdeets.html',context)
+
 
 @login_required
 def itinerary(request):
@@ -447,12 +518,15 @@ def save_itinerary_state(request):
     if request.method == 'POST' and request.user.is_authenticated:
         data = json.loads(request.body)
         places = data.get('places', [])
-        times = data.get('times', [])
+        text = data.get('text', [])
         images = data.get('images', [])
         place_ids = data.get('placeIds', [])
         types = data.get('types', [])
+        start_time = data.get('startTime', '')
+        budget = data.get('budget', [])
+        times = data.get('times', [])
         # Save the itinerary state to the database
-        ItineraryState.objects.update_or_create(user=request.user, defaults={'places': places, 'times': times,'images':images,'place_ids': place_ids,'types': types})
+        ItineraryState.objects.update_or_create(user=request.user, defaults={'places': places, 'times': times,'images':images,'place_ids': place_ids,'types': types,"start_time":start_time,"budget":budget,"text":text})
         return JsonResponse({'success': True})
     return JsonResponse({'success': False})
 
@@ -461,11 +535,45 @@ def load_itinerary_state(request):
     if request.user.is_authenticated:
         itinerary_state = ItineraryState.objects.filter(user=request.user).first()
         if itinerary_state:
-            data = {'places': itinerary_state.places, 'times': itinerary_state.times,'images':itinerary_state.images,'placeIds': itinerary_state.place_ids,'types': itinerary_state.types,}
+            data = {'places': itinerary_state.places, 'times': itinerary_state.times,'images':itinerary_state.images,'placeIds': itinerary_state.place_ids,'types': itinerary_state.types,'startTime': itinerary_state.start_time.strftime('%H:%M'),'budget':itinerary_state.budget,'text':itinerary_state.text}
             return JsonResponse(data)
-    return JsonResponse({'places': [], 'times': [], 'images': [],'placeIds': [],'types': []})
+    return JsonResponse({'places': [], 'times': [], 'images': [],'placeIds': [],'types': [], 'startTime': '','budget': [],'text': []})
 
 
+def map(request):
+    return render(request, 'map.html', {})
+
+@login_required
+def adpromo(request):
+    if not request.user.groups.filter(name='Admin').exists():
+        return HttpResponseForbidden("You don't have permission to access this page.")
+    else:
+      all_admin = Place.objects.all()
+      context = {'all_admin': all_admin,} 
+      return render(request,'adpromo.html',context)
+
+
+
+
+@login_required
+def promo(request,pk):
+    if not request.user.groups.filter(name='Admin').exists():
+        return HttpResponseForbidden("You don't have permission to access this page.")
+    else:
+        all_admin = Place.objects.all()
+        place = get_object_or_404(Place, pk=pk)
+        
+        if request.POST:
+            form = PromoForm(request.POST,request.FILES,instance=place)
+            if form.is_valid():
+                place = form.save(commit=False)
+                place.save()
+                return redirect('adpromo')
+        else:
+            form = PromoForm(instance=place)
+
+        context = {'form': form, 'place': place,'all_admin': all_admin} 
+        return render(request, 'promo.html', context)
 
     
 

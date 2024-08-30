@@ -11,7 +11,7 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {% load static %}
     <title>UpdatePlace | ValVista</title>
-    <link rel="stylesheet" href="{% static 'addplacess.css' %}">
+    <link rel="stylesheet" href="{% static 'RegUpdForm.css' %}">
 </head>
 <header>
     <nav>
@@ -50,15 +50,15 @@
     <div class="content">
         <div class="box-container">
             <div class="circle-container circle1"></div>
+            <h2  class="container-text"><a href="{%url 'adpromo'%}" style="width: 40vh;" class="btn btn-outline-danger">Post Announcement/Promos</a></h2>
+        </div>
+        <div class="box-container">
+            <div class="circle-container circle1"></div>
             <h2  class="container-text"><span style="width: 40vh;" class="badge bg-secondary">Businesses Registered: {{ business_count }}</span></h2>
         </div>
         <div class="box-container">
             <div class="circle-container circle2"></div>
             <h2 class="container-text"><span style="width: 40vh;"  class="badge bg-secondary">Users Registered: {{ user_count }}</span></h2>
-        </div>
-        <div class="box-container">
-            <div class="circle-container circle3"></div>
-            <h2 class="container-text"><span style="width: 40vh;"  class="badge bg-secondary">Business Owners Registered: {{ business_owner_count }}</span></h2>
         </div>
         <div class="box-container">
             <div class="circle-container circle4"></div>
@@ -71,7 +71,7 @@
     </div>
 </div>
 <div class="col">
-    <h2>All Business Owners</h2>
+    <h2>All Businesses</h2>
     <table class="table table-striped">
         <thead>
             <tr>

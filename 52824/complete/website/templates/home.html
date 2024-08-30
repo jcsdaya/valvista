@@ -173,10 +173,10 @@ document.getElementById('applyFiltersBtn').addEventListener('click', function() 
     <div class="list">
         {% for bussiness in all_business %}
         {% if not bus.archived%}
-        {% if bus.approval%}
-        {% if bus.promo%}
+        {% if bussiness.approval%}
+        {% if bussiness.promo%}
         <div class="item {% if forloop.first %}active{% endif %}">
-            <img style="object-fit:fill" src="{{ bus.promo.url }}" alt="Promo Image">
+            <img style="object-fit:fill" src="{{ bussiness.promo.url }}" alt="Promo Image">
         </div>
         {% endif %}
         {% endif %}
@@ -242,14 +242,19 @@ document.getElementById('applyFiltersBtn').addEventListener('click', function() 
   <div class="container my-5" id="resultsContainer">
     {% for item in all_admin %}
         {% if not item.archived %}
-        <div class="jumbotron" data-activities="{{ item.category }},{{ item.category2 }},{{ item.category3 }}" data-budget="{{ item.cost }}" data-time="{{ item.time }}">
+        <div class="jumbotron" data-activities=" {% for category in item.categories.all %}{{ category.name }}{% if not forloop.last %},{% endif %} {% endfor %}" data-budget="{{ item.cost }}" data-time="{{ item.time }}">
             <div class="row">
                 <div class="col-md-4">
                     <img style="height: 300px; width: 400px; border-radius: 10px;" src="{{item.thumbnail.url}}" class="img-fluid" alt="{{item.name}}">
                 </div>
                 <div class="col-md-7">
                     <h2 class="display-4">{{item.name}}</h2>
-                    <p class="lead"> Category:{{ item.category }},{{ item.category2 }},{{ item.category3 }} </p>
+                    <p class="lead"> Category:
+                    {% for category in item.categories.all %}
+                    {{ category.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+
                     <p class="lead">Location: {{item.location}}</p>
                     <hr class="my-4">
                     <p class="lead">
@@ -293,6 +298,11 @@ document.getElementById('applyFiltersBtn').addEventListener('click', function() 
             {% endif %}
             <div class="col-md-7">
                 <h2 class="display-4">{{ buss.name }}</h2>
+                <p class="lead"> Category:
+                    {% for category in buss.categories.all %}
+                    {{ category.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
                 <p class="lead">Location: {{ buss.location }}</p>
                 <p class="lead">
                     {% if buss.cost == '0' %}

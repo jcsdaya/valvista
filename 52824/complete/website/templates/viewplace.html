@@ -57,9 +57,15 @@
     <div class="text">
         <div class="main"><img style= "height: 200px;width: 300px;object-fit: cover;" src="{{place.thumbnail.url}}" alt="Pio Valenzuela"></div>
         <h3 class="h3">{{place.name}}</h3>
-        <p>{{place.location}}</p>
-        <p>{{place.category}}</p>
-        <p>⭐9.5 Excellent (100 review)</p>
+        <p><strong>Location:</strong> {{place.location}}</p>
+       
+        <p><strong>Category:</strong>  
+            {% for category in place.categories.all %}
+                {{ category.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+              <p><strong>Ratings:</strong> ⭐9.5 Excellent (100 review)</p>
+
     </div>
     
     <div class="container">
@@ -86,8 +92,9 @@
                     <span onclick="closeFullImg()">X</span>
                 </div>
                 <div class="img-gallery">
-                    <img src="{{place.photo.url}}" onclick="openFullImg(this.src)">
-                    <img src="{{place.photos.url}}" onclick="openFullImg(this.src)">
+                    {% for media in place.photo.all %}
+                <img src="{{media.file.url}}" onclick="openFullImg(this.src)">
+                {% endfor %}
                 </div>
             </div>
 

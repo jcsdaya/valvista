@@ -6,6 +6,7 @@ from django.contrib.auth.models import User,Group
 from business.models import Business
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+import os
 
 class Admin(models.Model):
         username = models.CharField (max_length=50,unique=True)
@@ -15,13 +16,31 @@ class Admin(models.Model):
         def __str__ (self):
             return self.username
         
+class PlaceMedia(models.Model):
+    file = models.FileField(upload_to="media")
+
+@receiver(models.signals.pre_save, sender=PlaceMedia)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+    """
+    Deletes old file from filesystem
+    when corresponding `MediaFile` object is updated
+    with new file.
+    """
+    if not instance.pk:
+        return False
+
+    try:
+        old_file = PlaceMedia.objects.get(pk=instance.pk).file
+    except PlaceMedia.DoesNotExist:
+        return False
+
+    new_file = instance.file
+    if not old_file == new_file:
+        if os.path.isfile(old_file.path):
+            os.remove(old_file.path)
+
+
 class Place(models.Model):
-        CATEGORY_CHOICES = [
-        ('Leisure', 'Leisure'),
-        ('Educational', 'Educational'),
-        ('Historical', 'Historical'),
-        ('Diner', 'Diner'),
-        ]
         COST_CHOICES = [
         ('0','0'),
         ('1-200','1-200'),
@@ -31,14 +50,11 @@ class Place(models.Model):
         name = models.CharField (max_length=100)
         location = models.CharField (max_length=100)
         description = models.CharField (max_length=1000)
-        category = models.CharField (max_length=100,default='Leisure',choices=CATEGORY_CHOICES)
-        category2 = models.CharField (max_length=100, blank=True,null=True,choices=CATEGORY_CHOICES)
-        category3 = models.CharField (max_length=100, blank=True,null=True,choices=CATEGORY_CHOICES)
+        categories = models.ManyToManyField('Category', related_name='places')
         time = models.CharField (max_length=20)
         timeclose = models.CharField (max_length=20)
         cost = models.CharField(max_length=100, blank=True,null=True,choices= COST_CHOICES)
-        photo = models.ImageField(upload_to="media",blank=True,null=True)
-        photos = models.ImageField(upload_to="media", blank=True,null=True)
+        photo = models.ManyToManyField(PlaceMedia,related_name='places',blank=True)
         thumbnail = models.ImageField(upload_to="media")
         archived = models.BooleanField(default=False)
         map = models.CharField(max_length=2000,blank=True,null=True)
@@ -53,6 +69,14 @@ class Place(models.Model):
         
         def __str__ (self):
                 return self.name
+        
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+    
+
         
 class NormalUser(models.Model):
        username = models.CharField (max_length=50,unique=True)
@@ -119,8 +143,11 @@ class ItineraryState(models.Model):
     places = models.JSONField(default=list)
     times = models.JSONField(default=list)
     images = models.JSONField(default=list)
+    text = models.JSONField(default=list)
+    budget = models.JSONField(default=list)
     place_ids = models.JSONField(default=list)
     types = models.JSONField(default=list)
+    start_time = models.TimeField(blank=True, null=True)
 
     def __str__(self):
         return f"Itinerary State for {self.user.username}"

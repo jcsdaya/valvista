@@ -52,6 +52,7 @@
                 <th>Business Name</th>
                 <th>Email</th>
                 <th>Reference ID</th>
+                <th>Details</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -61,16 +62,12 @@
                 <td>{{ business.username }}</td>
                 <td>{{ business.email }}</td>
                 <td>{{ business.refid }}</td>
-                <td>
-                    <a class="btn btn-sm btn-success" href="{% url 'approvebusiness' business.id %}">Approve</a>
-                    <a class="btn btn-sm btn-danger" href="{% url 'declinebusiness' business.id %}">Decline</a>
-                </td>
+                <td><a class="btn btn-outline-danger btn-sm" href="{% url 'bussdeets' business.id %}">View Details</a></td>
+                <td><a class="btn btn-sm btn-success" href="{% url 'approvebusiness' business.id %}">Approve</a> <a class="btn btn-sm btn-danger" href="{% url 'declinebusiness' business.id %}">Decline</a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-
-    <!-- Table for Business Registration -->
 
 </div>
 

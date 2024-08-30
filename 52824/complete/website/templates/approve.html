@@ -11,7 +11,7 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {% load static %}
     <title>UpdatePlace | ValVista</title>
-    <link rel="stylesheet" href="{% static 'addplacess.css' %}">
+    <link rel="stylesheet" href="{% static 'RegUpdForm.css' %}">
 </head>
 <header>
 
@@ -46,6 +46,7 @@
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Valenzuela_Seal.svg/768px-Valenzuela_Seal.svg.png" alt="Header Image">
         <h1> ValVista Approve Place</h1>
         <p> Are you sure you want to Approve {{business}}?</p>
+        
 
         <form method="post" action="{% url 'approvebusiness' business.id %} ">
             {% csrf_token %}

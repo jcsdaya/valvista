@@ -41,7 +41,10 @@ urlpatterns = [
   path('deletevisitor/<str:pk>/', views.deletevisitor, name="deletevisitor"),
   path('viewrating/<str:pk>/', views.viewrating, name="viewrating"),
   path('ratingform/', views.ratingform, name='ratingform'),
-
+  path('bussdeets/<str:pk>/', views.bussdeets, name="bussdeets"),
+  path('map/',views.map,name="map"),
+  path('adpromo',views.adpromo,name="adpromo"),
+  path('promo/<str:pk>/',views.promo, name="promo"),
 
   
 ]
