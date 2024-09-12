@@ -647,6 +647,17 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	}
 
 /* Printing */
+
+.leaflet-routing-alt, .leaflet-routing-geocoders, .leaflet-routing-error {
+    color: black;
+    padding: 6px;
+    margin-top: 2px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #ccc;
+    max-height: 320px;
+    overflow-y: auto;
+    transition: all 0.2s ease;
+}
 	
 @media print {
 	/* Prevent printers from removing background-images of controls. */
@@ -655,3 +666,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 		color-adjust: exact;
 		}
 	}
+
+
+

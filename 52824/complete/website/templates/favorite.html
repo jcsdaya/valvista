@@ -43,7 +43,7 @@
             {% if user.is_authenticated%}
             {% if not user.is_Business and not business.approval%}
             <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
-            <li><a><i></i> Welcome {{request.user}}!</a></li>
+            <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
             
             {%endif%}
             {%else%}

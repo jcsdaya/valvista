@@ -84,10 +84,7 @@
         </select>
     </div>
 
-    <div class="starrttime">
-        <label for="start-time">Enter starting time:</label>
-        <input type="time" id="start-time" onchange="updateItineraryTimes()">
-    </div>
+   
     <button class="btn btn-danger" id="favoriteButton" onclick="saveItineraryState()">Save Itinerary</button>
     <button id="downloadItineraryBtn" class="btn btn-danger">📩 Download Itinerary</button>
     <a id="mapButton" class="btn btn-danger" href="{%url 'map'%}"> 🗺️ Map </a>
@@ -96,91 +93,104 @@
         <input type="hidden" name="places" id="places-input">
         <input type="hidden" name="times" id="times-input">
 
-    <!-- Start Timeline -->
-    <div class="process-wrapper">
-        <div id="progress-bar-container">
-            <ul style="z-index: 1050;" id="step-list">
-                <li class="step step01 active" onclick="updateProgress(1)"><div class="step-inner">Place #1</div></li>
-                <li class="step step02" onclick="updateProgress(2)"><div class="step-inner">Place #2</div></li>
-                <li class="step step03" onclick="updateProgress(3)"><div class="step-inner">Place #3</div></li>
-                <li class="step step04" onclick="updateProgress(4)"><div class="step-inner">Place #4</div></li>
-                <li class="step step05" onclick="updateProgress(5)"><div class="step-inner">Place #5</div></li>
-            </ul>
-            <div id="line">
-                <div id="line-progress"></div>
-            </div>
+        <div class="starrttime">
+            <label for="start-time">Enter starting time:</label>
+            <input type="time" id="start-time" onchange="updateItineraryTimes()">
         </div>
-    </div>
-    
+
+
         {% csrf_token %}
-        <div id="progress-content-section">
-            <div class="section-content discovery active">
+
+        <table class="table table-bordered">
+            <thead >
+                <tr>
+                    <th>Name of Place</th>
+                    <th>Time In</th>
+                    <th>Time Out</th>
+                    <th>Budget</th>
+                    <th>Notes/Reminders</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            
+            <tbody>
                 {% with place.0 as first_place %}
-                    {% if first_place %}
-                        <h2>{{ first_place.name }}</h2>
-                        <p class="inline-input">Time <input type="text" id="timeInput1" placeholder="Enter time here"></p>
-                        <p class="inline-input">Budget <input type="text" id="BudgetInput1" placeholder=></p>
-                        <img data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')" style="height: 500px; width: 800px;object-fit: cover;border:5px solid black;" src="{{ first_place.thumbnail.url }}" alt="">
-                        <button style="height: 500px;border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
-                        <textarea id="myTextArea1" rows="4" cols="100" placeholder="Add your notes here..."></textarea>
-                    {% endif %}
-                {% endwith %}
-            </div>
-        
-            <div class="section-content discovery ">
+                {% if first_place%}
+   
+    <tr data-place-id="{{ first_place.id }}" class="tablecontent">
+        <th class="place-name">{{ first_place.name }}</th>
+        <th><p class="inline-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=""></p></th>
+        <th><p class="inline-input"><input type="text" id="time1Input{{ first_place.id }}" placeholder=""></p></th>
+        <th><p class="inline-input"><input type="text" id="BudgetInput{{ first_place.id }}" placeholder=""></p></th>
+        <th><textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
+        <th>
+            <button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
+            <a style="height: 50px;width: 100px; border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
+        </th>
+    </tr>{% endif %}
+    {% endwith %}
+
                 {% with place.1 as first_place %}
-                    {% if first_place %}
-                        <h2>{{ first_place.name }}</h2>
-                        <p class="inline-input">Time <input type="text" id="timeInput2" placeholder="Enter time here"></p>
-                        <p class="inline-input">Budget <input type="text" id="BudgetInput2" placeholder=></p>
-                        <img data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name%}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')" style="height: 500px; width: 800px;object-fit: cover;border:5px solid black;" src="{{ first_place.thumbnail.url }}" alt="">
-                        <button style="height: 500px;border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
-                        <textarea id="myTextArea2" rows="4" cols="100" placeholder="Add your notes here..."></textarea>
-                    {% endif %}
+                {% if first_place %}
+                <tr data-place-id="{{ first_place.id }}" class="tablecontent">
+                    <th class="place-name">{{ first_place.name }} </th>
+                    <th><p class="inline-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=""></p> </th>
+                    <th><p class="inline-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
+                    <th><p class="inline-input"> <input type="text" id="BudgetInput{{ first_place.id }}" placeholder=></p></th>
+                    <th> <textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
+                    <th><button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
+                        <a style="height: 50px;width: 100px; border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
+                    </th>
+                </tr>
+                {% endif %}
                 {% endwith %}
-            </div>
-        
-            <div class="section-content discovery ">
                 {% with place.2 as first_place %}
-                    {% if first_place %}
-                        <h2>{{ first_place.name }}</h2>
-                        <p class="inline-input">Time <input type="text" id="timeInput3" placeholder="Enter time here"></p>
-                        <p class="inline-input">Budget <input type="text" id="BudgetInput3" placeholder=></p>
-                        <img data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}"  data-category="{% firstof first_place.categories.first.name 'No Category' %}"  onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')" style="height: 500px; width: 800px;object-fit: cover;border:5px solid black;" src="{{ first_place.thumbnail.url }}" alt="">
-                        <button style="height: 500px;border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
-                        <textarea id="myTextArea3" rows="4" cols="100" placeholder="Enter your text here..."></textarea>
-                    {% endif %}
+                {% if first_place %}
+                <tr data-place-id="{{ first_place.id }}" class="tablecontent">
+                    <th class="place-name">{{ first_place.name }} </th>
+                    <th><p class="inline-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=""></p> </th>
+                    <th><p class="inline-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
+                    <th><p class="inline-input"> <input type="text" id="BudgetInput{{ first_place.id }}" placeholder=></p></th>
+                    <th> <textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
+                    <th><button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
+                        <a style="height: 50px;width: 100px; border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
+                    </th>
+                </tr>
+                {% endif %}
                 {% endwith %}
-            </div>
-        
-            <div class="section-content discovery ">
                 {% with place.3 as first_place %}
-                    {% if first_place %}
-                        <h2>{{ first_place.name }}</h2>
-                        <p class="inline-input">Time <input type="text" id="timeInput4" placeholder="Enter time here"></p>
-                        <p class="inline-input">Budget <input type="text" id="BudgetInput4" placeholder=></p>
-                        <img data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')" style="height: 500px; width: 800px;object-fit: cover;border:5px solid black;" src="{{ first_place.thumbnail.url }}" alt="">
-                        <button style="height: 500px;border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
-                        <textarea id="myTextArea4" rows="4" cols="100" placeholder="Add your notes here..."></textarea>
-                    {% endif %}
+                {% if first_place %}
+                <tr data-place-id="{{ first_place.id }}" class="tablecontent">
+                    <th class="place-name">{{ first_place.name }} </th>
+                    <th><p class="inline-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=""></p> </th>
+                    <th><p class="inline-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
+                    <th><p class="inline-input"> <input type="text" id="BudgetInput{{ first_place.id }}" placeholder=></p></th>
+                    <th> <textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
+                    <th><button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
+                        <a style="height: 50px;width: 100px; border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
+                    </th>
+                </tr>
+                {% endif %}
                 {% endwith %}
-            </div>
-        
-            <div class="section-content discovery active">
                 {% with place.4 as first_place %}
-                    {% if first_place %}
-                        <h2>{{ first_place.name }}</h2>
-                        <p class="inline-input">Time <input type="text" id="timeInput5" placeholder="Enter time here"></p>
-                        <p class="inline-input">Budget <input type="text" id="BudgetInput5" placeholder=></p>
-                        <img data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-closing-time="{{ first_place.timeclose }}"data-category="{% firstof first_place.categories.first.name 'No Category' %}"  onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')" style="height: 500px; width: 800px;object-fit: cover;border:5px solid black;" src="{{ first_place.thumbnail.url }}" alt="">
-                        <button style="height: 500px;border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
-                        <textarea id="myTextArea5" rows="4" cols="100" placeholder="Add your notes here..."></textarea>
-                    {% endif %}
+                {% if first_place %}
+                <tr data-place-id="{{ first_place.id }}" class="tablecontent">
+                    <th class="place-name">{{ first_place.name }} </th>
+                    <th><p class="inline-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=""></p> </th>
+                    <th><p class="inline-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
+                    <th><p class="inline-input"> <input type="text" id="BudgetInput{{ first_place.id }}" placeholder=></p></th>
+                    <th> <textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
+                    <th><button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
+                        <a style="height: 50px;width: 100px; border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
+                    </th>
+                </tr>
+                {% endif %}
                 {% endwith %}
-            </div>
-            <p><strong>Time:</strong> <span id="end-time"></span></p> 
-            <p><strong>Total Duration:</strong> <span id="total-duration"></span> hours</p>
-        </div>
+            </tbody>
+        </table>
+        <p><strong>Time:</strong> <span id="end-time"></span></p> 
+        <p><strong>Total Duration:</strong> <span id="total-duration"></span> hours</p>
+
     </div>
     </div>
 </div>
@@ -201,7 +211,7 @@
                         {% for place in place %}
                         {% if not place.archived %}
                         <div class="col">
-                            <div class="card" onclick="selectItem('{{ place.id }}', '{{ place.name }}', '{{ place.thumbnail.url }}', 'business', '{% firstof place.categories.first.name 'No Category' %}')">
+                            <div class="card" onclick="selectItem('{{ place.id }}', '{{ place.name }}', '{{ place.thumbnail.url }}', 'place', '{% firstof place.categories.first.name 'No Category' %}')">
                                 <img style="height: 148px; width: 100%;object-fit: cover;" src="{{ place.thumbnail.url }}" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ place.name }}</h5>
@@ -242,86 +252,35 @@ function getCSRFToken() {
     return document.querySelector('[name=csrfmiddlewaretoken]').value;
 }
 
-// Function to update the active place and corresponding section content
-function updateActivePlace(index) {
-    const steps = document.querySelectorAll('.step');
-    const contents = document.querySelectorAll('.section-content');
 
-    // Remove active class from all steps and section contents
-    steps.forEach(step => step.classList.remove('active'));
-    contents.forEach(content => content.classList.remove('active'));
 
-    // Add active class to the clicked step and corresponding section content
-    steps[index].classList.add('active');
-    contents[index].classList.add('active');
+function setActiveRow(button) {
+    // Log the clicked button
+    console.log('Button clicked:', button);
 
-    // Ensure all sections are visible
-    contents.forEach(content => {
-        content.style.display = 'block';
-    });
+    // Remove the active class from the previously active row
+    document.querySelectorAll('.tablecontent.active').forEach(row => row.classList.remove('active'));
 
-    // Scroll the active section into view
+    // Get the parent row (tr) of the clicked button
+    const row = button.closest('tr');
+    
+    // Log the selected row
+    console.log('Row selected:', row);
 
+    // Add the active class to the clicked row
+    row.classList.add('active');
+    
+    // Scroll the active row into view (optional)
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const stepList = document.querySelectorAll('.step');
-    const sectionContents = document.querySelectorAll('.section-content.discovery');
-    const progressBar = document.getElementById('line-progress');
-    const stepWidth = 100 / stepList.length;
-
-    function updateProgressOnScroll() {
-        let scrollPosition = window.scrollY + window.innerHeight / 2; // middle of the viewport
-        let currentStep = 0;
-
-        sectionContents.forEach((content, index) => {
-            const contentTop = content.getBoundingClientRect().top + window.scrollY;
-            const contentBottom = contentTop + content.offsetHeight;
-            if (scrollPosition >= contentTop && scrollPosition <= contentBottom) {
-                currentStep = index + 1; // Index is zero-based, so add 1
-            }
-        });
-
-        const progressWidth = (currentStep - 1) * stepWidth;
-        progressBar.style.width = progressWidth + '%';
-
-        updateActivePlace(currentStep - 1);
-    }
-
-    // Event listener for scroll
-    window.addEventListener('scroll', updateProgressOnScroll);
-
-    // Initial call to update progress on page load
-    updateProgressOnScroll();
-});
-
-// Event listener for each step to update the active place
-document.querySelectorAll('.step').forEach((step, index) => {
-    step.addEventListener('click', () => {
-        updateActivePlace(index);
-    });
-});
 
 // Function to update itinerary based on selected place count
 function updateItinerary() {
     const placeCount = parseInt(document.getElementById('place-count').value, 10);
     const steps = document.querySelectorAll('.step');
-    const contents = document.querySelectorAll('.section-content.discovery');
+    const contents = document.querySelectorAll('.tablecontent');
 
-    steps.forEach((step, index) => {
-        step.style.display = (index < placeCount) ? 'inline-block' : 'none';
-    });
-
-    contents.forEach((content, index) => {
-        content.style.display = (index < placeCount) ? 'block' : 'none';
-    });
-
-    // Reset progress bar
-    $('#line-progress').css('width', '0%');
-    $('.step').removeClass('active');
-    $('.step01').addClass('active');
-    $('.section-content.discovery').removeClass('active');
-    $('.section-content.discovery').first().addClass('active');
 
     // Clear and update itinerary times
     updateItineraryTimes();
@@ -331,68 +290,113 @@ function updateItinerary() {
 
 
 function selectItem(id, name, imageUrl, type, category) {
+   
+    // Select the currently active row
+    const activeContent = document.querySelector('.tablecontent.active');
     
-    // Update the active place with the selected place's name and image
-    const activeContent = document.querySelector('.section-content.discovery.active');
-    activeContent.dataset.placeId = id;
-    activeContent.dataset.type = type; // Correct attribute name
-    activeContent.dataset.category = category; // Add category attribute
-    activeContent.querySelector('h2').textContent = name;
-    const imgElement = activeContent.querySelector('img');
-    imgElement.src = imageUrl;
-    imgElement.dataset.placeId = id;
-    imgElement.dataset.type = type;  // Correct attribute name
-    imgElement.dataset.category = category; // Add category attribute
-    console.log("Category:", category);
-    // Set the onclick attribute based on the type
-    if (type === 'place') {
-        imgElement.setAttribute('onclick', `redirectToPlace('${id}')`);
-    } else if (type === 'business') {
-        imgElement.setAttribute('onclick', `redirectToBusiness('${id}')`);
+    if (!activeContent) {
+        console.error('No active content found');
+        return; // Exit the function if no active row is found
     }
 
-    // Save the itemId to local storage
+    // Update the active section with the selected item's details
+    activeContent.dataset.placeId = id;
+    activeContent.dataset.type = type;
+    activeContent.dataset.category = category;
+
+    console.log("category",category)
+
+    // Update the name in the correct table row
+    const nameCell = activeContent.querySelector('th:first-child');
+    if (nameCell) {
+        nameCell.textContent = name;
+    } else {
+        console.error('Name cell not found');
+    }
+
+    // Fetch the time inputs and other fields by their position or class name
+    const timeInputs = activeContent.querySelectorAll('.timeInput'); // Adjust class name as needed
+    const timeInputs2 = activeContent.querySelectorAll('.time1Input');
+
+    const budgetInput = activeContent.querySelector('.BudgetInput'); // Adjust class name as needed
+    const textArea = activeContent.querySelector('.myTextArea'); // Adjust class name as needed
+
+    // Clear or reset the time inputs and textarea
+    if (timeInput1) timeInput1.value = ''; // Clear the value or set a new default
+    else console.error('Time Input 1 not found');
+
+    if (timeInput2) timeInput2.value = '';
+    else console.error('Time Input 2 not found');
+
+    if (budgetInput) budgetInput.value = '';
+    else console.error('Budget Input not found');
+
+    if (textArea) textArea.value = '';
+    else console.error('Text Area not found');
+
+    // Log the selected inputs for debugging
+    console.log(`Updating inputs for id: ${id}`);
+    console.log(`Time Input 1: ${timeInput1 ? timeInput1.value : 'Not Found'}`);
+    console.log(`Time Input 2: ${timeInput2 ? timeInput2.value : 'Not Found'}`);
+    console.log(`Budget Input: ${budgetInput ? budgetInput.value : 'Not Found'}`);
+    console.log(`Text Area: ${textArea ? textArea.value : 'Not Found'}`);
+
+    // Save the itemId and other attributes to local storage
     localStorage.setItem('selectedItemId', id);
-    localStorage.setItem('selectedItemType', type); 
-    localStorage.setItem('selectedItemCategory', category); // Save category
+    localStorage.setItem('selectedItemType', type);
+    localStorage.setItem('selectedItemCategory', category);
 
-    // Save itinerary state after selecting an item
-    updateItineraryTimes(); // Update itinerary times to reflect changes
+    // Update the itinerary times after selecting an item
+    updateItineraryTimes();
 
-    // Hide the modal (correctly using Bootstrap 5 modal instance)
+    // Hide the modal (using Bootstrap 5 modal instance)
     const modalElement = document.getElementById('editModal');
-    const modalInstance = bootstrap.Modal.getInstance(modalElement);
-    modalInstance.hide();
+    if (modalElement) {
+        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (modalInstance) {
+            modalInstance.hide();
+        } else {
+            console.error('Modal instance not found');
+        }
+    } else {
+        console.error('Modal element not found');
+    }
 }
+
+
 
 // Function to save the itinerary state
 function saveItineraryState() {
     const places = [];
     const times = [];
+    const times2 = [];
     const images = [];
     const placeIds = [];
     const types = [];
     const startTime = document.getElementById('start-time').value;
     const budget = [];
     const text = [];
+    const category = [];
     console.log('Starting time:', startTime);
 
    
 
-    document.querySelectorAll('.section-content.discovery').forEach((content, index) => {
-        const placeName = content.querySelector('h2').textContent;
+    document.querySelectorAll('.tablecontent').forEach((content, index) => {
+        const placeName = content.querySelector('.place-name').textContent;
         const timeInput = document.getElementById('timeInput' + (index + 1)).value;
-        const imageSrc = content.querySelector('img').src;
+        const time1Input = document.getElementById('time1Input' + (index + 1)).value;
         const id = content.dataset.placeId;
         const type = content.dataset.type;
+        const categorys = content.dataset.category;
         const budgetinput = document.getElementById('BudgetInput' + (index + 1)).value;
         const textarea = document.getElementById('myTextArea' + (index + 1)).value;
 
         places.push(placeName);
         times.push(timeInput);
-        images.push(imageSrc);
+        times2.push(time1Input);
         placeIds.push(id);
         types.push(type);
+        category.push(categorys);
         budget.push(budgetinput);
         text.push(textarea)
     });
@@ -400,9 +404,10 @@ function saveItineraryState() {
     const data = {
         places: places,
         times: times,
-        images: images,
+        times2: times2,
         placeIds: placeIds,
         types: types,
+        category:category,
         startTime: startTime,
         budget: budget,
         text: text
@@ -437,42 +442,48 @@ function loadItineraryState() {
         console.log('Loaded data:', data);
         const places = data.places;
         const times = data.times;
-        const images = data.images;
+        const times2 = data.times2;
         const placeIds = data.placeIds;
         const types = data.types;
+        const category = data.category;
         const startTime = data.startTime;
         const budget = data.budget;
         const text = data.text;
 
         console.log('Starting time:', startTime);
 
+        // Set start time
         if (startTime) {
             document.getElementById('start-time').value = startTime;
         }
-        
 
-        places.forEach((place, index) => {
-            const content = document.querySelector(`.section-content.discovery:nth-child(${index + 1})`);
-            if (content) {
-                content.querySelector('h2').textContent = place;
+        // Loop over each .tablecontent directly instead of using nth-child
+        const tableContents = document.querySelectorAll('.tablecontent');
+
+        tableContents.forEach((content, index) => {
+            // Ensure data exists at the current index
+            if (places && places.length > index) {
+                const place = places[index];
+                content.querySelector('.place-name').textContent = place;
+
                 document.getElementById('timeInput' + (index + 1)).value = times[index];
+                document.getElementById('time1Input' + (index + 1)).value = times2[index];
                 document.getElementById('BudgetInput' + (index + 1)).value = budget[index];
                 document.getElementById('myTextArea' + (index + 1)).value = text[index];
-
-                const img = content.querySelector('img');
-                img.src = images[index];
-                img.alt = place;
 
                 if (placeIds && placeIds.length > index && types && types.length > index) {
                     const placeId = placeIds[index];
                     const type = types[index];
+
                     content.dataset.placeId = placeId;
                     content.dataset.type = type;
 
+                    const button = content.querySelector('button');
+
                     if (type === 'place') {
-                        img.setAttribute('onclick', `redirectToPlace('${placeId}')`);
+                        button.setAttribute('onclick', `redirectToPlace('${placeId}')`);
                     } else if (type === 'business') {
-                        img.setAttribute('onclick', `redirectToBusiness('${placeId}')`);
+                        button.setAttribute('onclick', `redirectToBusiness('${placeId}')`);
                     }
 
                     const selectedItemId = localStorage.getItem('selectedItemId');
@@ -487,6 +498,7 @@ function loadItineraryState() {
         console.error('Error loading itinerary state:', error);
     });
 }
+
 
 window.addEventListener('load', function() {
     loadItineraryState();
@@ -521,14 +533,21 @@ function updateProgress(position) {
 }
 
 const categoryDurations = {
-    'Leisure': 1.5 * 60, // 1.5 hours in minutes
-    'Dining': 1 * 60, // 1 hour in minutes
+    'Leisure': 2 * 60, // 1.5 hours in minutes
+    'Dining': 1.5 * 60, // 1 hour in minutes
     'Historical': 2 * 60, // 2 hours in minutes
-    'Educational': 2 * 60, // 2 hours in minutes
+    'Educational': 1 * 60, // 2 hours in minutes
     // Add more categories and durations as needed
 };
 
 
+
+function formatTime(hours, minutes) {
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const formattedHours = ((hours % 12) || 12).toString().padStart(2, '0');
+    const formattedMinutes = minutes.toString().padStart(2, '0');
+    return `${formattedHours}:${formattedMinutes} ${period}`;
+}
 
 function updateItineraryTimes() {
     const startTimeInput = document.getElementById('start-time');
@@ -540,48 +559,57 @@ function updateItineraryTimes() {
     let totalDuration = 0; // Initialize total duration in minutes
 
     // Clear previous times
-    document.querySelectorAll('.time-input').forEach(input => input.value = '');
+    document.querySelectorAll('.timeInput').forEach(input => input.value = '');
+    document.querySelectorAll('.time1Input').forEach(input => input.value = '');
 
     // Get the number of active places
     const placeCount = parseInt(document.getElementById('place-count').value, 10);
 
-    document.querySelectorAll('.section-content.discovery').forEach((content, index) => {
-        if (index >= placeCount) {
-            // Skip if the index exceeds the number of selected places
-            return;
-        }
+    document.querySelectorAll('.tablecontent').forEach((content, index) => {
+    // Select the correct button using the `.btn-category` class
+    const button = content.querySelector('button');
+    if (button) {
+        const category = button.dataset.category;
+        console.log(`Index ${index}: Category -`, category); // Debug log
 
-        const category = content.querySelector('img').dataset.category;
-        const duration = categoryDurations[category] || 60; // Default to 1 hour if category is not found
+        const duration = categoryDurations[category] || 60;
+        totalDuration += duration;
 
-        totalDuration += duration; // Accumulate total duration
-
-        // Calculate end time for the current place
         totalMinutes += duration;
         let endHours = Math.floor(totalMinutes / 60);
         let endMinutes = totalMinutes % 60;
-        let formattedEndTime = `${String(endHours).padStart(2, '0')}:${String(endMinutes).padStart(2, '0')}`;
 
-        // Calculate start time for the current place
-        let formattedStartTime = `${String(startHours).padStart(2, '0')}:${String(startMinutes).padStart(2, '0')}`;
+        const formattedStartTime = formatTime(startHours, startMinutes);
+        const formattedEndTime = formatTime(endHours, endMinutes);
+
+        const timeInput = content.querySelector(`#timeInput${index + 1}`);
+        const time1Input = content.querySelector(`#time1Input${index + 1}`);
+        if (timeInput && time1Input) {
+            timeInput.value = formattedStartTime;
+            time1Input.value = formattedEndTime;
+        }
+
         startHours = endHours;
         startMinutes = endMinutes;
-
-        // Update the time input fields in the content
-        const timeInput = content.querySelector(`#timeInput${index + 1}`);
-        if (timeInput) {
-            timeInput.value = `${formattedStartTime}-${formattedEndTime}`;
-        }
-    });
-
+    } else {
+        console.error(`Button not found for index ${index}`);
+    }
+});
     // Calculate and display total end time and duration
     const totalEndHours = Math.floor(totalMinutes / 60);
     const totalEndMinutes = totalMinutes % 60;
-    const formattedTotalEndTime = `${String(totalEndHours).padStart(2, '0')}:${String(totalEndMinutes).padStart(2, '0')}`;
+    const formattedTotalEndTime = formatTime(totalEndHours, totalEndMinutes);
     document.getElementById('end-time').textContent = formattedTotalEndTime;
 
     const totalHours = (totalDuration / 60).toFixed(2); // Total duration in hours
     document.getElementById('total-duration').textContent = totalHours;
+
+    console.log('Itinerary times updated:', {
+        startTime,
+        totalEndTime: formattedTotalEndTime,
+        totalDuration,
+        totalHours
+    });
 }
 
 // Call this function to initialize or update times and duration
@@ -589,7 +617,6 @@ updateItineraryTimes();
 
 // Initial load
 updateItinerary();
-
 
 document.getElementById('downloadItineraryBtn').addEventListener('click', function() {
     const itineraryContent = document.getElementById('itinerary-content');

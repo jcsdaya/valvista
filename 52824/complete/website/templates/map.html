@@ -45,7 +45,7 @@
             {% if user.is_authenticated%}
             {% if not user.is_Business and not business.approval%}
             <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
-            <li><a><i></i> Welcome {{request.user}}!</a></li>
+            <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
             
             {%endif%}
             {%else%}
@@ -122,6 +122,8 @@
             shadowSize: [41, 41]
         });
 
+
+        //fix na to
         function initializeMap() {
             const map = L.map('map').setView(INITIAL_LAT_LNG, 12); // Increased zoom level
             map.setMaxBounds(VALENZUELA_BOUNDS);
@@ -159,70 +161,108 @@
             update();
         }
 
+
+        //fix na to
         function handleGeolocation(position, marker, map) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            const newLatLng = [lat, lng];
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+    const newLatLng = [lat, lng];
 
-            // Update marker position
-            animateMarker(marker, newLatLng);
+    // Animate and update marker position smoothly
+    animateMarker(marker, newLatLng);
 
-            // Update map view
-            map.setView(newLatLng, map.getZoom());
+    // Smoothly pan the map to the new location
+    map.flyTo(newLatLng, map.getZoom(), {
+        animate: true,
+        duration: 1.5 // Control the animation duration
+    });
 
-            if (routingControl) {
-                routingControl.setWaypoints([
-                    newLatLng,
-                    routingControl.getWaypoints()[1] || newLatLng // Keep the existing destination if any
-                ]);
+    // Update routing control if it exists
+    if (routingControl) {
+        const currentWaypoints = routingControl.getWaypoints();
+        const destination = currentWaypoints[1] ? currentWaypoints[1].latLng : newLatLng;
+
+        routingControl.setWaypoints([
+            newLatLng,
+            destination
+        ]);
+    }
+
+    console.log(`Your coordinates are: Lat: ${lat}, Long: ${lng}`);
+}
+
+function handleError(error) {
+    let errorMessage;
+
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            errorMessage = "User denied the request for Geolocation.";
+            break;
+        case error.POSITION_UNAVAILABLE:
+            errorMessage = "Location information is unavailable.";
+            break;
+        case error.TIMEOUT:
+            errorMessage = "The request to get user location timed out.";
+            break;
+        case error.UNKNOWN_ERROR:
+        default:
+            errorMessage = "An unknown error occurred.";
+            break;
+    }
+
+    console.error("Error occurred while retrieving location: ", errorMessage);
+    alert(errorMessage); // Provide user feedback via alert
+}
+
+
+        //fix na to
+        function setupRoutingControl(map, marker) {
+    map.on('click', function (e) {
+        if (map.getBounds().contains(e.latlng)) {
+            const destinationLatLng = e.latlng;
+
+            // Remove existing destination marker if present
+            if (destinationMarker) {
+                map.removeLayer(destinationMarker);
             }
 
-            console.log("Your coordinate is: Lat: " + lat + " Long: " + lng);
+            // Create new destination marker
+            destinationMarker = L.marker(destinationLatLng, {
+                icon: pinnedIcon
+            }).addTo(map);
+
+            // Update routing control
+            if (routingControl) {
+                routingControl.setWaypoints([
+                    marker.getLatLng(),
+                    destinationLatLng
+                ]);
+            } else {
+                routingControl = L.Routing.control({
+                    waypoints: [
+                        marker.getLatLng(),
+                        destinationLatLng
+                    ],
+                    routeWhileDragging: true,
+                    createMarker: function() { return null; }, // Hide default markers
+                    fitSelectedRoutes: true // Adjust map view to fit the selected route
+                }).on('routesfound', function (e) {
+                    // Animate marker movement along the route
+                    e.routes[0].coordinates.forEach(function (coord, index) {
+                        setTimeout(function () {
+                            animateMarker(marker, [coord.lat, coord.lng], 500);
+                        }, 100 * index);
+                    });
+                }).addTo(map);
+            }
+
+            console.log("Route set from current location to: ", destinationLatLng);
+        } else {
+            console.log("Clicked location is out of bounds.");
         }
+    });
+}
 
-        function handleError(error) {
-            console.error("Error occurred while retrieving location: ", error);
-        }
-
-        function setupRoutingControl(map, marker) {
-            map.on('click', function (e) {
-                if (map.getBounds().contains(e.latlng)) {
-                    const destinationLatLng = e.latlng;
-
-                    if (routingControl) {
-                        routingControl.setWaypoints([
-                            marker.getLatLng(),
-                            destinationLatLng
-                        ]);
-                    } else {
-                        routingControl = L.Routing.control({
-                            waypoints: [
-                                marker.getLatLng(),
-                                destinationLatLng
-                            ],
-                            routeWhileDragging: true,
-                            createMarker: function() { return null; } // Hide the default markers
-                        }).on('routesfound', function (e) {
-                            e.routes[0].coordinates.forEach(function (coord, index) {
-                                setTimeout(function () {
-                                    animateMarker(marker, [coord.lat, coord.lng], 500); // Smooth transition of marker
-                                }, 100 * index);
-                            });
-                        }).addTo(map);
-                    }
-
-                    if (destinationMarker) {
-                        map.removeLayer(destinationMarker);
-                    }
-
-                    destinationMarker = L.marker(destinationLatLng, { 
-                        icon: pinnedIcon
-                    }).addTo(map);
-                } else {
-                    console.log("Clicked location is out of bounds.");
-                }
-            });
-        }
 
         function resetMarker(marker) {
             marker.setLatLng(INITIAL_LAT_LNG);
@@ -243,183 +283,249 @@
             });
         }
 
+
+        // fix na to
         function setupLocationUpdateButton(map, marker) {
-            document.getElementById('update-location').addEventListener('click', function () {
-                const locationInput = document.getElementById('location-input').value;
-                const geocoder = L.Control.Geocoder.nominatim();
+    const updateButton = document.getElementById('update-location');
+    const locationInput = document.getElementById('location-input');
+    const geocoder = L.Control.Geocoder.nominatim();
 
-                geocoder.geocode(locationInput, function (results) {
-                    if (results.length > 0) {
-                        const latLng = results[0].center;
-                        if (map.getBounds().contains(latLng)) {
-                            animateMarker(marker, latLng);
-                            map.setView(latLng, map.getZoom());
+    updateButton.addEventListener('click', function () {
+        const location = locationInput.value.trim();
 
-                            if (routingControl) {
-                                routingControl.setWaypoints([
-                                    latLng,
-                                    routingControl.getWaypoints()[1] || latLng // Keep the existing destination if any
-                                ]);
-                            }
-                        } else {
-                            console.log("Searched location is out of bounds.");
-                        }
-                    } else {
-                        console.log("No results found.");
-                    }
-                });
-            });
+        // Validate input
+        if (!location) {
+            alert("Please enter a location.");
+            return;
         }
 
-        function pinLocations(map, marker) {
-            const locations = [
-                { name: 'Dr. Pio Valenzuela Museo', lat: 14.69640, lng: 120.96568 },
-                { name: 'Valenzuela peoples park', lat: 14.69240, lng: 120.97024 },
-                { name: 'San Diego de Alcala Church', lat: 14.69917, lng: 120.96525 },
-                { name: 'SM City Valenzuela', lat: 14.68549, lng: 120.97730 },
-                { name: 'Paraiso ni Baste', lat: 14.7041, lng: 120.9754 },
-                { name: 'Tagalag Fishing Village Valenzuela', lat: 14.71800, lng: 120.94188 },
-                { name: 'Valenzuela Family Park', lat: 14.68895, lng: 120.97959 },
-                { name: 'Valenzuela City Astrodome', lat: 14.70937, lng: 120.95759 },
-                { name: 'Polo Mini Park', lat: 14.70785, lng: 120.94620 },
-            ];
+        // Show loading spinner or message
+        updateButton.disabled = true;
+        updateButton.innerText = "Searching...";
 
-            const pinnedLocationsList = document.getElementById('pinned-locations-list');
-            pinnedLocationsList.innerHTML = ''; // Clear existing list
+        geocoder.geocode(location, function (results) {
+            // Hide loading spinner or message
+            updateButton.disabled = false;
+            updateButton.innerText = "Update Location";
 
-            locations.forEach(location => {
-                const pinMarker = L.marker([location.lat, location.lng], { icon: pinnedIcon })
-                    .bindPopup(`<b>${location.name}</b>`)
-                    .addTo(map);
+            if (results.length > 0) {
+                const latLng = results[0].center;
 
-                pinMarkers.push(pinMarker); // Add to pin markers array
+                // Check if the location is within Valenzuela City
+                const valenzuelaBounds = L.latLngBounds(
+                    L.latLng(14.6505, 120.9403), // SW corner
+                    L.latLng(14.7333, 121.1000)  // NE corner
+                );
 
-                // Add click event listener to the pin markers
-                pinMarker.on('click', function () {
-                    const destinationLatLng = pinMarker.getLatLng();
+                if (valenzuelaBounds.contains(latLng)) {
+                    animateMarker(marker, latLng);
+                    map.setView(latLng, map.getZoom());
 
                     if (routingControl) {
                         routingControl.setWaypoints([
-                            marker.getLatLng(),
-                            destinationLatLng
+                            latLng,
+                            routingControl.getWaypoints()[1] || latLng // Keep the existing destination if any
                         ]);
-                    } else {
-                        routingControl = L.Routing.control({
-                            waypoints: [
-                                marker.getLatLng(),
-                                destinationLatLng
-                            ],
-                            routeWhileDragging: true,
-                            createMarker: function() { return null; } // Hide the default markers
-                        }).on('routesfound', function (e) {
-                            e.routes[0].coordinates.forEach(function (coord, index) {
-                                setTimeout(function () {
-                                    animateMarker(marker, [coord.lat, coord.lng], 500); // Smooth transition of marker
-                                }, 100 * index);
-                            });
-                        }).addTo(map);
                     }
 
-                    if (destinationMarker) {
-                        map.removeLayer(destinationMarker);
-                    }
+                    // Store last searched location (optional feature)
+                    localStorage.setItem('lastLocation', JSON.stringify(latLng));
 
-                    destinationMarker = L.marker(destinationLatLng, { 
-                        icon: pinnedIcon
-                    }).addTo(map);
-                });
-
-                // Add location name to the list
-                const listItem = document.createElement('li');
-                listItem.textContent = location.name;
-                listItem.style.cursor = 'pointer'; // Make it look clickable
-                listItem.addEventListener('click', function() {
-                    pinMarker.fire('click'); // Simulate click on the pin marker
-                });
-                pinnedLocationsList.appendChild(listItem);
-            });
-        }
-
-        function setupPinnedLocationsToggle() {
-            const pinnedLocationsIcon = document.getElementById('pinned-locations-icon');
-            const pinnedLocationsContainer = document.getElementById('pinned-locations');
-
-            pinnedLocationsIcon.addEventListener('click', function() {
-                if (pinnedLocationsContainer.style.display === 'none') {
-                    pinnedLocationsContainer.style.display = 'block';
                 } else {
-                    pinnedLocationsContainer.style.display = 'none';
+                    alert("Searched location is out of bounds. Please search within Valenzuela City.");
                 }
-            });
-        }
-
-        function setupSearchFunctionality(map, marker) {
-            const locationInput = document.getElementById('location-input');
-            const searchResults = document.getElementById('search-results');
-            const geocoder = L.Control.Geocoder.nominatim();
-
-            locationInput.addEventListener('input', function() {
-                const query = locationInput.value;
-                searchResults.innerHTML = ''; // Clear previous results
-
-                if (query.length > 0) {
-                    geocoder.geocode(query, function(results) {
-                        results.forEach(result => {
-                            const latLng = result.center;
-                            const listItem = document.createElement('li');
-                            listItem.textContent = result.name || 'Unnamed Location';
-                            listItem.style.cursor = 'pointer'; // Make it look clickable
-                            listItem.addEventListener('click', function() {
-                                map.setView(latLng, map.getZoom());
-                                animateMarker(marker, latLng);
-
-                                if (routingControl) {
-                                    routingControl.setWaypoints([
-                                        marker.getLatLng(),
-                                        latLng
-                                    ]);
-                                }
-                                searchResults.innerHTML = ''; // Clear results after selection
-                            });
-                            searchResults.appendChild(listItem);
-                        });
-                    });
-                }
-            });
-        }
-
-        function main() {
-            const map = initializeMap();
-            const marker = initializeMarker(map);
-
-            // Continuously track the user's location
-            if (navigator.geolocation) {
-                navigator.geolocation.watchPosition(
-                    (position) => handleGeolocation(position, marker, map),
-                    handleError,
-                    { enableHighAccuracy: true, maximumAge: 1000, timeout: 5000 }
-                );
             } else {
-                console.error("Geolocation is not supported by this browser.");
+                alert("No results found for the entered location.");
+            }
+        });
+    });
+
+    // Optional: Restore last location from history
+    const lastLocation = localStorage.getItem('lastLocation');
+    if (lastLocation) {
+        const latLng = JSON.parse(lastLocation);
+        animateMarker(marker, latLng);
+        map.setView(latLng, map.getZoom());
+    }
+}
+
+
+
+        //fix na to pa baba
+        function pinLocations(map, marker) {
+    const locations = [
+        { name: 'Dr. Pio Valenzuela Museum', lat: 14.70859, lng: 120.94507, imageUrl: 'https://valenzuela.gov.ph/ckuploads/images/The-City-Museo-ni-Dr.-Pio-Valenzuela.jpg' },
+        { name: 'Valenzuela peoples park', lat: 14.69240, lng: 120.97024, imageUrl: 'https://en.wikipedia.org/wiki/File:Valenzuela_People%27s_Park_(MacArthur_Highway,_Valenzuela;_10-03-2021).jpg' },
+        { name: 'San Diego de Alcala Church', lat: 14.70770 , lng: 120.94591, imageUrl: 'https://valenzuela.gov.ph/ckuploads/images/SnDiego_Polo_20110224_9501.jpg' },
+        { name: 'SM City Valenzuela', lat: 14.68549, lng: 120.97730, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/SM_City_Valenzuela%2C_Mar_2024.jpg/1024px-SM_City_Valenzuela%2C_Mar_2024.jpg' },
+        { name: 'Tagalag Fishing Village Valenzuela', lat: 14.71800, lng: 120.94188, imageUrl: 'https://mirror.pia.gov.ph/uploads/2023/03/6ac28a48a588d512c783267872234484-800-1200.jpeg' },
+        { name: 'Valenzuela Family Park', lat: 14.68895, lng: 120.97959, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0c/Valenzuela_Family_Park_Karuhatan_01.jpg' },
+        { name: 'Valenzuela City Astrodome', lat: 14.70937, lng: 120.95759, imageUrl: 'https://valenzuela.gov.ph/ckuploads/files/PBALegends_EAC_20121202_0993.JPG' },
+        { name: 'Polo Mini Park', lat: 14.70785, lng: 120.94620, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Polo_Arkong_Bato_Valenzuela_29.jpg/800px-Polo_Arkong_Bato_Valenzuela_29.jpg?20230525040508' },
+        { name: 'Valenzuela City Sports Park', lat: 14.73282, lng: 120.92847, imageUrl: 'https://journal.com.ph/wp-content/uploads/2021/07/Valenzuela-City-Sports-Park-1-632x335.jpg' },
+        { name: 'Fatima Avenue', lat: 14.68062, lng: 120.97921, imageUrl: 'https://valenzuela.gov.ph/ckuploads/gallery/G_20220624_FatimaAveInaug_01.jpg' },
+        { name: 'Arkong bato Park', lat: 14.69562, lng: 120.95320, imageUrl: 'https://valenzuela.gov.ph/ckuploads/images/ArkongBato2023s.jpg' },
+        { name: 'Museo Valenzuela', lat: 14.68232, lng: 120.98045, imageUrl: 'https://valenzuela.gov.ph/ckuploads/images/MuseoValenzuela_20110205_22971.JPG' },
+        { name: 'National Shrine of Our Lady of Fatima', lat: 14.68256, lng: 120.98068, imageUrl: 'https://valenzuela.gov.ph/ckuploads/images/FatimaShrine_20110224_29680.JPG' },
+        { name: 'WES Arena', lat: 14.74186, lng: 120.98920, imageUrl: 'https://edgedavao.net/wp-content/uploads/2021/10/1012arena.jpg' },
+        { name: 'Tancinco Heritage House', lat: 14.7015, lng: 120.9546, imageUrl: 'https://valenzuela.gov.ph/ckuploads/images/The-City-Museo-ni-Dr.-Pio-Valenzuela.jpg' },
+        { name: 'Egbert Memorial Canon', lat: 14.69364, lng: 120.96879, imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi_iv5A8Uus96JrMiVdUGHwa2CumN6vgXNiT-SyRufTW8TP7Hi1CkYlecDYloU8WQUI2Pg5QOTp1PIEYSiOgAeGeof09FzFWsnEDxv9K3dELo6aDo1kb1TBUM8kvyViz4d_ubXC5PjbdUih/s1600/2018-05-29_10.20.04.jpg' },
+        { name: 'Triumvirate Monument', lat: 14.69176, lng: 120.96955, imageUrl: 'https://pbs.twimg.com/media/E4pGWWRVoAQEHpG.jpg' },
+        { name: 'Valenzuela farm and Fishpond', lat: 14.75317, lng: 120.99470, imageUrl: 'https://valenzuela.gov.ph/ckuploads/gallery/B_ICFP_DVBignay_20170907_Panorama.jpg' },
+    ];
+
+    const pinnedLocationsList = document.getElementById('pinned-locations-list');
+    pinnedLocationsList.innerHTML = ''; // Clear existing list
+
+    locations.forEach(location => {
+        const pinMarker = L.marker([location.lat, location.lng], { icon: pinnedIcon })
+            .bindPopup(`
+                <b>${location.name}</b><br>
+                <img src="${location.imageUrl}" alt="${location.name}" style="width:100%; height:auto;">
+            `)
+            .addTo(map);
+
+        pinMarkers.push(pinMarker); // Add to pin markers array
+
+        // Add click event listener to the pin markers
+        pinMarker.on('click', function () {
+            const destinationLatLng = pinMarker.getLatLng();
+
+            if (routingControl) {
+                routingControl.setWaypoints([
+                    marker.getLatLng(),
+                    destinationLatLng
+                ]);
+            } else {
+                routingControl = L.Routing.control({
+                    waypoints: [
+                        marker.getLatLng(),
+                        destinationLatLng
+                    ],
+                    routeWhileDragging: true,
+                    createMarker: function() { return null; } // Hide the default markers
+                }).on('routesfound', function (e) {
+                    e.routes[0].coordinates.forEach(function (coord, index) {
+                        setTimeout(function () {
+                            animateMarker(marker, [coord.lat, coord.lng], 500); // Smooth transition of marker
+                        }, 100 * index);
+                    });
+                }).addTo(map);
             }
 
-            setupRoutingControl(map, marker);
-            setupClearRouteButton(map, marker);
-            setupLocationUpdateButton(map, marker);
-            pinLocations(map, marker);
-            setupPinnedLocationsToggle();
-            setupSearchFunctionality(map, marker);
+            if (destinationMarker) {
+                map.removeLayer(destinationMarker);
+            }
 
-            // Show the tutorial on page load
-            document.getElementById('tutorial').style.display = 'block';
+            destinationMarker = L.marker(destinationLatLng, { 
+                icon: pinnedIcon
+            }).addTo(map);
+        });
 
-            // Close tutorial button event
-            document.getElementById('tutorial-close').addEventListener('click', function () {
-                document.getElementById('tutorial').style.display = 'none';
+        // Add location name to the list
+        const listItem = document.createElement('li');
+        listItem.textContent = location.name;
+        listItem.style.cursor = 'pointer'; // Make it look clickable
+        listItem.addEventListener('click', function() {
+            pinMarker.fire('click'); // Simulate click on the pin marker
+        });
+        pinnedLocationsList.appendChild(listItem);
+    });
+}
+
+function setupPinnedLocationsToggle() {
+    const pinnedLocationsIcon = document.getElementById('pinned-locations-icon');
+    const pinnedLocationsContainer = document.getElementById('pinned-locations');
+
+    pinnedLocationsIcon.addEventListener('click', function() {
+        if (pinnedLocationsContainer.style.display === 'none') {
+            pinnedLocationsContainer.style.display = 'block';
+        } else {
+            pinnedLocationsContainer.style.display = 'none';
+        }
+    });
+}
+
+function setupSearchFunctionality(map, marker) {
+    const locationInput = document.getElementById('location-input');
+    const searchResults = document.getElementById('search-results');
+    const geocoder = L.Control.Geocoder.nominatim();
+
+    locationInput.addEventListener('input', function() {
+        const query = locationInput.value;
+        searchResults.innerHTML = ''; // Clear previous results
+
+        if (query.length > 0) {
+            geocoder.geocode(query, function(results) {
+                results.forEach(result => {
+                    const latLng = result.center;
+                    const listItem = document.createElement('li');
+                    listItem.textContent = result.name || 'Unnamed Location';
+                    listItem.style.cursor = 'pointer'; // Make it look clickable
+                    listItem.addEventListener('click', function() {
+                        map.setView(latLng, map.getZoom());
+                        animateMarker(marker, latLng);
+
+                        if (routingControl) {
+                            routingControl.setWaypoints([
+                                marker.getLatLng(),
+                                latLng
+                            ]);
+                        }
+                        searchResults.innerHTML = ''; // Clear results after selection
+                    });
+                    searchResults.appendChild(listItem);
+                });
             });
         }
+    });
+}
 
-        document.addEventListener('DOMContentLoaded', main);
+function main() {
+    const map = initializeMap();
+    const marker = initializeMarker(map);
+
+    // Continuously track the user's location
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(
+            (position) => handleGeolocation(position, marker, map),
+            handleError,
+            { enableHighAccuracy: true, maximumAge: 1000, timeout: 5000 }
+        );
+    } else {
+        console.error("Geolocation is not supported by this browser.");
+    }
+
+    setupRoutingControl(map, marker);
+    setupClearRouteButton(map, marker);
+    setupLocationUpdateButton(map, marker);
+    pinLocations(map, marker);
+    setupPinnedLocationsToggle();
+    setupSearchFunctionality(map, marker);
+    setupTrafficLayer(map);
+    setupWeatherOverlay(map);
+    setupDistanceAndTimeCalculation(map);
+    setupBookmarkFeature(map);
+    setupDarkModeToggle();
+
+    // Show the tutorial on page load
+    document.getElementById('tutorial').style.display = 'block';
+
+    // Close tutorial button event
+    document.getElementById('tutorial-close').addEventListener('click', function () {
+        document.getElementById('tutorial').style.display = 'none';
+    });
+
+    // Set up the geofence to keep routing within Valenzuela City
+    setupGeofence(map);
+
+    // Customization options for user's location marker
+    setupMarkerCustomization(marker);
+}
+
+document.addEventListener('DOMContentLoaded', main);
+
+
     </script>
 </body>
 

@@ -53,10 +53,14 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    text-decoration: none;
+    background-color: white; 
+    border-radius: 5px;
     color: black;
-}
-
+  }
+  nav ul li.no-hover a:hover {
+    background-color: transparent; /* Remove background color on hover */
+    color: inherit; /* Inherit text color from parent */
+  }
 
 .menu-icon {
     display: none;

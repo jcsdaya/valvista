@@ -56,9 +56,14 @@ nav{
       transition: color 0.3s ease;
   }
   
-  nav ul li a:hover{
-      text-decoration: none;
-      color: black;
+  nav ul li a:hover {
+    background-color: white; 
+    border-radius: 5px;
+    color: black;
+  }
+  nav ul li.no-hover a:hover {
+    background-color: transparent; /* Remove background color on hover */
+    color: inherit; /* Inherit text color from parent */
   }
   
   .menu-icon{
@@ -126,7 +131,15 @@ nav{
     flex: 1;
     display: flex;
     justify-content: flex-end;
-    align-items: center; /* Add this line */
+    align-items: center; /* Add this line */nav ul li a:hover {
+        background-color: white; 
+        border-radius: 5px;
+        color: black;
+      }
+      nav ul li.no-hover a:hover {
+        background-color: transparent; /* Remove background color on hover */
+        color: inherit; /* Inherit text color from parent */
+      }
 }
 
 .image-container img {

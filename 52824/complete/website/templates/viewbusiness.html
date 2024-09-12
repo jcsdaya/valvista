@@ -36,7 +36,7 @@
         {%endif%}
         {% if user.is_authenticated%}
         <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
-        <li><a><i></i> Welcome {{request.user}}!</a></li>
+        <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
         
         {%else%}
         <li><a href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>

@@ -142,12 +142,14 @@ class ItineraryState(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     places = models.JSONField(default=list)
     times = models.JSONField(default=list)
+    times2 = models.JSONField(default=list)
     images = models.JSONField(default=list)
     text = models.JSONField(default=list)
     budget = models.JSONField(default=list)
     place_ids = models.JSONField(default=list)
     types = models.JSONField(default=list)
     start_time = models.TimeField(blank=True, null=True)
+    category = models.JSONField(default=list)
 
     def __str__(self):
         return f"Itinerary State for {self.user.username}"
@@ -158,6 +160,8 @@ class FavoriteItinerary(models.Model):
 
     def __str__(self):
         return f"Favorite Itinerary for {self.user.username}"
+
+
 
 
 

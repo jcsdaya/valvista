@@ -7,18 +7,90 @@
   }
 
   .jumbotron {
-    background: #c80000;
-
+    background: #dddddd;
     padding: 2rem 1rem;
     margin-bottom: 2rem;
-    border-radius: 3rem;
+    border-radius: 5rem;
     width: 120%;
-  
-   
-   
+    border: 3px solid black; /* Black border */
+    padding: 2rem 1rem; /* Optional: adjust padding if needed */
+    border-radius: 30px; /* Optional: keep the rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    position: relative;
 }
+
 .lead{
-    font-size: 25px;
+    text-align: left;
+}
+
+.display-4{
+  text-align: left;
+}
+  
+
+
+.favorite-btn-wrapper {
+  position: absolute;
+  top: 10px;
+}
+
+.btn-heart {
+  background: none;
+  border: none;
+  color: #000;
+  font-size: 36px; /* Adjust size as needed */
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.btn-heart:hover {
+  color: #000;
+}
+
+.btn-heart .fa-heart {
+  font-size: 36px;
+  margin-right: 50px;/* Ensure the icon is the same size */
+}
+
+.btn-heart .far.fa-heart {
+  color: gray;
+}
+
+.favorite-btn-wrapper {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.btn-heart {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 36px; /* Make the heart larger */
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.btn-heart:hover {
+  color: darkred;
+}
+
+.btn-heart .fa-heart {
+  font-size: 36px; /* Ensure the icon is the same size */
+}
+
+.btn-heart .far.fa-heart {
+  color: gray;
+}
+
+.jumbotron img {
+  border: 3px solid black; /* Black border for the image */
+  border-radius: 10px; /* Keeps the rounded corners */
+}
+
+
+.lead{
+    font-size: 22px;
 } 
 
 .overlap-column {
@@ -43,7 +115,7 @@
     align-items: center;
   }
   
-  nav{
+  nav {
     padding: 20px 30px;
     display: flex;
     align-items: center;
@@ -56,76 +128,111 @@
     left: 0;
     z-index: 1000;
     border-bottom: 5px solid black;
-  }
-  
-  .logo{
+}
+
+.logo {
     cursor: pointer;
-    padding: 10px;
-    max-height: 350px;
+    max-height: 100%;
     max-width: 400px;
-  }
-  
-  nav ul{
-      display: flex;
-      margin-right: 200px;
-      margin-top: 10px;
-      gap: 20px;
-      align-items: center;
-      z-index: 1; /* Ensure the menuList is behind the search bar */
-  }
-  
-  nav ul li{
-      list-style-type: none;
-  }
-  
-  nav ul li a{
-      text-decoration: none;
-      color: #fff;
-      font-size: 20px;
-      transition: color 0.3s ease;
-      display: inline-block;
-     
-  }
-  
-  nav ul li a:hover{
-      text-decoration: none;
-      color: black;
-  }
-  
-  .menu-icon{
-      display: none;
-  }
-  
-  .menu-icon i{
-      color: #fff;
-      font-size: 30px;
-  }
-  
-  @media (max-width:600px) {
-      nav ul{
-          position: absolute;
-          top: 125px;
-          left: 0;
-          right: 0;
-          flex-direction: column;
-          text-align: center;
-          background: #d80404;
-          gap: 0;
-          overflow: hidden;
-      }
-  
-  
-      nav ul li{
-          padding: 20px;
-          padding-top: 0;
-      }
-      .menu-icon{
-          display: block;
-      }
-      #menuList{
-          transition: all 0.5s;
-      }
-  }
+}
+
+nav ul {
+    display: flex;
+    margin-right: 70px;
+    margin-top: 10px;
+    gap: 20px;
+    align-items: center;
+    z-index: 1; /* Ensure the menuList is behind the search bar */
+}
+
+nav ul li {
+    list-style-type: none;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 20px;
+    transition: color 0.3s ease;
+    display: inline-block;
+}
+
+nav ul li a:hover {
+    background-color: white; 
+    border-radius: 5px;
+    color: black;
+}
+
+nav ul li.no-hover a:hover {
+  background-color: transparent; /* Remove background color on hover */
+  color: inherit; /* Inherit text color from parent */
+}
+
+.menu-icon {
+    display: none;
+}
+
+.menu-icon i {
+    color: #fff;
+    font-size: 30px;
+}
+
+.view-more-btn {
+    background-color: #c80000; /* Light button color */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    color: white;
+    border-radius: 50px;
+    max-width: 300px;
+    bottom: 100%;
+    float: right;
+}
+
+.view-more-btn:hover {
+    background-color: #ffffff;
+    color: red /* Darken the button on hover */
+}
+
+@media (max-width: 900px) {
+    nav {
+        height: auto;
+        padding: 15px 20px;
+    }
+
+    nav ul {
+        margin-right: 0;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    nav ul {
+        position: absolute;
+        top: 125px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        text-align: center;
+        background: #d80404;
+        gap: 0;
+        overflow: hidden;
+    }
+
+    nav ul li {
+        padding: 20px;
+        padding-top: 0;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+
+    #menuList {
+        transition: all 0.5s;
+    }
+}
+
+
   
 
   
@@ -136,7 +243,7 @@
   position: fixed;
   top: 60px; /* Below the navbar */
   left: 0;
-  background-color: lightgrey;
+  background-color: #dddddd;
   width: 250px;
   height: calc(100% - 60px); /* Adjusted for the height of the navbar */
   padding: 20px;
@@ -144,7 +251,8 @@
   overflow-y: auto;
   z-index: 100;
   transition: transform 0.3s ease, opacity 0.3s ease;
-  border-radius: 5px;
+  border: 5px solid black; /* Black border with 2px thickness */
+  border-radius: 3px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -275,8 +383,11 @@
 }
 
 #applyFiltersBtn:hover {
-  background-color: white;
-  transform: translateY(-2px);
+  background-color: #ffffff;
+      color: #d80404;
+      border-style: solid;
+      border-width: 1px;
+      border-color: #d80404;
 }
 
 #applyFiltersBtn:active {
@@ -383,6 +494,8 @@
       display: flex;
       width: 1650px;
       margin-left: 250px;
+      overflow: hidden;
+      
   }
 
   .slider .list {
@@ -401,7 +514,7 @@
   .slider .list .item img{
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit:fill;
   }
   .slider .list .item::after{
       content: '';
@@ -457,6 +570,7 @@
       animation-duration: 1.3s;
   }
   .arrows{
+      
       position: absolute;
       top: 45%;
       margin-top: 80px;
@@ -464,19 +578,19 @@
       z-index: 900;
   }
   .arrows button{
-      
+    background-color: #c80000;
       border: none;
       font-family: monospace;
       width: 40px;
       height: 40px;
       border-radius: 5px;
       font-size: x-large;
-      color: black;
+      color: white;
       transition: .5s;
   }
   .arrows button:hover{
       background-color: #eee;
-      color: black;
+      color: red;
   }
   .thumbnail{
       position: absolute;
@@ -846,4 +960,3 @@ h1 {
   h6{
       color:white;
   }
-  
