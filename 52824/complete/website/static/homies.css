@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: sans-serif;
+    font-family:'Franklin Gothic Medium';
   
   }
 
@@ -12,7 +12,7 @@
     margin-bottom: 2rem;
     border-radius: 5rem;
     width: 120%;
-    border: 3px solid black; /* Black border */
+    box-shadow: 3px inset #000 ; /* Black border */
     padding: 2rem 1rem; /* Optional: adjust padding if needed */
     border-radius: 30px; /* Optional: keep the rounded corners */
     transition: background-color 0.3s ease; /* Smooth transition */
@@ -83,10 +83,7 @@
   color: gray;
 }
 
-.jumbotron img {
-  border: 3px solid black; /* Black border for the image */
-  border-radius: 10px; /* Keeps the rounded corners */
-}
+
 
 
 .lead{
@@ -123,17 +120,17 @@
     background: #c80000;
     position: fixed;
     width: 100%;
-    height: 150px;
+    height: 80px;
     top: 0;
     left: 0;
     z-index: 1000;
-    border-bottom: 5px solid black;
+   
 }
 
 .logo {
-    cursor: pointer;
     max-height: 100%;
     max-width: 400px;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
 }
 
 nav ul {
@@ -251,8 +248,7 @@ nav ul li.no-hover a:hover {
   overflow-y: auto;
   z-index: 100;
   transition: transform 0.3s ease, opacity 0.3s ease;
-  border: 5px solid black; /* Black border with 2px thickness */
-  border-radius: 3px;
+
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -430,7 +426,7 @@ nav ul li.no-hover a:hover {
       margin-right: 650px;
       border-width: 3px 2px; /* Top and bottom border width = 2px, left and right border width = 1px */
     border-style: solid;
-    border-color: black;
+   
   }
   
   /* hover search btn */
@@ -678,14 +674,6 @@ h1 {
 .container {
   padding: 1.5rem;
   text-align: center;
-  background: radial-gradient(circle at 1.4% 1.4%, var(--color-1) .8%, transparent .8%),
-    radial-gradient(circle at 5.5% 3%, var(--color-2) .45%, transparent .45%),
-    radial-gradient(circle at 2.5% 3.5%, var(--color-3) .5%, transparent .5%),
-    radial-gradient(circle at 4.5% 1.2%, var(--color-4) .25%, transparent .25%),
-    radial-gradient(circle at 98% 98%, var(--color-1) .8%, transparent .8%),
-    radial-gradient(circle at 95% 95%, var(--color-2) .45%, transparent .45%),
-    radial-gradient(circle at 94.5% 97.5%, var(--color-3) .5%, transparent .5%),
-    radial-gradient(circle at 98.5% 95.5%, var(--color-4) .25%, transparent .25%);
 }
 
 @media screen and (max-width: 768px) {
