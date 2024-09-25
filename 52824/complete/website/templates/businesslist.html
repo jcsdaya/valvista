@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="..\media\media\vlogos.png" type="image/png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -11,29 +12,33 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {% load static %}
     <title>Home | ValVista</title>
-    <link rel="stylesheet" href="{% static 'templatoss.css' %}">
+    <link rel="stylesheet" href="{% static 'businesslist.css' %}">
 </head>
 <header>
     <div style= "background-image: url('https://www.valenzuela.gov.ph/ckuploads/images/cityhall_facade.jpg'); background-size: cover;background-position: center;"></div>
     
     <nav>
-        <img class="logo"src ="..\media\media\valvista logo.png" alt="logo">
+        <a href="{%url 'home' %}"><img class="logo"src ="..\media\media\valvista logo.png" alt="logo"></a>
         <ul class="nav-links">
             <li><a href="{%url 'businesshome' %}"><i class="fa-solid fa-house"></i> Profile</a></li>
             <li><a href="{%url 'businesslist' %}"><i class="fa-solid fa-clipboard-list"></i> View Business</a></li>
+           
+        </ul>
+        <ul class="nav-links ul-user">
             {% if user.is_authenticated%}
-            <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
             <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
+            <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
             {%else%}
-            <li><a href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+            <li><a style="margin-left: 400px;" href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+            
             {%endif%}
+            
         </ul>
     </nav>
 </header>
-    <br><br><br><br><br><br><br><br>
-    <h1 style="margin-left: 800px;" >ValVista Business List</h1>
+    <br><br><br><br><br><br>
+    <h1 style="margin-left: 750px;" >ValVista Business List</h1>
     <div  style="padding-left: 70px;" class="row row-cols-1 row-cols-md-4 g-4 py-5">
-        <a class="btn btn-primary" href="{% url 'register_business' %}" role="button">Add Business</a>
         {% for bus in all_bus %}
             {% if not bus.archived %}
             {% if bus.approval %}

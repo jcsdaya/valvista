@@ -421,12 +421,12 @@ def viewbusiness(request,pk):
 
 def bussdeets(request,pk):
     business = get_object_or_404(Business, pk=pk)
-    photos = request.FILES.getlist('photo')
-    for photo in photos:
-            photo_instance = Media(file=photo)
-            photo_instance.save()
-            business.photo.add(photo_instance)
     form = BusinessUpdForm(instance=business)
+    photos = request.FILES.getlist('photos')
+    for photos in photos:
+            photo_instance = Media(file=photos)
+            photo_instance.save()
+            business.photos.add(photo_instance)
     context = {'business':business,'form':form}
     return render(request, 'bussdeets.html',context)
 

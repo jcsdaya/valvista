@@ -1,10 +1,10 @@
 body {
-    background-image: url('https://valenzuela.gov.ph/ckuploads/images/cityhall_facade.jpg');
+    background-image: url('/media/media/cityhall_facade.jpg');
     background-size: cover; /* Cover the entire background */
     background-repeat: no-repeat; /* Prevent the image from repeating */
     background-attachment: fixed; /* Keep the background fixed on scroll */
     background-position: center; /* Center the background image */
-    font-family: sans-serif;
+    font-family:'Franklin Gothic';
     margin: 0; /* Remove default margin */
     overflow-y: auto;
 
@@ -12,111 +12,96 @@ body {
 
 /* Header styles */
 
-nav{
+nav {
     padding: 20px 30px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     background: #c80000;
     position: fixed;
     width: 100%;
-    height: 150px;
+    height: 80px;
     top: 0;
     left: 0;
-    z-index: 1000;
-    border-bottom: 5px solid black;
-  }
-  
-  .logo{
-    cursor: pointer;
-    padding: 10px;
-    max-height: 350px;
-    max-width: 400px;
+    z-index: 1100;
+   
 }
-  
-  nav ul{
-      display: flex;
-      margin-right: 200px;
-      margin-top: 10px;
-      gap: 20px;
-      align-items: center;
-      z-index: 1; /* Ensure the menuList is behind the search bar */
+.logo {
+    margin-top: 3px;
+    height: 200px; 
+    width: 220px; 
+    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5)); 
   }
   
-  nav ul li{
-      list-style-type: none;
-  }
-  
-  nav ul li a{
-      text-decoration: none;
-      color: #fff;
-      font-size: 20px;
-      transition: color 0.3s ease;
-  }
-  
-  nav ul li a:hover {
+
+
+nav ul {
+    display: flex;
+    margin-top: 20px;
+    margin-right: 30px;
+    gap: 20px;
+    z-index: 1; /* Ensure the menuList is behind the search bar */
+}
+
+
+nav ul li {
+    list-style-type: none;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 20px;
+    transition: color 0.3s ease;
+    display: inline-block;
+}
+
+nav ul li a:hover {
     background-color: white; 
     border-radius: 5px;
     color: black;
+}
+
+.ul-user{
+    margin-left: 1140px;
   }
-  nav ul li.no-hover a:hover {
-    background-color: transparent; /* Remove background color on hover */
-    color: inherit; /* Inherit text color from parent */
+
+
+nav ul li.no-hover a:hover {
+  background-color: transparent; /* Remove background color on hover */
+  color: inherit; /* Inherit text color from parent */
+}
+ .image-holder {
+    flex: 1;
+    background: url('/media/media/gif.gif') center center/cover no-repeat;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
   }
   
-  .menu-icon{
-      display: none;
-  }
-  
-  .menu-icon i{
-      color: #fff;
-      font-size: 30px;
-  }
-  
-  @media (max-width:600px) {
-      nav ul{
-          position: absolute;
-          top: 125px;
-          left: 0;
-          right: 0;
-          flex-direction: column;
-          text-align: center;
-          background: #d80404;
-          gap: 0;
-          overflow: hidden;
-      }
-  
-  
-      nav ul li{
-          padding: 20px;
-          padding-top: 0;
-      }
-      .menu-icon{
-          display: block;
-      }
-      #menuList{
-          transition: all 0.5s;
-      }
-  }
 
 /* Login Form Styles */
 .login {
     display: flex;
+    max-width: 900px;
+    width: 100%;
+    margin-left: 500px;
+    margin-top: 130px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* For Safari */
     justify-content: center;
-    align-items: center;
-    min-height: 80vh;
-    padding: 20px;
 }
 
 .login__form {
-    background: transparent; /* Removed white background */
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgb(0, 0, 0);
-    padding: 40px;
-    max-width: 400px;
-    width: 100%;
-    backdrop-filter: blur(10px); /* Added backdrop filter for a subtle blur effect */
+    flex: 1;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 40px 60px;
+    color: #505e6c;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .login__title {
@@ -124,7 +109,6 @@ nav{
     font-weight: bold;
     margin-bottom: 20px;
     text-align: center;
-    color:white
 }
 
 .login__content {
@@ -173,7 +157,6 @@ nav{
     top: -10px;
     left: 10px;
     font-size: 12px;
-    color: white;
 }
 
 .login__eye {
@@ -202,7 +185,6 @@ nav{
 
 .login__check-label {
     font-size: 14px;
-    color: white;
 }
 
 .login__forgot {
@@ -224,7 +206,6 @@ nav{
     color: #ffffff;
     font-size: 16px;
     cursor: pointer;
-    transition: background 0.3s ease;
 }
 
 .login__button:hover {
@@ -236,7 +217,6 @@ nav{
     text-align: center;
     margin-top: 20px;
     font-size: 14px;
-    color: white;
 }
 
 .login__register a {

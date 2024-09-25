@@ -113,15 +113,15 @@
                 </tr>
             </thead>
             
-            <tbody>
+            <tbody id="itineraryBody">
                 {% with place.0 as first_place %}
                 {% if first_place%}
    
     <tr data-place-id="{{ first_place.id }}" class="tablecontent">
         <th class="place-name">{{ first_place.name }}</th>
-        <th><p class="inline-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=""></p></th>
-        <th><p class="inline-input"><input type="text" id="time1Input{{ first_place.id }}" placeholder=""></p></th>
-        <th><p class="inline-input"><input type="text" id="BudgetInput{{ first_place.id }}" placeholder=""></p></th>
+        <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p></th>
+        <th><p class="time1-input"><input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
+        <th><p class="inline-input"><input type="text" id="BudgetInput{{ first_place.id }}" placeholder=></p></th>
         <th><textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
         <th>
             <button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
@@ -134,8 +134,8 @@
                 {% if first_place %}
                 <tr data-place-id="{{ first_place.id }}" class="tablecontent">
                     <th class="place-name">{{ first_place.name }} </th>
-                    <th><p class="inline-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=""></p> </th>
-                    <th><p class="inline-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
+                    <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
+                    <th><p class="time1-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
                     <th><p class="inline-input"> <input type="text" id="BudgetInput{{ first_place.id }}" placeholder=></p></th>
                     <th> <textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
                     <th><button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
@@ -148,8 +148,8 @@
                 {% if first_place %}
                 <tr data-place-id="{{ first_place.id }}" class="tablecontent">
                     <th class="place-name">{{ first_place.name }} </th>
-                    <th><p class="inline-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=""></p> </th>
-                    <th><p class="inline-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
+                    <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
+                    <th><p class="time1-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
                     <th><p class="inline-input"> <input type="text" id="BudgetInput{{ first_place.id }}" placeholder=></p></th>
                     <th> <textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
                     <th><button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
@@ -162,8 +162,8 @@
                 {% if first_place %}
                 <tr data-place-id="{{ first_place.id }}" class="tablecontent">
                     <th class="place-name">{{ first_place.name }} </th>
-                    <th><p class="inline-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=""></p> </th>
-                    <th><p class="inline-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
+                    <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
+                    <th><p class="time1-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
                     <th><p class="inline-input"> <input type="text" id="BudgetInput{{ first_place.id }}" placeholder=></p></th>
                     <th> <textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
                     <th><button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
@@ -176,8 +176,8 @@
                 {% if first_place %}
                 <tr data-place-id="{{ first_place.id }}" class="tablecontent">
                     <th class="place-name">{{ first_place.name }} </th>
-                    <th><p class="inline-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=""></p> </th>
-                    <th><p class="inline-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
+                    <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
+                    <th><p class="time1-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
                     <th><p class="inline-input"> <input type="text" id="BudgetInput{{ first_place.id }}" placeholder=></p></th>
                     <th> <textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
                     <th><button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
@@ -242,7 +242,7 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    
@@ -277,20 +277,51 @@ function setActiveRow(button) {
 
 // Function to update itinerary based on selected place count
 function updateItinerary() {
-    const placeCount = parseInt(document.getElementById('place-count').value, 10);
-    const steps = document.querySelectorAll('.step');
-    const contents = document.querySelectorAll('.tablecontent');
-
-
-    // Clear and update itinerary times
-    updateItineraryTimes();
+    const placeCount = document.getElementById('place-count').value;
+    const itineraryBody = document.getElementById('itineraryBody');
+    
+    // Get all existing rows
+    const rows = itineraryBody.querySelectorAll('tr');
+    
+    // Loop through all rows
+    rows.forEach((row, index) => {
+        if (index < placeCount) {
+            row.style.display = '';  // Show row
+            toggleInputs(row, false, true); // Enable input fields in this row, keep values
+        } else {
+            row.style.display = 'none';  // Hide row
+            toggleInputs(row, true, false); // Disable and clear input fields in this row
+        }
+    });
 }
 
+// Helper function to disable/enable and clear inputs in a row
+function toggleInputs(row, disable, keepValue) {
+    const inputs = row.querySelectorAll('input, textarea, select');
+    
+    inputs.forEach(input => {
+        // Log current input being handled for debugging
+        console.log('Processing input:', input);
+
+        input.disabled = disable;  // Disable or enable input
+        console.log('Disabled:', disable, 'Keep Value:', keepValue);
+        
+        // Clear the input value if we're hiding the row and not keeping the value
+        if (!keepValue) {
+            input.value = '';  // Clear value if the row is hidden
+            console.log('Input cleared');
+        } else {
+            console.log('Value kept:', input.value);
+        }
+    });
+}
+
+// Initialize the itinerary with the default selected option
+updateItineraryTimes();
 // Initial load
 
 
 function selectItem(id, name, imageUrl, type, category) {
-   
     // Select the currently active row
     const activeContent = document.querySelector('.tablecontent.active');
     
@@ -304,7 +335,8 @@ function selectItem(id, name, imageUrl, type, category) {
     activeContent.dataset.type = type;
     activeContent.dataset.category = category;
 
-    console.log("category",category)
+    console.log("id", id)
+    console.log("category", category);
 
     // Update the name in the correct table row
     const nameCell = activeContent.querySelector('th:first-child');
@@ -315,39 +347,61 @@ function selectItem(id, name, imageUrl, type, category) {
     }
 
     // Fetch the time inputs and other fields by their position or class name
-    const timeInputs = activeContent.querySelectorAll('.timeInput'); // Adjust class name as needed
-    const timeInputs2 = activeContent.querySelectorAll('.time1Input');
+   let timeInput = activeContent.querySelector(`[id^='timeInput']`);
+    let time1Input = activeContent.querySelector(`[id^='time1Input']`);
+    let budgetInput = activeContent.querySelector(`[id^='BudgetInput']`);
+    let textArea = activeContent.querySelector(`[id^='myTextArea']`);
 
-    const budgetInput = activeContent.querySelector('.BudgetInput'); // Adjust class name as needed
-    const textArea = activeContent.querySelector('.myTextArea'); // Adjust class name as needed
+    // Dynamically update the IDs of inputs with the new id
+    if (timeInput) {
+        timeInput.id = `timeInput${id}`;
+        timeInput.value = ''; // Clear the value or set a new default
+    } else {
+        console.error(`Time Input 1 not found for place ID: ${id}`);
+    }
 
-    // Clear or reset the time inputs and textarea
-    if (timeInput1) timeInput1.value = ''; // Clear the value or set a new default
-    else console.error('Time Input 1 not found');
+    if (time1Input) {
+        time1Input.id = `time1Input${id}`;
+        time1Input.value = '';
+    } else {
+        console.error(`Time Input 2 not found for place ID: ${id}`);
+    }
 
-    if (timeInput2) timeInput2.value = '';
-    else console.error('Time Input 2 not found');
+    if (budgetInput) {
+        console.log(budgetInput)
+        budgetInput.id = `BudgetInput${id}`;
+        budgetInput.value = '500';
+        budgetInput.addEventListener('input', saveItineraryState); // Add listener
 
-    if (budgetInput) budgetInput.value = '';
-    else console.error('Budget Input not found');
+    } else {
+        console.error(`Budget Input not found for place ID: ${id}`);
+    }
 
-    if (textArea) textArea.value = '';
-    else console.error('Text Area not found');
+    if (textArea) {
+        textArea.id = `myTextArea${id}`;
+        textArea.value = '';
+        textArea.addEventListener('input', saveItineraryState);
+
+    } else {
+        console.error(`Text Area not found for place ID: ${id}`);
+    }
+        updateItineraryTimes();
 
     // Log the selected inputs for debugging
     console.log(`Updating inputs for id: ${id}`);
-    console.log(`Time Input 1: ${timeInput1 ? timeInput1.value : 'Not Found'}`);
-    console.log(`Time Input 2: ${timeInput2 ? timeInput2.value : 'Not Found'}`);
     console.log(`Budget Input: ${budgetInput ? budgetInput.value : 'Not Found'}`);
     console.log(`Text Area: ${textArea ? textArea.value : 'Not Found'}`);
 
     // Save the itemId and other attributes to local storage
+    activeContent.dataset.timeInputId = `timeInput${id}`;
+    activeContent.dataset.time1InputId = `time1Input${id}`;
+    activeContent.dataset.budgetInputId = `BudgetInput${id}`;
+    activeContent.dataset.textAreaId = `myTextArea${id}`;
     localStorage.setItem('selectedItemId', id);
     localStorage.setItem('selectedItemType', type);
     localStorage.setItem('selectedItemCategory', category);
 
-    // Update the itinerary times after selecting an item
-    updateItineraryTimes();
+
 
     // Hide the modal (using Bootstrap 5 modal instance)
     const modalElement = document.getElementById('editModal');
@@ -362,7 +416,6 @@ function selectItem(id, name, imageUrl, type, category) {
         console.error('Modal element not found');
     }
 }
-
 
 
 // Function to save the itinerary state
@@ -382,24 +435,30 @@ function saveItineraryState() {
    
 
     document.querySelectorAll('.tablecontent').forEach((content, index) => {
+        const placeId = content.dataset.placeId;
+        const timeInputId = content.dataset.timeInputId; 
+        const time1InputId = content.dataset.time1InputId; 
         const placeName = content.querySelector('.place-name').textContent;
-        const timeInput = document.getElementById('timeInput' + (index + 1)).value;
-        const time1Input = document.getElementById('time1Input' + (index + 1)).value;
-        const id = content.dataset.placeId;
         const type = content.dataset.type;
         const categorys = content.dataset.category;
-        const budgetinput = document.getElementById('BudgetInput' + (index + 1)).value;
-        const textarea = document.getElementById('myTextArea' + (index + 1)).value;
+        const BudgetInputId = content.dataset.budgetInputId; 
+        const textAreaId = content.dataset.textAreaId; 
 
         places.push(placeName);
-        times.push(timeInput);
-        times2.push(time1Input);
-        placeIds.push(id);
+        placeIds.push(placeId);
         types.push(type);
         category.push(categorys);
-        budget.push(budgetinput);
-        text.push(textarea)
+        times.push({ id: timeInputId, value: content.querySelector(`#${timeInputId}`)?.value || '' });
+        times2.push({ id: time1InputId, value: content.querySelector(`#${time1InputId}`)?.value || '' });
+        const budgetInputValue = content.querySelector(`#${BudgetInputId}`)?.value || '';
+        budget.push(budgetInputValue);
+
+        // Capture the text area input value
+        const textAreaValue = content.querySelector(`#${textAreaId}`)?.value || '';
+        text.push(textAreaValue);
     });
+
+
 
     const data = {
         places: places,
@@ -461,15 +520,43 @@ function loadItineraryState() {
         const tableContents = document.querySelectorAll('.tablecontent');
 
         tableContents.forEach((content, index) => {
-            // Ensure data exists at the current index
             if (places && places.length > index) {
                 const place = places[index];
                 content.querySelector('.place-name').textContent = place;
 
-                document.getElementById('timeInput' + (index + 1)).value = times[index];
-                document.getElementById('time1Input' + (index + 1)).value = times2[index];
-                document.getElementById('BudgetInput' + (index + 1)).value = budget[index];
-                document.getElementById('myTextArea' + (index + 1)).value = text[index];
+                const placeId = placeIds[index]; 
+                content.dataset.placeId = placeId;
+                content.dataset.type = types[index];
+
+                 // Update input IDs dynamically
+                 const timeInputId = `timeInput${placeId}`;
+                const time1InputId = `time1Input${placeId}`;
+                const budgetInputId = `BudgetInput${placeId}`;
+                const textAreaId = `myTextArea${placeId}`;
+
+                // Apply new IDs to inputs
+                const timeInput = content.querySelector(`input[id^='timeInput']`);
+                const time1Input = content.querySelector(`input[id^='time1Input']`);
+                const budgetInput = content.querySelector(`input[id^='BudgetInput']`);
+                const textArea = content.querySelector(`textarea[id^='myTextArea']`);
+
+                if (timeInput) {
+                    timeInput.id = timeInputId;
+                    timeInput.value = times[index]?.value || '';
+                }
+                if (time1Input) {
+                    time1Input.id = time1InputId;
+                    time1Input.value = times2[index]?.value || '';
+                }
+                if (budgetInput) {
+                    budgetInput.id = budgetInputId;
+                    budgetInput.value = budget[index]?.value || '';
+                }
+                if (textArea) {
+                    textArea.id = textAreaId;
+                    textArea.value = text[index]?.value || '';
+                }
+
 
                 if (placeIds && placeIds.length > index && types && types.length > index) {
                     const placeId = placeIds[index];
@@ -486,20 +573,21 @@ function loadItineraryState() {
                         button.setAttribute('onclick', `redirectToBusiness('${placeId}')`);
                     }
 
-                    const selectedItemId = localStorage.getItem('selectedItemId');
+                   const selectedItemId = localStorage.getItem('selectedItemId');
                     if (selectedItemId === placeId) {
                         content.classList.add('active');
                     }
                 }
             }
         });
+        updateItineraryTimes();
     })
     .catch(error => {
         console.error('Error loading itinerary state:', error);
     });
 }
 
-
+ 
 window.addEventListener('load', function() {
     loadItineraryState();
 });
@@ -533,10 +621,10 @@ function updateProgress(position) {
 }
 
 const categoryDurations = {
-    'Leisure': 2 * 60, // 1.5 hours in minutes
-    'Dining': 1.5 * 60, // 1 hour in minutes
-    'Historical': 2 * 60, // 2 hours in minutes
-    'Educational': 1 * 60, // 2 hours in minutes
+    'Leisure': 1 * 60, // 1.5 hours in minutes
+    'Dining': 2 * 60, // 1 hour in minutes
+    'Historical': 3 * 60, // 2 hours in minutes
+    'Educational': 4 * 60, // 2 hours in minutes
     // Add more categories and durations as needed
 };
 
@@ -552,56 +640,65 @@ function formatTime(hours, minutes) {
 function updateItineraryTimes() {
     const startTimeInput = document.getElementById('start-time');
     const startTime = startTimeInput.value;
-    if (!startTime) return;
+    if (!startTime) return;  // Exit if no start time is provided
 
     let [startHours, startMinutes] = startTime.split(':').map(Number);
     let totalMinutes = startHours * 60 + startMinutes;
-    let totalDuration = 0; // Initialize total duration in minutes
+    let totalDuration = 0;  // Initialize total duration in minutes
 
     // Clear previous times
-    document.querySelectorAll('.timeInput').forEach(input => input.value = '');
-    document.querySelectorAll('.time1Input').forEach(input => input.value = '');
+    document.querySelectorAll('#timeInput').forEach(input => input.value = '');
+    document.querySelectorAll('#time1Input').forEach(input => input.value = '');
 
-    // Get the number of active places
+    // Get the number of active places (visible rows)
     const placeCount = parseInt(document.getElementById('place-count').value, 10);
 
+    // Only process visible rows and skip the hidden ones
     document.querySelectorAll('.tablecontent').forEach((content, index) => {
-    // Select the correct button using the `.btn-category` class
-    const button = content.querySelector('button');
-    if (button) {
-        const category = button.dataset.category;
-        console.log(`Index ${index}: Category -`, category); // Debug log
+        const row = content.closest('tr');  // Get the parent row
+        if (row && row.style.display !== 'none') {  // Only process visible rows
+            // Select the correct button using the `.btn-category` class
+            const button = content.querySelector('button');
+            if (button) {
+                const category = button.dataset.category;
+                console.log(`Index ${index}: Category -`, category); // Debug log
 
-        const duration = categoryDurations[category] || 60;
-        totalDuration += duration;
+                const duration = categoryDurations[category] || 60;  // Default to 60 minutes
+                totalDuration += duration;
 
-        totalMinutes += duration;
-        let endHours = Math.floor(totalMinutes / 60);
-        let endMinutes = totalMinutes % 60;
+                totalMinutes += duration;
+                let endHours = Math.floor(totalMinutes / 60);
+                let endMinutes = totalMinutes % 60;
 
-        const formattedStartTime = formatTime(startHours, startMinutes);
-        const formattedEndTime = formatTime(endHours, endMinutes);
+                const formattedStartTime = formatTime(startHours, startMinutes);
+                const formattedEndTime = formatTime(endHours, endMinutes);
 
-        const timeInput = content.querySelector(`#timeInput${index + 1}`);
-        const time1Input = content.querySelector(`#time1Input${index + 1}`);
-        if (timeInput && time1Input) {
-            timeInput.value = formattedStartTime;
-            time1Input.value = formattedEndTime;
+                // Use dataset.placeId to target the correct inputs
+                const timeInput = content.querySelector(`#timeInput${content.dataset.placeId}`);
+                const time1Input = content.querySelector(`#time1Input${content.dataset.placeId}`);
+
+                if (timeInput && time1Input) {
+                    timeInput.value = formattedStartTime;
+                    time1Input.value = formattedEndTime;
+                } else {
+                    console.error(`Time inputs not found for place ID ${content.dataset.placeId}`);
+                }
+
+                startHours = endHours;
+                startMinutes = endMinutes;
+            } else {
+                console.error(`Button not found for index ${index}`);
+            }
         }
+    });
 
-        startHours = endHours;
-        startMinutes = endMinutes;
-    } else {
-        console.error(`Button not found for index ${index}`);
-    }
-});
     // Calculate and display total end time and duration
     const totalEndHours = Math.floor(totalMinutes / 60);
     const totalEndMinutes = totalMinutes % 60;
     const formattedTotalEndTime = formatTime(totalEndHours, totalEndMinutes);
     document.getElementById('end-time').textContent = formattedTotalEndTime;
 
-    const totalHours = (totalDuration / 60).toFixed(2); // Total duration in hours
+    const totalHours = (totalDuration / 60).toFixed(2);  // Total duration in hours
     document.getElementById('total-duration').textContent = totalHours;
 
     console.log('Itinerary times updated:', {
@@ -615,8 +712,7 @@ function updateItineraryTimes() {
 // Call this function to initialize or update times and duration
 updateItineraryTimes();
 
-// Initial load
-updateItinerary();
+
 
 document.getElementById('downloadItineraryBtn').addEventListener('click', function() {
     const itineraryContent = document.getElementById('itinerary-content');

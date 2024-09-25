@@ -3,48 +3,52 @@ body {
   font-family: sans-serif;
   margin: 0; /* Remove default margin */
   overflow: hidden; /* Prevent scrolling */
+  font-family:'Franklin Gothic';
 }
 
-nav{
+nav {
   padding: 20px 30px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   background: #c80000;
   position: fixed;
   width: 100%;
-  height: 150px;
+  height: 80px;
   top: 0;
   left: 0;
-  z-index: 1000;
-  border-bottom: 5px solid black;
+  z-index: 1100;
+ 
+}
+.logo {
+  margin-top: 3px;
+  height: 200px; 
+  width: 220px; 
+  filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5)); 
 }
 
-.logo{
-  cursor: pointer;
-  padding: 10px;
-  max-height: 350px;
-  max-width: 400px;
+
+nav ul {
+  display: flex;
+  margin-top: 20px;
+  margin-right: 30px;
+  gap: 20px;
+  z-index: 1; /* Ensure the menuList is behind the search bar */
 }
 
-nav ul{
-    display: flex;
-    margin-right: 200px;
-    margin-top: 10px;
-    gap: 20px;
-    align-items: center;
-    z-index: 1; /* Ensure the menuList is behind the search bar */
+.ul-user{
+margin-left: 300px;
 }
 
-nav ul li{
-    list-style-type: none;
+nav ul li {
+  list-style-type: none;
 }
 
-nav ul li a{
-    text-decoration: none;
-    color: #fff;
-    font-size: 20px;
-    transition: color 0.3s ease;
+nav ul li a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 20px;
+  transition: color 0.3s ease;
+  display: inline-block;
 }
 
 nav ul li a:hover {
@@ -52,10 +56,16 @@ nav ul li a:hover {
   border-radius: 5px;
   color: black;
 }
+
 nav ul li.no-hover a:hover {
-  background-color: transparent; /* Remove background color on hover */
-  color: inherit; /* Inherit text color from parent */
+background-color: transparent; /* Remove background color on hover */
+color: inherit; /* Inherit text color from parent */
 }
+
+.ul-user{
+  margin-left: 1140px;
+}
+
 .menu-icon{
     display: none;
 }

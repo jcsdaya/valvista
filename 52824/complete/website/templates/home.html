@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="..\media\media\vlogos.png" type="image/png">
+    <link rel="shortcut icon" href="..\media\media\vlogos.png" type="image/png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -19,13 +21,7 @@
         <div class="logo">
             <a style="margin-right: 50px;" href="{%url 'home' %}"><img class="logo"src ="..\media\media\valvista logo.png" alt="logo"></a>
         </div>
-        <div class="search-container">
-            <div class="search-bar">
-                <input id="searchInput" type="text" placeholder="Search...">
-                <button id="searchBtn" class="btn"><i class="fa-solid fa-magnifying-glass"></i></button>
-
-            </div>
-        </div>
+      
             <ul class="nav-links">
 
             <li><a href="{%url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
@@ -40,57 +36,52 @@
 			{%else%}
             <li><a ></i></a></li>
             {%endif%}
+        </ul>
+            <div class="search-container">
+                <div class="search-bar">
+                    <input id="searchInput" type="text" placeholder="Search...">
+                    <button id="filterbut" class="btn"><i class="fa-solid fa-filter"></i></button>
+    
+                </div>
+            </div>
+            <ul class="nav-links ul-user">
             {% if user.is_authenticated%}
-            <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
             <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
+            <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
             {%else%}
-            <li><a href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+            <li><a style="margin-left: 400px;" href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
             
             {%endif%}
             
         </ul>
         
     </nav>
-    <script>
-        let menuList = document.getElementById("menuList")
-        menuList.style.maxHeight = "0px";
+<body>
+<!-- Modal Structure -->
+<div id="filterModal" class="modal">
 
-        function toggleMenu(){
-            if(menuList.style.maxHeight == "0px")
-            {
-                menuList.style.maxHeight = "300px";
-            }
-            else{
-                menuList.style.maxHeight = "0px";
-            }
-        } 
-        </script>
-        <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script>
-
+        <!-- Sidebar content goes here -->
         <div class="ssidebar">
+            <span class="close">&times;</span>
             <div class="filter">
-                <label><strong>Activities</strong></label>
-                <input type="checkbox" id="activity1" name="activity" value="Leisure">
-                <label for="activity1">Leisure</label>
-                <input type="checkbox" id="activity2" name="activity" value="Educational">
-                <label for="activity2">Educational</label>
-                <input type="checkbox" id="activity3" name="activity" value="Historical">
-                <label for="activity3">Historical</label>
-                <input type="checkbox" id="activity4" name="activity" value="Diner">
-                <label for="activity4">Diner</label>
+                <label for="activities"><strong>Activity</strong></label>
+                <select id="activities" name="activities">
+                    <option value="Leisure">Leisure</option>
+                    <option value="Educational">Educational</option>
+                    <option value="Historical">Historical</option>
+                    <option value="Diner">Diner</option>
+                </select>
+                
+                <label for="activities"><strong>Budget</strong></label>
+                <select id="budget" name="budget">
+                    <option value="0">Free Admission</option>
+                    <option value="1-200">₱1-₱200</option>
+                    <option value="201-500">₱201 - ₱500</option>
+                    <option value="501+">₱501+</option>
+                </select>
+            </div>
+        
 
-            </div>
-            <div class="filter">
-                <label><strong>Budget</strong></label>
-                <input type="checkbox" id="budget1" name="budget" value="0">
-                <label for="budget1">Free Admission</label>
-                <input type="checkbox" id="budget2" name="budget" value="1-200">
-                <label for="budget2">₱1-₱200</label>
-                <input type="checkbox" id="budget3" name="budget" value="201-500">
-                <label for="budget3">₱201 - ₱500</label>
-                <input type="checkbox" id="budget4" name="budget" value="501+">
-                <label for="budget4">₱501+</label>
-            </div>
             <div class="filter">
                 <label for="time"><strong>Time</strong></label>
                 <select id="hours" name="hours">
@@ -112,14 +103,50 @@
                     <option value="PM">PM</option>
                 </select>
             </div>
+            
             <input type="button" id="applyFiltersBtn" value="Apply Filters">
         </div>
-    
-        <script>
+        
+</div>
+
+<script>
+
+var modal = document.getElementById("filterModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("filterbut");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+    console.log("button is being pressed");
+
+    // Check if the modal is currently displayed
+    if (modal.style.display === "block") {
+        // If it's displayed, hide it
+        modal.style.display = "none";
+    } else {
+        // If it's hidden, show it
+        modal.style.display = "block";
+    }
+}
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
 
 document.getElementById('applyFiltersBtn').addEventListener('click', function () {
-    const selectedActivities = Array.from(document.querySelectorAll('input[name="activity"]:checked')).map(cb => cb.value);
-    const selectedBudgets = Array.from(document.querySelectorAll('input[name="budget"]:checked')).map(cb => cb.value);
+    const selectedActivities = document.getElementById('activities').value;
+    const selectedBudgets = document.getElementById('budget').value;
     const selectedHour = document.getElementById('hours').value;
     const selectedAmPm = document.getElementById('amorpm').value.toUpperCase();
 
@@ -143,13 +170,14 @@ document.getElementById('applyFiltersBtn').addEventListener('click', function ()
         console.log('Item Budget:', itemBudget);
         console.log('Item Time in Minutes:', itemTimeInMinutes);
 
-        const matchesActivities = selectedActivities.length === 0 || selectedActivities.some(act => itemActivities.includes(act));
-        const matchesTime = itemTimeInMinutes <= selectedTimeInMinutes; // Check if item's time is less than or equal to selected time
+        // Check activity match (since select is single-value, direct comparison)
+        const matchesActivities = selectedActivities === '' || itemActivities.includes(selectedActivities);
 
-        let matchesBudget = false;
-        if (selectedBudgets.length === 0 || selectedBudgets.some(budget => itemBudget.includes(budget))) {
-            matchesBudget = true; // No budget filter selected or item's budget range overlaps with selected budgets
-        }
+        // Check budget match (since select is single-value, direct comparison)
+        const matchesBudget = selectedBudgets === '' || itemBudget === selectedBudgets;
+
+        // Check time match
+        const matchesTime = itemTimeInMinutes <= selectedTimeInMinutes;
 
         console.log('Matches Activities:', matchesActivities);
         console.log('Matches Budget:', matchesBudget);
@@ -176,10 +204,9 @@ function convertToMinutes(hour, ampm) {
     return hours * 60; // Convert to minutes
 }
 
+    </script>
 
 
-        </script>
-    
 
 
 
@@ -191,7 +218,8 @@ function convertToMinutes(hour, ampm) {
         {% if not bus.archived%}
         {% if bussiness.approval%}
         {% if bussiness.promo%}
-        <div class="item {% if forloop.first %}active{% endif %}">
+        <div class="item {% if forloop.first %}active{% endif %}"  style="background-image: url('{{ bussiness.promo.url }}');">
+            
             <img style="object-fit:fill" src="{{ bussiness.promo.url }}" alt="Promo Image">
         </div>
         {% endif %}
@@ -201,8 +229,9 @@ function convertToMinutes(hour, ampm) {
         {% for place in all_admin %}
         {% if not place.archived%}
         {% if place.promos%}
-        <div class="item {% if forloop.first %}active{% endif %}">
-            <img src="{{ place.promos.url }}" alt="Promo Image">
+        <div class="item {% if forloop.first %}active{% endif %}"
+        style="background-image: url('{{ place.promos.url }}');">
+            <img  style="object-fit:fill" src="{{ place.promos.url }}" alt="Promo Image">
         </div>
         {% endif %}
         {% endif %}
@@ -211,8 +240,8 @@ function convertToMinutes(hour, ampm) {
     </div>
     <!-- button arrows -->
     <div class="arrows">
-        <button id="prev"><</button>
-        <button id="next">></button>
+        <button id="prev">></button>
+        <button id="next"><</button>
     </div>
    
 
@@ -246,10 +275,9 @@ function convertToMinutes(hour, ampm) {
         setInterval(nextSlide, 10000); // Change slide every 3 seconds
     }
 });</script>
-<script src="app.js"></script>
 
 
-  <div class="container my-5" id="resultsContainer">
+  <div style="margin-right: 400px;" class="container my-5" id="resultsContainer">
     {% for item in all_admin %}
         {% if not item.archived %}
         <div class="jumbotron" data-activities="{% for category in item.categories.all %}{{ category.name }}{% if not forloop.last %},{% endif %} {% endfor %}" data-budget="{{ item.cost }}" data-time="{{ item.time }}">
@@ -413,17 +441,6 @@ $.ajaxSetup({
         }
     });
 }
-
-// Trigger search when the search button is clicked
-document.getElementById('searchBtn').addEventListener('click', performSearch);
-
-// Trigger search on "Enter" key press in the input field
-document.getElementById('searchInput').addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        performSearch();
-    }
-});
 
 // Automatically perform search on every input change
 document.getElementById('searchInput').addEventListener('input', performSearch);
