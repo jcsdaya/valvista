@@ -12,7 +12,7 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {% load static %}
     <title>UpdatePlace | ValVista</title>
-    <link rel="stylesheet" href="{% static 'RegUpdForm.css' %}">
+    <link rel="stylesheet" href="{% static 'promo.css' %}">
 </head>
 <header>
     <nav>
@@ -30,11 +30,14 @@
             <li><a href="{%url 'businessadmin' %}"><i class="fa-solid fa-list"></i></i>Business List</a></li>
             <li><a href="{%url 'approvallist' %}"><i class="fa-solid fa-check-to-slot"></i>Approval List</a></li>
             <li><a href="{%url 'archives' %}"><i class="fa-solid fa-box-archive"></i>Archive</a></li>
+        </ul>
+        <ul class="nav-links ul-user">
             {% if user.is_authenticated%}
-            <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
             <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
+            <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
             {%else%}
-            <li><a href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+            <li><a style="margin-left: 400px;" href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+            
             {%endif%}
             
         </ul>

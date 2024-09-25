@@ -125,8 +125,14 @@
         <th class="place-name">{{ first_place.name }}</th>
         <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p></th>
         <th><p class="time1-input"><input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
-        <th><p class="inline-input"><input type="text" id="BudgetInput{{ first_place.id }}" placeholder=></p></th>
-        <th><textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
+        <th>
+            <p class="inline-input">
+                <input type="text" class="budget-input" placeholder="Enter budget">
+            </p>
+        </th>
+        <th>
+            <textarea class="notes-input" rows="4" cols="10" placeholder="Add your notes here..."></textarea>
+        </th>
         <th>
             <button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
             <a style="height: 50px;width: 100px; border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
@@ -140,8 +146,14 @@
                     <th class="place-name">{{ first_place.name }} </th>
                     <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
                     <th><p class="time1-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
-                    <th><p class="inline-input"> <input type="text" id="BudgetInput{{ first_place.id }}" placeholder=></p></th>
-                    <th> <textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
+                    <th>
+                        <p class="inline-input">
+                            <input type="text" class="budget-input" placeholder="Enter budget">
+                        </p>
+                    </th>
+                    <th>
+                        <textarea class="notes-input" rows="4" cols="10" placeholder="Add your notes here..."></textarea>
+                    </th>
                     <th><button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
                         <a style="height: 50px;width: 100px; border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
                     </th>
@@ -154,8 +166,14 @@
                     <th class="place-name">{{ first_place.name }} </th>
                     <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
                     <th><p class="time1-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
-                    <th><p class="inline-input"> <input type="text" id="BudgetInput{{ first_place.id }}" placeholder=></p></th>
-                    <th> <textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
+                    <th>
+                        <p class="inline-input">
+                            <input type="text" class="budget-input" placeholder="Enter budget">
+                        </p>
+                    </th>
+                    <th>
+                        <textarea class="notes-input" rows="4" cols="10" placeholder="Add your notes here..."></textarea>
+                    </th>
                     <th><button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
                         <a style="height: 50px;width: 100px; border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
                     </th>
@@ -168,8 +186,14 @@
                     <th class="place-name">{{ first_place.name }} </th>
                     <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
                     <th><p class="time1-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
-                    <th><p class="inline-input"> <input type="text" id="BudgetInput{{ first_place.id }}" placeholder=></p></th>
-                    <th> <textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
+                    <th>
+                        <p class="inline-input">
+                            <input type="text" class="budget-input" placeholder="Enter budget">
+                        </p>
+                    </th>
+                    <th>
+                        <textarea class="notes-input" rows="4" cols="10" placeholder="Add your notes here..."></textarea>
+                    </th>
                     <th><button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
                         <a style="height: 50px;width: 100px; border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
                     </th>
@@ -182,8 +206,14 @@
                     <th class="place-name">{{ first_place.name }} </th>
                     <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
                     <th><p class="time1-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
-                    <th><p class="inline-input"> <input type="text" id="BudgetInput{{ first_place.id }}" placeholder=></p></th>
-                    <th> <textarea id="myTextArea{{ first_place.id }}" rows="4" cols="10" placeholder="Add your notes here..."></textarea></th>
+                    <th>
+                        <p class="inline-input">
+                            <input type="text" class="budget-input" placeholder="Enter budget">
+                        </p>
+                    </th>
+                    <th>
+                        <textarea class="notes-input" rows="4" cols="10" placeholder="Add your notes here..."></textarea>
+                    </th>
                     <th><button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
                         <a style="height: 50px;width: 100px; border-radius: 10px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
                     </th>
@@ -353,8 +383,6 @@ function selectItem(id, name, imageUrl, type, category) {
     // Fetch the time inputs and other fields by their position or class name
    let timeInput = activeContent.querySelector(`[id^='timeInput']`);
     let time1Input = activeContent.querySelector(`[id^='time1Input']`);
-    let budgetInput = activeContent.querySelector(`[id^='BudgetInput']`);
-    let textArea = activeContent.querySelector(`[id^='myTextArea']`);
 
     // Dynamically update the IDs of inputs with the new id
     if (timeInput) {
@@ -371,36 +399,14 @@ function selectItem(id, name, imageUrl, type, category) {
         console.error(`Time Input 2 not found for place ID: ${id}`);
     }
 
-    if (budgetInput) {
-        console.log(budgetInput)
-        budgetInput.id = `BudgetInput${id}`;
-        budgetInput.value = '500';
-        budgetInput.addEventListener('input', saveItineraryState); // Add listener
-
-    } else {
-        console.error(`Budget Input not found for place ID: ${id}`);
-    }
-
-    if (textArea) {
-        textArea.id = `myTextArea${id}`;
-        textArea.value = '';
-        textArea.addEventListener('input', saveItineraryState);
-
-    } else {
-        console.error(`Text Area not found for place ID: ${id}`);
-    }
         updateItineraryTimes();
 
     // Log the selected inputs for debugging
     console.log(`Updating inputs for id: ${id}`);
-    console.log(`Budget Input: ${budgetInput ? budgetInput.value : 'Not Found'}`);
-    console.log(`Text Area: ${textArea ? textArea.value : 'Not Found'}`);
 
     // Save the itemId and other attributes to local storage
     activeContent.dataset.timeInputId = `timeInput${id}`;
     activeContent.dataset.time1InputId = `time1Input${id}`;
-    activeContent.dataset.budgetInputId = `BudgetInput${id}`;
-    activeContent.dataset.textAreaId = `myTextArea${id}`;
     localStorage.setItem('selectedItemId', id);
     localStorage.setItem('selectedItemType', type);
     localStorage.setItem('selectedItemCategory', category);
@@ -436,7 +442,8 @@ function saveItineraryState() {
     const category = [];
     console.log('Starting time:', startTime);
 
-   
+    const budgetInputs = document.querySelectorAll('.budget-input');
+    const notesInputs = document.querySelectorAll('.notes-input');
 
     document.querySelectorAll('.tablecontent').forEach((content, index) => {
         const placeId = content.dataset.placeId;
@@ -445,8 +452,7 @@ function saveItineraryState() {
         const placeName = content.querySelector('.place-name').textContent;
         const type = content.dataset.type;
         const categorys = content.dataset.category;
-        const BudgetInputId = content.dataset.budgetInputId; 
-        const textAreaId = content.dataset.textAreaId; 
+
 
         places.push(placeName);
         placeIds.push(placeId);
@@ -454,12 +460,8 @@ function saveItineraryState() {
         category.push(categorys);
         times.push({ id: timeInputId, value: content.querySelector(`#${timeInputId}`)?.value || '' });
         times2.push({ id: time1InputId, value: content.querySelector(`#${time1InputId}`)?.value || '' });
-        const budgetInputValue = content.querySelector(`#${BudgetInputId}`)?.value || '';
-        budget.push(budgetInputValue);
-
-        // Capture the text area input value
-        const textAreaValue = content.querySelector(`#${textAreaId}`)?.value || '';
-        text.push(textAreaValue);
+        budget.push(budgetInputs[index]?.value || '');
+        text.push(notesInputs[index]?.value || '');
     });
 
 
@@ -523,6 +525,19 @@ function loadItineraryState() {
         // Loop over each .tablecontent directly instead of using nth-child
         const tableContents = document.querySelectorAll('.tablecontent');
 
+        const budgetInputs = document.querySelectorAll('.budget-input');
+        const notesInputs = document.querySelectorAll('.notes-input');
+
+        // Loop through all .tablecontent rows and assign saved values
+        document.querySelectorAll('.tablecontent').forEach((content, index) => {
+            if (budget && budget.length > index) {
+                budgetInputs[index].value = budget[index] || '';
+            }
+            if (text && text.length > index) {
+                notesInputs[index].value = text[index] || '';
+            }
+        });
+
         tableContents.forEach((content, index) => {
             if (places && places.length > index) {
                 const place = places[index];
@@ -535,14 +550,10 @@ function loadItineraryState() {
                  // Update input IDs dynamically
                  const timeInputId = `timeInput${placeId}`;
                 const time1InputId = `time1Input${placeId}`;
-                const budgetInputId = `BudgetInput${placeId}`;
-                const textAreaId = `myTextArea${placeId}`;
 
                 // Apply new IDs to inputs
                 const timeInput = content.querySelector(`input[id^='timeInput']`);
                 const time1Input = content.querySelector(`input[id^='time1Input']`);
-                const budgetInput = content.querySelector(`input[id^='BudgetInput']`);
-                const textArea = content.querySelector(`textarea[id^='myTextArea']`);
 
                 if (timeInput) {
                     timeInput.id = timeInputId;
@@ -551,14 +562,6 @@ function loadItineraryState() {
                 if (time1Input) {
                     time1Input.id = time1InputId;
                     time1Input.value = times2[index]?.value || '';
-                }
-                if (budgetInput) {
-                    budgetInput.id = budgetInputId;
-                    budgetInput.value = budget[index]?.value || '';
-                }
-                if (textArea) {
-                    textArea.id = textAreaId;
-                    textArea.value = text[index]?.value || '';
                 }
 
 
