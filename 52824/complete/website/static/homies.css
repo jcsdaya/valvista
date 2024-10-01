@@ -1,60 +1,116 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family:'Franklin Gothic';
-  
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Franklin Gothic';
+}
 
+.row {
+  display: flex; /* Use flexbox for rows */
+  flex-wrap: wrap; /* Allow items to wrap into multiple rows */
+}
+
+.jumbotron {
+  flex: 1 1 calc(33.333% - 20px); /* Make three columns with some space */
+  margin: 10px; /* Space between items */
+  display: flex; /* Ensuring the jumbotron itself is a flex container */
+  flex-direction: column; /* Stack content vertically */
+}
+
+@media (max-width: 768px) {
   .jumbotron {
-    background: #dddddd;
-    padding: 2rem 1rem;
-    margin-bottom: 2rem;
-    border-radius: 5rem;
-    width: 120%;
-    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5)); 
-    padding: 2rem 1rem; /* Optional: adjust padding if needed */
-    border-radius: 30px; /* Optional: keep the rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition */
-    position: relative;
-
+      flex: 1 1 calc(50% - 20px); /* Two columns on medium screens */
+  }
 }
 
-.lead{
-    text-align: left;
+@media (max-width: 576px) {
+  .jumbotron {
+      flex: 1 1 100%; /* One column on small screens */
+  }
 }
 
-.display-4{
+.jumbotron {
+  background: #dddddd;
+  padding: 1rem;
+  margin: 1rem auto;
+  border-radius: 15px;
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+  width: 100%;
+  max-width: 1000px;
+  transition: background-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 300px;
+  height: 200%;
+  overflow: hidden;
+  transition: opacity 0.3s; /* Smooth transition for showing items */
+  display: flex; /* Ensure the items are displayed as flex */
+}
+
+.img-fluid {
+  width: 100%;
+  height: auto;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.text-dark {
+  color: black;
+}
+
+.lead {
+  margin: 0.5rem 0;
+  flex-grow: 1;
+  font-size: clamp(12px, 1.2vw, 18px); /* Auto-resize text */
   text-align: left;
-}
-  
-
-
-.favorite-btn-wrapper {
-  position: absolute;
-  top: 10px;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.btn-heart {
-  background: none;
-  border: none;
-  color: #000;
-  font-size: 36px; /* Adjust size as needed */
-  cursor: pointer;
-  transition: color 0.3s;
+#resultsContainer {
+  display: flex; /* Flexbox for layout */
+  flex-wrap: wrap; /* Allow items to wrap */
+  justify-content: flex-start; /* Align items to the start */
+  gap: 1rem; /* Space between items */
 }
 
-.btn-heart:hover {
-  color: #000;
+.col-md-4 {
+  width: 33.33%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem;
+  border-radius: 10px;
+  height: 500px; /* Fixed height for equal-sized boxes */
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: transform 0.3s;
 }
 
-.btn-heart .fa-heart {
-  font-size: 36px;
-  margin-right: 50px;/* Ensure the icon is the same size */
+.col-md-4:hover {
+  transform: scale(1.05);
 }
 
-.btn-heart .far.fa-heart {
-  color: gray;
+
+.col-md-4 h2 {
+  font-size: clamp(16px, 1.5vw, 24px);
+  white-space: nowrap; /* Prevent line breaks */
+  overflow: hidden; /* Hide overflowed content */
+  text-overflow: ellipsis; /* Show ellipsis for overflowed text */
+  line-height: 1.3;
+  max-height: 3em; /* Limit the height of the heading */
+}
+
+.col-md-4 p {
+  font-size: clamp(12px, 1.2vw, 16px);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+  flex-grow: 1; /* Allow paragraph to take remaining space */
+  max-height: 4em; /* Limit the height of the paragraph */
 }
 
 .favorite-btn-wrapper {
@@ -67,129 +123,167 @@
   background: none;
   border: none;
   color: red;
-  font-size: 36px; /* Make the heart larger */
+  font-size: 24px;
   cursor: pointer;
-  transition: color 0.3s;
+  transition: color 0.3s, text-shadow 0.3s, box-shadow 0.3s; 
+  position: relative; /* Required for absolute positioning of shadow */
 }
 
+/* Text shadow for edge highlighting */
 .btn-heart:hover {
   color: darkred;
+  text-shadow: 0 0 5px rgba(255, 0, 0, 0.5), 
+               0 0 10px rgba(255, 0, 0, 0.5); /* Soft red glow around text */
+}
+
+.btn-heart:focus {
+  outline: none; /* Remove the default outline */
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.7), 
+               0 0 16px rgba(255, 0, 0, 0.7); /* Stronger glow when focused */
 }
 
 .btn-heart .fa-heart {
-  font-size: 36px; /* Ensure the icon is the same size */
+  font-size: 24px;
 }
 
-.btn-heart .far.fa-heart {
-  color: gray;
+.view-more-btn {
+  background-color: #c80000;
+  color: white;
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  align-self: center;
+  margin-top: auto; /* Pushes the button to the bottom */
+  width: 100%; /* Make the button full width */
+  white-space: nowrap; /* Prevent text wrapping inside the button */
 }
 
-
-
-
-.lead{
-    font-size: 22px;
-} 
-
-.overlap-column {
-  position: relative;
-  z-index: 1; /* Ensure this column is on top of the other column */
+.view-more-btn:hover {
+  background-color: #ffffff;
+  color: red;
 }
 
-.overlap-column .col-md-4 {
-  position: relative;
-  left: -50%; /* Adjust the left position to overlap with the adjacent column */
+.anicontainer {
+  max-width: 800px; 
+  margin: 0 auto; 
+  text-align: center; 
 }
-.jumbotron h2 {
-  white-space: nowrap; /* Prevent line breaks */
-  overflow: hidden; /* Hide overflowed content */
-  text-overflow: ellipsis; /* Show ellipsis for overflowed text */
-  max-width: 100%; /* Ensure the heading doesn't exceed its container width */
-  
+
+.animated-title {
+  color: white;
+  font-size: 2rem; 
+  opacity: 0;
+  transform: translateY(-50px);
+  animation: slideIn 1s forwards;
+  text-shadow: #000000;
 }
-  
-  body {
-    height: 100%;
-    width: 100%;
-    align-items: center;
+.top-title {
+  color: white; 
+  font-size: clamp(2rem, 5vw, 4rem); 
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); 
+}
+
+.bottom-title {
+  color: red; 
+  font-size: 7rem; 
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7); 
+  margin-top: 10px; 
+}
+@keyframes slideIn {
+  from {
+      opacity: 0;
+      transform: translateY(-50px);
   }
-  
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+
+
+.display-4 {
+  text-align: left;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
 nav {
-    padding: 20px 30px;
-    display: flex;
-    align-items: center;
-    background: #c80000;
-    position: fixed;
-    width: 100%;
-    height: 80px;
-    top: 0;
-    left: 0;
-    z-index: 1100;
-   
+  padding: 20px 30px;
+  display: flex;
+  align-items: center;
+  background: #c80000;
+  position: fixed;
+  width: 100%;
+  height: 80px;
+  top: 0;
+  left: 0;
+  z-index: 1100;
 }
 
 .logo {
   margin-top: 3px;
-  height: 200px; 
-  width: 220px; 
-  filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5)); 
+  height: 200px;
+  width: 220px;
+  filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
 }
-
 
 nav ul {
-    display: flex;
-    margin-top: 20px;
-    margin-right: 30px;
-    gap: 20px;
-    z-index: 1; /* Ensure the menuList is behind the search bar */
+  display: flex;
+  margin-top: 20px;
+  margin-right: 30px;
+  gap: 20px;
+  z-index: 1;
 }
 
-.ul-user{
+.ul-user {
   margin-left: 300px;
 }
 
 nav ul li {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 nav ul li a {
-    text-decoration: none;
-    color: #fff;
-    font-size: 20px;
-    transition: color 0.3s ease;
-    display: inline-block;
+  text-decoration: none;
+  color: #fff;
+  font-size: 20px;
+  transition: color 0.3s ease;
+  display: inline-block;
 }
 
 nav ul li a:hover {
-    background-color: white; 
-    border-radius: 5px;
-    color: black;
+  background-color: white;
+  border-radius: 5px;
+  color: black;
 }
 
 nav ul li.no-hover a:hover {
-  background-color: transparent; /* Remove background color on hover */
-  color: inherit; /* Inherit text color from parent */
+  background-color: transparent;
+  color: inherit;
 }
 
-/* The Modal (background) */
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 2000; /* Sit on top */
+  display: none;
+  position: fixed;
+  z-index: 2000;
   left: 1150px;
   top: 80px;
-
 }
 
-/* Modal Content */
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 15% auto;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 80%;
 }
 
-/* The Close Button */
 .close {
   color: #aaa;
   float: right;
@@ -197,83 +291,62 @@ nav ul li.no-hover a:hover {
   font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.close:hover, .close:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
 }
 
-
-
 .menu-icon {
-    display: none;
+  display: none;
 }
 
 .menu-icon i {
-    color: #fff;
-    font-size: 30px;
-}
-
-.view-more-btn {
-    background-color: #c80000; /* Light button color */
-    transition: background-color 0.3s ease; /* Smooth transition */
-    color: white;
-    border-radius: 50px;
-    max-width: 300px;
-    bottom: 100%;
-    float: right;
-}
-
-.view-more-btn:hover {
-    background-color: #ffffff;
-    color: red /* Darken the button on hover */
+  color: #fff;
+  font-size: 30px;
 }
 
 @media (max-width: 900px) {
-    nav {
-        height: auto;
-        padding: 15px 20px;
-    }
+  nav {
+      height: auto;
+      padding: 15px 20px;
+  }
 
-    nav ul {
-        margin-right: 0;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
+  nav ul {
+      margin-right: 0;
+      flex-wrap: wrap;
+      justify-content: center;
+  }
 }
 
 @media (max-width: 600px) {
-    nav ul {
-        position: absolute;
-        top: 125px;
-        left: 0;
-        right: 0;
-        flex-direction: column;
-        text-align: center;
-        background: #d80404;
-        gap: 0;
-        overflow: hidden;
-    }
+  nav ul {
+      position: absolute;
+      top: 125px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      text-align: center;
+      background: #d80404;
+      gap: 0;
+      overflow: hidden;
+  }
 
-    nav ul li {
-        padding: 20px;
-        padding-top: 0;
-    }
+  nav ul li {
+      padding: 20px;
+      padding-top: 0;
+  }
 
-    .menu-icon {
-        display: block;
-    }
+  .menu-icon {
+      display: block;
+  }
 
-    #menuList {
-        transition: all 0.5s;
-    }
+  #menuList {
+      transition: all 0.5s;
+  }
 }
 
 
-  
-
-  
   /* ========================================================================= */
 
  /* Sidebar */
@@ -479,197 +552,217 @@ nav ul li.no-hover a:hover {
   
   /*Slider */
   @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-  svg{
+
+  /* Animation Keyframes */
+  @keyframes fadeIn {
+      from {
+          opacity: 0;
+          transform: translateY(20px);
+      }
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+  
+  @keyframes buttonGrow {
+      from {
+          transform: scale(1);
+      }
+      to {
+          transform: scale(1.05);
+      }
+  }
+  
+  /* Slider Styles */
+  .slider {
+      opacity: 0; /* Start hidden */
+      animation: fadeIn 1s forwards; /* Fade-in effect for the entire slider */
+  }
+  
+  svg {
       width: 25px;
   }
   
-  /* css slider */
-  .slider{
-      height: 500px;
-      margin-top: 5%;
-      margin-left: 20px;
-      position: relative;
-      display: flex;
-      width: 1820px;
-      overflow: hidden;
-      justify-content: center;
-      filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5)); 
-
-      
+  .overlay {
+      opacity: 0; /* Start hidden */
+      animation: fadeIn 1s forwards; /* Fade-in effect for the overlay */
+      animation-delay: 0.5s; /* Delay to show overlay after slider */
   }
-
-  .slider .list {
+  
+  .discover-button {
+      margin-top: 20px;
+      padding: 10px 20px; 
+      background-color: red; 
+      color: white; 
+      border: none; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      font-size: 1.2rem; 
+      transition: background-color 0.3s, transform 0.2s; 
+  }
+  
+  .discover-button:hover {
+      background-color: rgb(255, 255, 255); 
+      animation: buttonGrow 0.2s forwards; 
+  }
+  
+  .carousel-text {
+      position: absolute;
+      top: 50%; 
+      left: 50%; 
+      transform: translate(-50%, -50%); 
+      text-align: center;
+      z-index: 20; 
+  }
+  
+  .carousel-text h1,
+  .carousel-text p {
+      opacity: 0; /* Start hidden */
+      animation: fadeIn 0.8s forwards; /* Fade-in effect */
+  }
+  
+  .carousel-text h1 {
+      animation-delay: 0.2s;
+      font-size: 5rem; 
+      font-weight: bold;
+      margin: 0; 
+      color: white; 
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  }
+  
+  .carousel-text h1 .valvista {
+      font-size: 8rem; 
+      color: #c80000; 
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); 
+  }
+  
+  .carousel-text p {
+      animation-delay: 0.4s; 
+      font-size: 1.5rem; 
+      color: rgb(255, 255, 255); 
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+  }
+  
+  /* CSS slider */
+  .slider {
+    height: calc(100vh - 80px); /* Fits beneath the header */
+    margin-top: 80px;
+    width: 100vw;
+    position: relative;
     display: flex;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center; 
+    background-color: #111; 
+    filter: drop-shadow(0 0 9px rgba(0, 0, 0, 0.603));
+    border-radius: 15px; 
+    box-sizing: border-box;
+}
+
+.slider .list {
+    width: 90%;
+    height: 90%;
+    overflow: hidden; /* Ensure no overflow in the item list */
+}
+
+.slider .list .item {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.slider .list .item img {
     position: relative;
     width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    z-index: 1; 
 }
 
-  
-.slider .list .item {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.5s;
-  background-size: cover; /* Cover the entire item area */
-  background-position: center;
-  background-repeat: no-repeat; /* Prevent repeat in case the image fits */
+.slider .list .item.active {
+    opacity: 1;
+    z-index: 10; /
 }
 
-.slider .list .item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: blur(15px); /* Apply blur effect */
-  z-index: 1; /* Behind the main image */
-  opacity: 0.7; /* Subtle transparency */
-}
-.slider .list .item img {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  z-index: 2; /* On top of the blurred background */
-}
-  .slider .list .item::after{
-      content: '';
-      width: 100%;
-      height: 100%;
+  /* Dark Background Overlay for the Slider */
+  .overlay {
       position: absolute;
+      top: 0;
       left: 0;
+      right: 0;
       bottom: 0;
-      
-      z-index: 1;
+      background-color: rgba(0, 0, 0, 0.425); 
+      z-index: 10; 
   }
-  .slider .list .item .content{
-      position: absolute;
-      left: 10%;
-      top: 20%;
-      width: 500px;
-      max-width: 80%;
-      z-index: 1;
-  }
-  .slider .list .item .content p:nth-child(1){
-      text-transform: uppercase;
-      letter-spacing: 10px;
-  }
-  .slider .list .item .content h2{
-      font-size: 70px;
-      margin: 0;
-      color: white;
-      text-align: center;
-  }
-  .slider .list .item.active{
-      opacity: 1;
-      z-index: 10;
-  }
-  @keyframes showContent {
-      to{
-          transform: translateY(0);
-          filter: blur(0);
-          opacity: 1;
-      }
-  }
-  .slider .list .item.active p:nth-child(1),
-  .slider .list .item.active h2,
-  .slider .list .item.active p:nth-child(3){
-      transform: translateY(30px);
-      filter: blur(20px);
-      opacity: 0;
-      animation: showContent .5s .7s ease-in-out 1 forwards;
-  }
-  .slider .list .item.active h2{
-      animation-delay: 1s;
-  }
-  .slider .list .item.active p:nth-child(3){
-      animation-duration: 1.3s;
-  }
-  .arrows{
-      
-      position: absolute;
-      top: 25%;
-      margin-top: 80px;
-      left: 980px;
-      z-index: 1000;
-
-  }
-
-#prev{
- margin-left: 800px;
-}
-
-#next{
-  margin-left: -1780px;
-}
   
-  .arrows button{
+  /* Dark Arrows */
+  .arrows {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      z-index: 1000; /* Ensure arrows are on top */
+      transform: translateY(-50%);
+  }
   
+  #prev {
+      margin-left: 20px;
+  }
+  
+  #next {
+      margin-right: 20px;
+  }
+  
+  /* Buttons for Dark Theme */
+  .arrows button {
       border: none;
-      font-family: monospace;
       width: 40px;
       height: 40px;
       border-radius: 5px;
       font-size: 20px;
-      color: black
+      color: white; /* Light button text */
+      background-color: #333; /* Dark background for buttons */
+  }
+  
+  .arrows button:hover {
+      background-color: #555; 
+      color: red; 
+  }
 
-  }
-  .arrows button:hover{
-      background-color: #eee;
-      color: red;
-  }
-  .thumbnail{
-      position: absolute;
-      bottom: 50px;
-      z-index: 11;
-      display: flex;
-      gap: 10px;
-      width: 100%;
-      height: 250px;
-      padding: 0 50px;
-      box-sizing: border-box;
-      overflow: auto;
-      justify-content: center;
-  }
-  .thumbnail::-webkit-scrollbar{
-      width: 0;
-  }
-  .thumbnail .item{
+.landscape-line {
+  width: 100%;
+  height: 5px;
+  background-color: #ccc;
+  margin: 20px 0;
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+  .thumbnail .item {
       width: 150px;
       height: 220px;
-      filter: brightness(.5);
-      transition: .5s;
+      filter: brightness(0.5); /* Darken inactive thumbnails */
+      transition: 0.5s;
       flex-shrink: 0;
   }
-  .thumbnail .item img{
+  
+  .thumbnail .item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       border-radius: 10px;
   }
-  .thumbnail .item.active{
-      filter: brightness(1.5);
-  }
-  .thumbnail .item .content{
-      position: absolute;
-      inset: auto 10px 10px 10px;
-  }
-  @media screen and (max-width: 678px) {
-      .thumbnail{
-          justify-content: start;
-      }
-      .slider .list .item .content h2{
-          font-size: 60px;
-      }
-      .arrows{
-          top: 10%;
-      }
-  }
   
+  .thumbnail .item.active {
+      filter: brightness(1.5); /* Brighten active thumbnail */
+  }
+ 
   /* Popular Colors Defined */
 :root {
   --color-1: #186cb8;
@@ -758,7 +851,7 @@ h1 {
     box-sizing: border-box;
   }
   
-  /* Remove default margin */
+  /* Remove default margin -----------------------------------------------------------------------------------------------------*/
   body,
   h2,
   p {
@@ -784,7 +877,7 @@ h1 {
     margin-top: var(--flow-space, 1em);
   }
   
-/* CARD COMPONENT */
+/* CARD COMPONENT -----------------------------------------------------------------------------------------------------------------------------------*/
 
 .card {
   display: grid;
@@ -939,7 +1032,6 @@ h1 {
   }
 }
 
-/* Responsive adjustments for CARDS */
 
 @media (max-width: 768px) {
   .card {
@@ -984,3 +1076,23 @@ h1 {
   h6{
       color:white;
   }
+
+
+  /**-------------------------------------------------------**/
+body::before {
+    content: "";
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: url('https://static.vecteezy.com/system/resources/previews/014/729/973/non_2x/abstract-white-3d-background-with-red-and-white-lines-paper-cut-style-textured-usable-for-decorative-web-layout-poster-banner-corporate-brochure-and-seminar-template-design-vector.jpg') repeat; 
+    opacity: 0.1; 
+    pointer-events: none; 
+    z-index: -1; 
+}
+
+/* Smooth scroll effect */
+html {
+    scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+}

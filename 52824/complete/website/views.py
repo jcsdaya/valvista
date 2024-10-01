@@ -77,7 +77,7 @@ def loginuser(request):
                     error_message = "Please wait as your account is on pending request"
                     return render(request,'login.html',{'error_message':error_message})
             else:
-                return redirect('placelist')
+                return redirect('dashboard')
         else:
             error_message = "Invalid username or password."
     return render(request,'login.html',{'error_message':error_message})

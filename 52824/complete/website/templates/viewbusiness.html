@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="..\media\media\vlogos.png" type="image/png">
+    <link rel="shortcut icon" href="\media\media\vlogos.png" type="image/png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -16,31 +16,31 @@
 
 <nav>
     <div class="logo">
-        <a href="{%url 'home' %}"><img class="logo"src ="..\media\media\valvista logo.png" alt="logo"></a>
+        <a href="{%url 'home' %}"><img class="logo"src ="\media\media\valvista logo.png" alt="logo"></a>
     </div>
 
     <ul class="nav-links">
-       
+
         <li><a href="{%url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
 
         {% if user.is_authenticated%}
         <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i>Favorites</a></li>
         {%else%}
         <li><a ></i></a></li>
-
         {%endif%}
         {% if user.is_authenticated%}
         <li><a href="{%url 'itinerary' %}"><i class="fa-solid fa-clipboard-list"></i> Itinerary Creation</a></li>
         {%else%}
         <li><a ></i></a></li>
-   
         {%endif%}
+    </ul>
+        <ul class="nav-links ul-user">
         {% if user.is_authenticated%}
-        <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
         <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
-        
+        <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
         {%else%}
-        <li><a href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+        <li><a style="margin-left: 400px;" href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+        
         {%endif%}
         
     </ul>
@@ -87,7 +87,7 @@
                     <span onclick="closeFullImg()">X</span>
                 </div>
                 <div class="img-gallery">
-                {% for media in business.photo.all %}
+                {% for media in business.photos.all %}
                 <img src="{{media.file.url}}" onclick="openFullImg(this.src)">
                 {% endfor %}
                 </div>

@@ -37,13 +37,13 @@
             <li><a ></i></a></li>
             {%endif%}
         </ul>
-            <div class="search-container">
-                <div class="search-bar">
-                    <input id="searchInput" type="text" placeholder="Search...">
-                    <button id="filterbut" class="btn"><i class="fa-solid fa-filter"></i></button>
-    
-                </div>
+        <div class="search-container">
+            <div class="search-bar">
+                <input id="searchInput" type="text" placeholder="Search..." oninput="performSearch()">
+                <button id="filterbut" class="btn"><i class="fa-solid fa-filter"></i></button>
             </div>
+        </div>
+        
             <ul class="nav-links ul-user">
             {% if user.is_authenticated%}
             <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
@@ -59,193 +59,178 @@
 <body>
 <!-- Modal Structure -->
 <div id="filterModal" class="modal">
-
-        <!-- Sidebar content goes here -->
-        <div class="ssidebar">
-            <span class="close">&times;</span>
-            <div class="filter">
-                <label for="activities"><strong>Activity</strong></label>
-                <select id="activities" name="activities">
-                    <option value="Leisure">Leisure</option>
-                    <option value="Educational">Educational</option>
-                    <option value="Historical">Historical</option>
-                    <option value="Diner">Diner</option>
-                </select>
-                
-                <label for="activities"><strong>Budget</strong></label>
-                <select id="budget" name="budget">
-                    <option value="0">Free Admission</option>
-                    <option value="1-200">₱1-₱200</option>
-                    <option value="201-500">₱201 - ₱500</option>
-                    <option value="501+">₱501+</option>
-                </select>
-            </div>
-        
-
-            <div class="filter">
-                <label for="time"><strong>Time</strong></label>
-                <select id="hours" name="hours">
-                    <option value="1:00">1:00</option>
-                    <option value="2:00">2:00</option>
-                    <option value="3:00">3:00</option>
-                    <option value="4:00">4:00</option>
-                    <option value="5:00">5:00</option>
-                    <option value="6:00">6:00</option>
-                    <option value="7:00">7:00</option>
-                    <option value="8:00">8:00</option>
-                    <option value="9:00">9:00</option>
-                    <option value="10:00">10:00</option>
-                    <option value="11:00">11:00</option>
-                    <option value="12:00">12:00</option>
-                </select>
-                <select id="amorpm" name="amorpm">
-                    <option value="AM">AM</option>
-                    <option value="PM">PM</option>
-                </select>
-            </div>
+    <div class="ssidebar">
+        <span class="close">&times;</span>
+        <div class="filter">
+            <label for="activities"><strong>Activity</strong></label>
+            <select id="activities" name="activities">
+                <option value="">All</option>
+                <option value="Leisure">Leisure</option>
+                <option value="Educational">Educational</option>
+                <option value="Historical">Historical</option>
+                <option value="Diner">Diner</option>
+            </select>
             
-            <input type="button" id="applyFiltersBtn" value="Apply Filters">
+            <label for="budget"><strong>Budget</strong></label>
+            <select id="budget" name="budget">
+                <option value="">All</option>
+                <option value="0">Free Admission</option>
+                <option value="1-200">₱1-₱200</option>
+                <option value="201-500">₱201 - ₱500</option>
+                <option value="501+">₱501+</option>
+            </select>
+        </div>
+    
+        <div class="filter">
+            <label for="time"><strong>Time</strong></label>
+            <select id="hours" name="hours">
+                <option value="">Any</option>
+                <option value="1:00">1:00</option>
+                <option value="2:00">2:00</option>
+                <option value="3:00">3:00</option>
+                <option value="4:00">4:00</option>
+                <option value="5:00">5:00</option>
+                <option value="6:00">6:00</option>
+                <option value="7:00">7:00</option>
+                <option value="8:00">8:00</option>
+                <option value="9:00">9:00</option>
+                <option value="10:00">10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="12:00">12:00</option>
+            </select>
+            <select id="amorpm" name="amorpm">
+                <option value="">Any</option>
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
         </div>
         
+        <input type="button" id="applyFiltersBtn" value="Apply Filters">
+    </div>
 </div>
 
 <script>
-
-var modal = document.getElementById("filterModal");
-
-// Get the button that opens the modal
-var btn = document.getElementById("filterbut");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal
-btn.onclick = function() {
-    console.log("button is being pressed");
-
-    // Check if the modal is currently displayed
-    if (modal.style.display === "block") {
-        // If it's displayed, hide it
-        modal.style.display = "none";
-    } else {
-        // If it's hidden, show it
-        modal.style.display = "block";
+    var modal = document.getElementById("filterModal");
+    var btn = document.getElementById("filterbut");
+    var span = document.getElementsByClassName("close")[0];
+    
+    // Modal toggle
+    btn.onclick = function() {
+        modal.style.display = modal.style.display === "block" ? "none" : "block";
     }
-}
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
+    span.onclick = function() {
         modal.style.display = "none";
     }
-}
-
-document.getElementById('applyFiltersBtn').addEventListener('click', function () {
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    
+    document.getElementById('applyFiltersBtn').addEventListener('click', function () {
     const selectedActivities = document.getElementById('activities').value;
     const selectedBudgets = document.getElementById('budget').value;
     const selectedHour = document.getElementById('hours').value;
     const selectedAmPm = document.getElementById('amorpm').value.toUpperCase();
-
-    console.log('Selected Activities:', selectedActivities);
-    console.log('Selected Budgets:', selectedBudgets);
-    console.log('Selected Hour:', selectedHour);
-    console.log('Selected AM/PM:', selectedAmPm);
-
     const selectedTimeInMinutes = convertToMinutes(selectedHour, selectedAmPm);
 
-    const items = document.querySelectorAll('.jumbotron');
+    const items = document.querySelectorAll('.jumbotron'); // Your items container
 
     items.forEach(item => {
         const itemActivities = item.getAttribute('data-activities').split(',').map(act => act.trim());
         const itemBudget = item.getAttribute('data-budget');
         const itemTimeString = item.getAttribute('data-time').toUpperCase();
-        const [itemHour, itemAmPm] = itemTimeString.split(/[:\s]+/); // Split time into hour and AM/PM parts
+        const [itemHour, itemAmPm] = itemTimeString.split(/[:\s]+/);
         const itemTimeInMinutes = convertToMinutes(itemHour, itemAmPm);
 
-        console.log('Item Activities:', itemActivities);
-        console.log('Item Budget:', itemBudget);
-        console.log('Item Time in Minutes:', itemTimeInMinutes);
-
-        // Check activity match (since select is single-value, direct comparison)
+        // Check activity match
         const matchesActivities = selectedActivities === '' || itemActivities.includes(selectedActivities);
 
-        // Check budget match (since select is single-value, direct comparison)
-        const matchesBudget = selectedBudgets === '' || itemBudget === selectedBudgets;
+        // Check budget match
+        const matchesBudget = (selectedBudgets === '' || budgetMatches(itemBudget, selectedBudgets));
 
         // Check time match
-        const matchesTime = itemTimeInMinutes <= selectedTimeInMinutes;
+        const matchesTime = (selectedHour === '' || selectedAmPm === '' || itemTimeInMinutes >= selectedTimeInMinutes);
 
-        console.log('Matches Activities:', matchesActivities);
-        console.log('Matches Budget:', matchesBudget);
-        console.log('Matches Time:', matchesTime);
-
+        // Show or hide item based on matches
         if (matchesActivities && matchesBudget && matchesTime) {
-            item.style.display = '';
-            console.log('Item displayed');
+            item.style.opacity = '1'; // Show item
+            item.style.visibility = 'Item blo'; // Ensure it takes space
         } else {
-            item.style.display = 'none';
-            console.log('Item hidden');
+            item.style.opacity = '0'; // Hide item gradually
+            item.style.visibility = 'Item none'; // Ensure it doesn't take space
         }
     });
 });
-
-// Helper function to convert time to minutes since midnight
-function convertToMinutes(hour, ampm) {
-    let hours = parseInt(hour);
-    if (ampm === 'PM' && hours !== 12) {
-        hours += 12;
-    } else if (ampm === 'AM' && hours === 12) {
-        hours = 0; // 12 AM is 0 hours in 24-hour format
+    // Function to check budget ranges
+    function budgetMatches(itemBudget, selectedBudget) {
+        if (selectedBudget === "0") {
+            return itemBudget === '0'; // Free admission
+        } else if (selectedBudget === "1-200") {
+            return itemBudget >= 1 && itemBudget <= 200;
+        } else if (selectedBudget === "201-500") {
+            return itemBudget >= 201 && itemBudget <= 500;
+        } else if (selectedBudget === "501+") {
+            return itemBudget >= 501;
+        }
+        return false; // If nothing matched, return false
     }
-    return hours * 60; // Convert to minutes
-}
-
+    
+    // Helper function to convert time to minutes since midnight
+    function convertToMinutes(hour, ampm) {
+        let hours = parseInt(hour) || 0; // Handle empty values
+        if (ampm === 'PM' && hours !== 12) {
+            hours += 12;
+        } else if (ampm === 'AM' && hours === 12) {
+            hours = 0; // 12 AM is 0 hours in 24-hour format
+        }
+        return hours * 60; // Convert to minutes
+    }
     </script>
 
 
+<!-- slider -->
+<div class="slider">
+    <div class="carousel-text">
+        <h1>Welcome to <span class="valvista">Valvista</span></h1>
+        <p>Your guide to exploring Valenzuela City</p>
+        <button id="discover-more" class="discover-button">Discover More</button>
+    </div>
 
-
-
-   <!-- slider -->
-   <div class="slider">
-    <!-- list Items -->
     <div class="list">
         {% for bussiness in all_business %}
-        {% if not bus.archived%}
-        {% if bussiness.approval%}
-        {% if bussiness.promo%}
-        <div class="item {% if forloop.first %}active{% endif %}"  style="background-image: url('{{ bussiness.promo.url }}');">
-            
-            <img style="object-fit:fill" src="{{ bussiness.promo.url }}" alt="Promo Image">
+        {% if not bussiness.archived %}
+        {% if bussiness.approval %}
+        {% if bussiness.promo %}
+        <div class="item {% if forloop.first %}active{% endif %}" style="background-image: url('{{ bussiness.promo.url }}');">
+            <img style="object-fit: cover;" src="{{ bussiness.promo.url }}" alt="Promo Image">
         </div>
         {% endif %}
         {% endif %}
         {% endif %}
         {% endfor %}
         {% for place in all_admin %}
-        {% if not place.archived%}
-        {% if place.promos%}
-        <div class="item {% if forloop.first %}active{% endif %}"
-        style="background-image: url('{{ place.promos.url }}');">
-            <img  style="object-fit:fill" src="{{ place.promos.url }}" alt="Promo Image">
+        {% if not place.archived %}
+        {% if place.promos %}
+        <div class="item {% if forloop.first %}active{% endif %}" style="background-image: url('{{ place.promos.url }}');">
+            <img style="object-fit: cover;" src="{{ place.promos.url }}" alt="Promo Image">
         </div>
         {% endif %}
         {% endif %}
         {% endfor %}
-        </div>
     </div>
-    <!-- button arrows -->
-    <div class="arrows">
-        <button id="prev">></button>
-        <button id="next"><</button>
-    </div>
-   
+    <div class="overlay"></div> <!-- Dark overlay covering entire carousel -->
+    <!-- Button arrows -->
+</div>
 
-<script>document.addEventListener('DOMContentLoaded', function() {
+<!-- Add landscape line with animation -->
+<div class="landscape-line"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const landscapeLine = document.querySelector('.landscape-line');
+
+    // Slider functionality
     let currentIndex = 0;
     const items = document.querySelectorAll('.slider .list .item');
     const totalItems = items.length;
@@ -256,6 +241,7 @@ function convertToMinutes(hour, ampm) {
         items.forEach((item, i) => {
             item.classList.toggle('active', i === index);
         });
+        resetAnimations(); // Reset animations when the slide changes
     }
 
     function nextSlide() {
@@ -268,157 +254,213 @@ function convertToMinutes(hour, ampm) {
         showSlide(currentIndex);
     }
 
+    function resetAnimations() {
+        const title = document.querySelector('.carousel-text h1');
+        const subtitle = document.querySelector('.carousel-text p');
+        const button = document.getElementById('discover-more');
+        const overlay = document.querySelector('.overlay');
+
+        title.style.opacity = 0;
+        subtitle.style.opacity = 0;
+        button.style.opacity = 0;
+        overlay.style.opacity = 0; // Reset overlay opacity
+
+        // Force reflow to restart the animations
+        void title.offsetWidth; // Trigger reflow
+        void subtitle.offsetWidth; // Trigger reflow
+        void button.offsetWidth; // Trigger reflow
+        void overlay.offsetWidth; // Trigger reflow for overlay
+
+        // Animate back in
+        setTimeout(() => {
+            title.style.opacity = 1;
+            subtitle.style.opacity = 1;
+            button.style.opacity = 1;
+            overlay.style.opacity = 1; // Animate overlay back in
+        }, 100); // Delay slightly before showing the text again
+    }
+
+    // Scroll functionality for Discover More button
+    const discoverButton = document.getElementById('discover-more');
+    discoverButton.addEventListener('click', function() {
+        const resultsContainer = document.getElementById('resultsContainer');
+        if (resultsContainer) {
+            const offset = 100; // Adjust this value as needed
+            const elementPosition = resultsContainer.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - offset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    });
+
     // Add event listeners for buttons
     if (totalItems > 1) {
         nextButton.addEventListener('click', nextSlide);
         prevButton.addEventListener('click', prevSlide);
-        setInterval(nextSlide, 10000); // Change slide every 3 seconds
-    }
-});</script>
-
-
-  <div style="margin-right: 400px;" class="container my-5" id="resultsContainer">
-    {% for item in all_admin %}
-        {% if not item.archived %}
-        <div class="jumbotron" data-activities="{% for category in item.categories.all %}{{ category.name }}{% if not forloop.last %},{% endif %} {% endfor %}" data-budget="{{ item.cost }}" data-time="{{ item.time }}">
-            <div class="position-relative">
-                {% if user.is_authenticated %}
-                <div class="favorite-btn-wrapper">
-                    <form method="post" action="{% url 'add_favorite_place' item.id %}" class="favorite-form" data-item-id="{{ item.id }}">
-                        {% csrf_token %}
-                        <button type="button" class="btn-heart" onclick="toggleFavorite({{ item.id }})">
-                            {% if item.id in favorite_places %}
-                                <i id="heart-icon-{{ item.id }}" class="fas fa-heart"></i>
-                            {% else %}
-                                <i id="heart-icon-{{ item.id }}" class="far fa-heart"></i>
-                            {% endif %}
-                        </button>
-                    </form>
-                </div>
-                {% endif %}
-                <div class="row">
-                    <div class="col-md-3">
-                        <img style="height: 220px; width: 300px; border-radius: 10px;" src="{{item.thumbnail.url}}" class="img-fluid" alt="{{item.name}}">
-                    </div>
-                    <div  class="col-md-9">
-                        <h2 style="color: black;" class="display-4">{{item.name}}</h2>
-                        <p style="color: black;" class="lead">
-                        ⭐⭐⭐⭐
-                        {% for category in item.categories.all %}
-                        {{ category.name}}{% if not forloop.last %} /{% endif %}
-                        {% endfor %}
-                        
-                        </p>
-                        <p style="color: black;" class="lead"> <i class="fa-duotone fa-solid fa-location-dot"></i> {{item.location}}</p>
-                        <hr style="color: black;margin-bottom: .3rem;">
-                        <p style="color: black;" class="lead">
-                            {% if item.cost == '0' %}
-                                Free Admission
-                            {% else %}
-                                {{ item.cost }}
-                            {% endif %}
-                        </p>
-                        <p style="color: black;" class="lead"> {{item.time}} to {{item.timeclose}} <button class="btn btn btn-lg view-more-btn" onclick="redirectToPlace('{{ item.pk }}')">View More</button></p>
-                       
-                    </div>
-                     
-                </div>
-            </div>
-        </div>
-        {% endif %}
-    {% endfor %}
-
-    {% for buss in all_business %}
-    {% if not buss.archived %}
-    {% if buss.approval %}
-    <div class="jumbotron" data-activities="{% for category in buss.categories.all %}{{ category.name }}{% if not forloop.last %},{% endif %} {% endfor %}" data-budget="{{ buss.cost }}" data-time="{{ buss.time }}">
-        <div class="position-relative">
-            {% if user.is_authenticated %}
-            <div class="favorite-btn-wrapper">
-                <form method="post" action="{% url 'add_favorite_place' buss.id %}" class="favorite-form" data-item-id="{{ buss.id }}">
-                    {% csrf_token %}
-                    <button type="button" class="btn-heart" onclick="toggleFavorite({{ buss.id }})">
-                        {% if buss.id in favorite_places %}
-                            <i id="heart-icon-{{ buss.id }}" class="fas fa-heart"></i>
-                        {% else %}
-                            <i id="heart-icon-{{ buss.id }}" class="far fa-heart"></i>
-                        {% endif %}
-                    </button>
-                </form>
-            </div>
-            {% endif %}
-            <div class="row">
-                {% if buss.thumbnail %}
-                <div class="col-md-3">
-                    <img style="height: 250px; width: 300px; border-radius: 5px;" src="{{ buss.thumbnail.url }}" class="img-fluid" alt="{{ buss.name }}">
-                </div>
-                {% endif %}
-                <div  class="col-md-9">
-                    <h2 style="color: black;" class="display-4">{{buss.name}}</h2>
-                    <p style="color: black;" class="lead">
-                    ⭐⭐⭐⭐
-                    {% for category in buss.categories.all %}
-                    {{ category.name}}{% if not forloop.last %} /{% endif %}
-                    {% endfor %}
-                    
-                    </p>
-                    <p style="color: black;" class="lead"> <i class="fa-duotone fa-solid fa-location-dot"></i> {{buss.location}}</p>
-                    <hr style="color: black;margin-bottom: .3rem;">
-                    <p style="color: black;" class="lead">
-                        {% if buss.cost == '0' %}
-                            Free Admission
-                        {% else %}
-                            {{ buss.cost }}
-                        {% endif %}
-                    </p>
-                    <p style="color: black;" class="lead"> {{buss.time}} to {{buss.timeclose}} <button class="btn btn btn-lg view-more-btn" onclick="redirectToBusiness('{{ buss.pk }}')">View More</button></p>
-                   
-                </div>
-                 
-            </div>
-        </div>
-    </div>
-    {% endif %}
-    {% endif %}
-    {% endfor %}
-</div>
-
-<!-- Include jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<script>
-function toggleFavorite(itemId) {
-    var form = $('.favorite-form[data-item-id="' + itemId + '"]');
-    $.ajax({
-        url: form.attr('action'),
-        type: 'POST',
-        data: form.serialize(),
-        success: function(response) {
-            // Toggle the heart icon
-            var icon = $('#heart-icon-' + itemId);
-            if (icon.hasClass('fas')) {
-                icon.removeClass('fas').addClass('far');
-            } else {
-                icon.removeClass('far').addClass('fas');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('An error occurred:', error);
-        }
-    });
-}
-
-// Ensure CSRF token is included in AJAX requests
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-        }
+        setInterval(nextSlide, 10000); // Change slide every 10 seconds
     }
 });
 </script>
 
+<div class="container my-5" id="resultsContainer">
+    <div class="anicontainer">
+        <h2 class="animated-title top-title">Discover More Places</h2>
+        <h3 class="animated-title bottom-title">Valenzuela City</h3>
+    </div>
+    
+    <div class="row">
+        {% for item in all_admin %}
+            {% if not item.archived %}
+                <div class="col-md-4 mb-4"> <!-- Use col-md-4 for three columns layout -->
+                    <div class="jumbotron animated" data-activities="{% for category in item.categories.all %}{{ category.name }}{% if not forloop.last %},{% endif %} {% endfor %}" data-budget="{{ item.cost }}" data-time="{{ item.time }}">
+                        <div class="position-relative">
+                            {% if user.is_authenticated %}
+                            <div class="favorite-btn-wrapper">
+                                <form method="post" action="{% url 'add_favorite_place' item.id %}" class="favorite-form" data-item-id="{{ item.id }}">
+                                    {% csrf_token %}
+                                    <button type="button" class="btn-heart" onclick="toggleFavorite({{ item.id }})">
+                                        {% if item.id in favorite_places %}
+                                            <i id="heart-icon-{{ item.id }}" class="fas fa-heart"></i>
+                                        {% else %}
+                                            <i id="heart-icon-{{ item.id }}" class="far fa-heart"></i>
+                                        {% endif %}
+                                    </button>
+                                </form>
+                            </div>
+                            {% endif %}
+                            <img src="{{item.thumbnail.url}}" class="img-fluid rounded" alt="{{item.name}}" style="object-fit: cover; height: 220px;"> <!-- Responsive image -->
+                            <h2 class="display-4 text-dark">{{item.name}}</h2>
+                            <p class="lead text-dark">⭐⭐⭐⭐
+                                {% for category in item.categories.all %}
+                                {{ category.name }}{% if not forloop.last %} /{% endif %}
+                                {% endfor %}
+                            </p>
+                            <p class="lead text-dark"><i class="fa-duotone fa-solid fa-location-dot"></i> {{item.location}}</p>
+                            <hr class="bg-dark mb-2">
+                            <p class="lead text-dark">
+                                {% if item.cost == '0' %}
+                                    Free Admission
+                                {% else %}
+                                    {{ item.cost }}
+                                {% endif %}
+                            </p>
+                            <p class="lead text-dark">{{item.time}} to {{item.timeclose}} <button class="btn btn-lg view-more-btn" onclick="redirectToPlace('{{ item.pk }}')">View More</button></p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {% for buss in all_business %}
+            {% if not buss.archived %}
+                {% if buss.approval %}
+                    <div class="col-md-4 mb-4"> <!-- Use col-md-4 for three columns layout -->
+                        <div class="jumbotron animated" data-activities="{% for category in buss.categories.all %}{{ category.name }}{% if not forloop.last %},{% endif %} {% endfor %}" data-budget="{{ buss.cost }}" data-time="{{ buss.time }}">
+                            <div class="position-relative">
+                                {% if user.is_authenticated %}
+                                <div class="favorite-btn-wrapper">
+                                    <form method="post" action="{% url 'add_favorite_place' buss.id %}" class="favorite-form" data-item-id="{{ buss.id }}">
+                                        {% csrf_token %}
+                                        <button type="button" class="btn-heart" onclick="toggleFavorite({{ buss.id }})">
+                                            {% if buss.id in favorite_places %}
+                                                <i id="heart-icon-{{ buss.id }}" class="fas fa-heart"></i>
+                                            {% else %}
+                                                <i id="heart-icon-{{ buss.id }}" class="far fa-heart"></i>
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                </div>
+                                {% endif %}
+                                {% if buss.thumbnail %}
+                                <img src="{{ buss.thumbnail.url }}" class="img-fluid rounded" alt="{{ buss.name }}" style="object-fit: cover; height: 250px;"> <!-- Responsive image -->
+                                {% endif %}
+                                <h2 class="display-4 text-dark">{{buss.name}}</h2>
+                                <p class="lead text-dark">⭐⭐⭐⭐
+                                    {% for category in buss.categories.all %}
+                                    {{ category.name }}{% if not forloop.last %} /{% endif %}
+                                    {% endfor %}
+                                </p>
+                                <p class="lead text-dark"><i class="fa-duotone fa-solid fa-location-dot"></i> {{buss.location}}</p>
+                                <hr class="bg-dark mb-2">
+                                <p class="lead text-dark">
+                                    {% if buss.cost == '0' %}
+                                        Free Admission
+                                    {% else %}
+                                        {{ buss.cost }}
+                                    {% endif %}
+                                </p>
+                                <p class="lead text-dark">{{buss.time}} to {{buss.timeclose}} <button class="btn btn-lg view-more-btn" onclick="redirectToBusiness('{{ buss.pk }}')">View More</button></p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Include jQuery lists -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script>
+    // Function to check if element is in viewport
+    function isElementInViewport(el) {
+        const rect = el.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
+
+    // Animate elements when they enter the viewport
+    function checkAnimation() {
+        $('.animated').each(function() {
+            if (isElementInViewport(this)) {
+                $(this).addClass('visible'); // Add the visible class
+            }
+        });
+    }
+
+    // Check on scroll and on page load
+    $(window).on('scroll', checkAnimation);
+    $(window).on('load', checkAnimation);
+    
+    function toggleFavorite(itemId) {
+        var form = $('.favorite-form[data-item-id="' + itemId + '"]');
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                // Toggle the heart icon
+                var icon = $('#heart-icon-' + itemId);
+                if (icon.hasClass('fas')) {
+                    icon.removeClass('fas').addClass('far');
+                } else {
+                    icon.removeClass('far').addClass('fas');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('An error occurred:', error);
+            }
+        });
+    }
+
+    // Ensure CSRF token is included in AJAX requests
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+            }
+        }
+    });
+
+    // Redirect functions
     function redirectToPlace(pk) {
         window.location.href = "{% url 'viewplace' 0 %}".replace('0', pk);
     }
@@ -426,27 +468,31 @@ $.ajaxSetup({
         window.location.href = "{% url 'viewbusiness' 0 %}".replace('0', pk);
     }
 
+    // Search function
+   
     function performSearch() {
-    let searchInputValue = document.getElementById('searchInput').value.toLowerCase();
-    let jumbotrons = document.querySelectorAll('.jumbotron');
+        let searchInputValue = document.getElementById('searchInput').value.toLowerCase();
+        let jumbotrons = document.querySelectorAll('.jumbotron');
+        let firstMatch = null;  // Variable to store the first matching jumbotron
 
-    jumbotrons.forEach(jumbotron => {
-        let title = jumbotron.querySelector('h2').textContent.toLowerCase();
-        
-        // Display all if the search input is empty
-        if (searchInputValue === '' || title.includes(searchInputValue)) {
-            jumbotron.style.display = 'block';
-        } else {
-            jumbotron.style.display = 'none';
+        jumbotrons.forEach(jumbotron => {
+            let title = jumbotron.querySelector('h2').textContent.toLowerCase();
+            
+            // Display all items if search input is empty
+            if (searchInputValue === '' || title.includes(searchInputValue)) {
+                jumbotron.style.display = 'block'; // Show matched jumbotron
+                if (!firstMatch) {
+                    firstMatch = jumbotron; // Store the first match
+                }
+            } else {
+                jumbotron.style.display = 'none'; // Hide unmatched jumbotron
+            }
+        });
+
+        // Scroll to the first match if found
+        if (firstMatch) {
+            firstMatch.scrollIntoView({ behavior: 'smooth' });
         }
-    });
-}
-
-// Automatically perform search on every input change
-document.getElementById('searchInput').addEventListener('input', performSearch);
-
-
-    </script>
-
-</body>
-</html>
+    }
+    
+</script>

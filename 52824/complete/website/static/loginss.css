@@ -31,6 +31,7 @@ nav {
     width: 220px; 
     filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5)); 
   }
+
   
 
 
@@ -70,12 +71,24 @@ nav ul li.no-hover a:hover {
   background-color: transparent; /* Remove background color on hover */
   color: inherit; /* Inherit text color from parent */
 }
- .image-holder {
+.image-holder {
     flex: 1;
-    background: url('/media/media/gif.gif') center center/cover no-repeat;
+    position: relative;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-  }
+    overflow: hidden;
+}
+
+.video-gif {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 390px;
+    height: 408px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
   
 
 /* Login Form Styles */
