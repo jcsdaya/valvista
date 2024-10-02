@@ -26,11 +26,12 @@ nav {
    
 }
 .logo {
-    margin-top: 3px;
-    height: 200px; 
-    width: 220px; 
-    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5)); 
+    margin-top: 1px;
+    height: 80px;
+    width: 200px;
+    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
   }
+  
 
   
 
@@ -215,14 +216,15 @@ nav ul li.no-hover a:hover {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: red;
+    background-color: #c80000;
     color: #ffffff;
     font-size: 16px;
     cursor: pointer;
 }
 
 .login__button:hover {
-    background-color: red;
+    background-color: #ffffff;
+    color: #c80000;
 }
 
 
@@ -233,7 +235,7 @@ nav ul li.no-hover a:hover {
 }
 
 .login__register a {
-    color: red;
+    color: #c80000;;
     text-decoration: none;
 }
 

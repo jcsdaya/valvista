@@ -72,11 +72,12 @@ nav {
 }
 
 .logo {
-    margin-top: 3px;
-    height: 200px; 
-    width: 220px; 
-    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5)); 
+    margin-top: 1px;
+    height: 80px;
+    width: 200px;
+    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
   }
+  
   
 
 nav ul {
@@ -270,8 +271,8 @@ nav ul li.no-hover a:hover {
     .selection-wrapper{
         display: inline;
         margin-top: 1000px;
-        margin-left:  350px;
         margin-bottom: 30px;
+        margin-right: 130px;
     }
 
 
@@ -324,19 +325,31 @@ nav ul li.no-hover a:hover {
 .inline-input input {
     margin-left: 5px; /* Space between the label and input */
 }
-
 .place-name {
-    display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    align-items: center; /* Center elements horizontally */
-    justify-content: center; /* Center elements vertically */
-    text-align: center; /* Ensure text is centered */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%; /* Fill the height of the th */
+}
+
+table {
+    width: 100%; 
+    border-collapse: collapse;
+}
+
+th {
+    padding: 0; 
 }
 
 .place-name img {
-    width: 100px; /* Adjust the size of the image */
+    display: block;
+    width: 150px; /* Adjust the size of the image */
     height: 100px;
-    margin-bottom: 5px; /* Add some space between the image and the name */
+    margin-bottom: 10px; /* Add some space between the image and the name */
+    margin-left: 50px;
+    border-radius: 10px;
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
 }
 
 .place-name .place-name-text {

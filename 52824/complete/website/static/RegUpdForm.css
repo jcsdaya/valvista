@@ -28,10 +28,10 @@ nav {
 }
 
 .logo {
-    margin-top: 3px;
-    height: 200px; 
-    width: 220px; 
-    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5)); 
+    margin-top: 1px;
+    height: 80px;
+    width: 200px;
+    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
   }
   
 
@@ -224,6 +224,23 @@ nav ul li.no-hover a:hover {
   
   
 }
+
+.signup{
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #c80000;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .signup:hover {
+    background-color: #ffffff;
+    color: #c80000;
+  }
+  
 
 
 

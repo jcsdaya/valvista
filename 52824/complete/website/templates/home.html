@@ -29,27 +29,35 @@
             {% if user.is_authenticated%}
             <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i>Favorites</a></li>
             {%else%}
-            <li><a ></i></a></li>
+            <li><a href="{%url 'login' %}"><i class="fa-solid fa-heart"></i>Favorites</a></li>
             {%endif%}
 			{% if user.is_authenticated%}
             <li><a href="{%url 'itinerary' %}"><i class="fa-solid fa-clipboard-list"></i> Itinerary Creation</a></li>
 			{%else%}
-            <li><a ></i></a></li>
+            <li><a href="{%url 'login' %}"><i class="fa-solid fa-clipboard-list"></i> Itinerary Creation</a></li>
             {%endif%}
         </ul>
+        {% if user.is_authenticated%}
         <div class="search-container">
             <div class="search-bar">
                 <input id="searchInput" type="text" placeholder="Search..." oninput="performSearch()">
                 <button id="filterbut" class="btn"><i class="fa-solid fa-filter"></i></button>
             </div>
         </div>
-        
+        {%else%}
+        <div style="margin-left: 500px;" class="search-container">
+            <div class="search-bar">
+                <input id="searchInput" type="text" placeholder="Search..." oninput="performSearch()">
+                <button id="filterbut" class="btn"><i class="fa-solid fa-filter"></i></button>
+            </div>
+        </div>
+        {%endif%}
             <ul class="nav-links ul-user">
             {% if user.is_authenticated%}
             <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
             <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
             {%else%}
-            <li><a style="margin-left: 400px;" href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+            <li><a style="margin-left: 20px;" href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
             
             {%endif%}
             
@@ -134,31 +142,48 @@
     const selectedAmPm = document.getElementById('amorpm').value.toUpperCase();
     const selectedTimeInMinutes = convertToMinutes(selectedHour, selectedAmPm);
 
-    const items = document.querySelectorAll('.jumbotron'); // Your items container
+    const items = document.querySelectorAll('.col-md-4');
 
     items.forEach(item => {
-        const itemActivities = item.getAttribute('data-activities').split(',').map(act => act.trim());
-        const itemBudget = item.getAttribute('data-budget');
-        const itemTimeString = item.getAttribute('data-time').toUpperCase();
-        const [itemHour, itemAmPm] = itemTimeString.split(/[:\s]+/);
-        const itemTimeInMinutes = convertToMinutes(itemHour, itemAmPm);
+        const jumbotron = item.querySelector('.jumbotron'); 
+        
+        if (jumbotron) {
+            const itemActivities = jumbotron.getAttribute('data-activities');
+            const itemBudget = jumbotron.getAttribute('data-budget');
+            const itemTimeString = jumbotron.getAttribute('data-time');
+            
+            // Check if data attributes exist
+            if (!itemActivities || !itemBudget || !itemTimeString) {
+                console.warn(`Missing data attributes for item`, item);
+                return;
+            }
 
-        // Check activity match
-        const matchesActivities = selectedActivities === '' || itemActivities.includes(selectedActivities);
+            // Convert item data for comparison
+            const itemActivitiesList = itemActivities.split(',').map(act => act.trim());
+            const [itemHour, itemAmPm] = itemTimeString.toUpperCase().split(/[:\s]+/);
+            const itemTimeInMinutes = convertToMinutes(itemHour, itemAmPm);
 
-        // Check budget match
-        const matchesBudget = (selectedBudgets === '' || budgetMatches(itemBudget, selectedBudgets));
+            console.log('Selected Time:', selectedTimeInMinutes);
+            console.log('Item Time:', itemTimeInMinutes);
 
-        // Check time match
-        const matchesTime = (selectedHour === '' || selectedAmPm === '' || itemTimeInMinutes >= selectedTimeInMinutes);
+            // Check activity match
+            const matchesActivities = selectedActivities === '' || itemActivitiesList.includes(selectedActivities);
+            console.log('Activities match:', matchesActivities);
 
-        // Show or hide item based on matches
-        if (matchesActivities && matchesBudget && matchesTime) {
-            item.style.opacity = '1'; // Show item
-            item.style.visibility = 'Item blo'; // Ensure it takes space
+            // Check budget match
+            const matchesBudget = selectedBudgets === '' || budgetMatches(itemBudget, selectedBudgets);
+            console.log('Budget match:', matchesBudget);
+
+            // Check time match (show items with time <= selected time)
+            const matchesTime = selectedHour === '' || selectedAmPm === '' || itemTimeInMinutes <= selectedTimeInMinutes;
+            console.log('Time match:', matchesTime);
+
+            // Show or hide item based on matches
+            if (matchesActivities && matchesBudget && matchesTime) {
+            item.style.display = 'flex';
         } else {
-            item.style.opacity = '0'; // Hide item gradually
-            item.style.visibility = 'Item none'; // Ensure it doesn't take space
+            item.style.display = 'none'; 
+        }
         }
     });
 });
@@ -242,16 +267,6 @@ document.addEventListener('DOMContentLoaded', function() {
             item.classList.toggle('active', i === index);
         });
         resetAnimations(); // Reset animations when the slide changes
-    }
-
-    function nextSlide() {
-        currentIndex = (currentIndex + 1) % totalItems;
-        showSlide(currentIndex);
-    }
-
-    function prevSlide() {
-        currentIndex = (currentIndex - 1 + totalItems) % totalItems;
-        showSlide(currentIndex);
     }
 
     function resetAnimations() {
@@ -471,28 +486,41 @@ document.addEventListener('DOMContentLoaded', function() {
     // Search function
    
     function performSearch() {
-        let searchInputValue = document.getElementById('searchInput').value.toLowerCase();
-        let jumbotrons = document.querySelectorAll('.jumbotron');
-        let firstMatch = null;  // Variable to store the first matching jumbotron
+    let searchInputValue = document.getElementById('searchInput').value.trim().toLowerCase(); // Trim whitespace from the search input
+    const items = document.querySelectorAll('.col-md-4'); // Fetch all items (same as filter)
+    let firstMatch = null; // Variable to store the first matching jumbotron
 
-        jumbotrons.forEach(jumbotron => {
-            let title = jumbotron.querySelector('h2').textContent.toLowerCase();
+    items.forEach(item => {
+        const jumbotron = item.querySelector('.jumbotron');
+        
+        if (jumbotron) {
+            const titleElement = jumbotron.querySelector('h2');
             
-            // Display all items if search input is empty
+            // Ensure the title element exists before proceeding
+            if (!titleElement) {
+                console.warn('Missing title element in jumbotron:', jumbotron);
+                return;
+            }
+
+            const title = titleElement.textContent.trim().toLowerCase(); // Trim whitespace from the title
+
+            // Display all items if search input is empty or match is found
             if (searchInputValue === '' || title.includes(searchInputValue)) {
-                jumbotron.style.display = 'block'; // Show matched jumbotron
+                item.style.display = 'flex'; // Show matched item
                 if (!firstMatch) {
-                    firstMatch = jumbotron; // Store the first match
+                    firstMatch = item; // Store the first match
                 }
             } else {
-                jumbotron.style.display = 'none'; // Hide unmatched jumbotron
+                item.style.display = 'none'; // Hide unmatched item
             }
-        });
-
-        // Scroll to the first match if found
-        if (firstMatch) {
-            firstMatch.scrollIntoView({ behavior: 'smooth' });
         }
+    });
+
+    // Scroll to the first match if found
+    if (firstMatch) {
+        firstMatch.scrollIntoView({ behavior: 'smooth' });
     }
+}
+
     
 </script>

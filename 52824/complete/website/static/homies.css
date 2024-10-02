@@ -10,12 +10,6 @@
   flex-wrap: wrap; /* Allow items to wrap into multiple rows */
 }
 
-.jumbotron {
-  flex: 1 1 calc(33.333% - 20px); /* Make three columns with some space */
-  margin: 10px; /* Space between items */
-  display: flex; /* Ensuring the jumbotron itself is a flex container */
-  flex-direction: column; /* Stack content vertically */
-}
 
 @media (max-width: 768px) {
   .jumbotron {
@@ -44,9 +38,9 @@
   min-height: 300px;
   height: 200%;
   overflow: hidden;
-  transition: opacity 0.3s; /* Smooth transition for showing items */
-  display: flex; /* Ensure the items are displayed as flex */
 }
+
+
 
 .img-fluid {
   width: 100%;
@@ -71,20 +65,19 @@
 }
 
 #resultsContainer {
-  display: flex; /* Flexbox for layout */
   flex-wrap: wrap; /* Allow items to wrap */
   justify-content: flex-start; /* Align items to the start */
   gap: 1rem; /* Space between items */
 }
 
 .col-md-4 {
-  width: 33.33%;
+  width: 33.33%;  /* Fixed width */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding: 1rem;
   border-radius: 10px;
-  height: 500px; /* Fixed height for equal-sized boxes */
+  height: 500px;  /* Fixed height */
   box-sizing: border-box;
   overflow: hidden;
   transition: transform 0.3s;
@@ -212,6 +205,7 @@ body {
   height: 100%;
   width: 100%;
   align-items: center;
+  overflow-x: hidden; 
 }
 
 nav {
@@ -228,11 +222,12 @@ nav {
 }
 
 .logo {
-  margin-top: 3px;
-  height: 200px;
-  width: 220px;
+  margin-top: 1px;
+  height: 80px;
+  width: 200px;
   filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
 }
+
 
 nav ul {
   display: flex;
@@ -243,7 +238,7 @@ nav ul {
 }
 
 .ul-user {
-  margin-left: 300px;
+  margin-left: 60px;
 }
 
 nav ul li {
@@ -474,6 +469,7 @@ nav ul li.no-hover a:hover {
       justify-content: center;
       align-items: center;
       margin-top: 150px; /* Adjusted margin to push content below the fixed header */
+      margin-left: 300px;
       position: relative; /* Changed position to relative */
   }
   
@@ -485,23 +481,31 @@ nav ul li.no-hover a:hover {
   .search-bar input[type="text"] {
       padding: 15px;
       width: 400px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      height: 40px;
+      border: 1px solid white;
+      border-radius: 20px;
   }
   
   .search-bar button {
       margin-top: -5px;
       padding: 15px 25px;
-      background-color: #d80404;
+      background-color: white;
       border-radius: 10px;
-      color: #fff;
+      color: #c80000;
       cursor: pointer;
       transition: 0.3s ease;
       margin-right: 650px;
       border-width: 3px 2px; /* Top and bottom border width = 2px, left and right border width = 1px */
     border-style: solid;
+    height: 40px;
    
   }
+
+  .fa-filter {
+    top: 50%; /* Center vertically */
+    left: 60%; /* Center horizontally */
+    transform: translate(-5%, -60%); /* Adjust for icon's dimensions */
+}
   
   /* hover search btn */
   .search-bar button:hover {
@@ -646,9 +650,10 @@ nav ul li.no-hover a:hover {
   
   /* CSS slider */
   .slider {
-    height: calc(100vh - 80px); /* Fits beneath the header */
+    height: calc(100vh - 80px); 
     margin-top: 80px;
     width: 100vw;
+    max-width: 100%; 
     position: relative;
     display: flex;
     overflow: hidden;

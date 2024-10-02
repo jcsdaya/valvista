@@ -200,10 +200,10 @@ body{
 }
 
 .logo {
-    margin-top: 3px;
-    height: 200px; 
-    width: 220px; 
-    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5)); 
+    margin-top: 1px;
+    height: 80px;
+    width: 200px;
+    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
   }
   
 

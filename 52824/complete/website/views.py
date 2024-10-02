@@ -32,12 +32,15 @@ def ratingform(request):
 def add_favorite_place(request, place_id):
     place = get_object_or_404(Place, id=place_id)
     favorite, created = Favorite.objects.get_or_create(user=request.user, place=place)
+
     if not created:
         favorite.delete()
-    if request.get_full_path() == reverse('userhome'):
-        return redirect('home')  
-    else:
-        return redirect('home')
+
+    # Use 'HTTP_REFERER' to go back to the previous page
+    referer = request.META.get('HTTP_REFERER', reverse('home'))
+
+    return redirect(referer)
+
 
 def add_favorite_business(request, business_id):
     business = get_object_or_404(Business, id=business_id)
