@@ -20,42 +20,46 @@
     
     <title>Itinerary</title>
 </head>
-    <nav>
-        <div class="logo">
-            <a href="{%url 'home' %}"><img class="logo"src ="..\media\media\valvista logo.png" alt="logo"></a>
-        </div>
+<nav>
+    <div class="logo">
+        <a href="{%url 'home' %}"><img class="logo"src ="..\media\media\valvista logo.png" alt="logo"></a>
+    </div>
+    
 
-        <ul class="nav-links">
-           
-            <li><a href="{%url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
-  
-            {% if user.is_authenticated%}
-            {% if not user.is_Business and not business.approval%}
-            <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i>Favorites</a></li>
-            {%else%}
-            <li><a ></i></a></li>
-            {%endif%}
-            {%endif%}
-            {% if user.is_authenticated%}
-            {% if not user.is_Business and not business.approval%}
-            <li><a href="{%url 'itinerary' %}"><i class="fa-solid fa-clipboard-list"></i> Itinerary Creation</a></li>
-            {%else%}
-            <li><a ></i></a></li>
-            {%endif%}
-            {%endif%}
-            {% if user.is_authenticated%}
-            {% if not user.is_Business and not business.approval%}
-            <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
-            <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
-            
-            {%endif%}
-            {%else%}
-            <li><a href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
-            {%endif%}
-            
-        </ul>
+    <ul class="nav-links">
+       
+        <li><a href="{%url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
+
+        {% if user.is_authenticated%}
+        {% if not user.is_Business and not business.approval%}
+        <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i>Favorites</a></li>
+        {%else%}
+        <li><a ></i></a></li>
+        {%endif%}
+        {%endif%}
+        {% if user.is_authenticated%}
+        {% if not user.is_Business and not business.approval%}
+        <li><a href="{%url 'itinerary' %}"><i class="fa-solid fa-clipboard-list"></i> Itinerary Creation</a></li>
+        {%else%}
+        <li><a ></i></a></li>
+        {%endif%}
+        {%endif%}
         
-    </nav>
+    </ul>
+    <ul class="nav-links ul-user">
+        {% if user.is_authenticated%}
+        {% if not user.is_Business and not business.approval%}
+        <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
+        <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
+        {%else%}
+        <li><a style="margin-left: 400px;" href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+        
+        {%endif%}
+        {%endif%}
+    </ul>
+    
+</nav>
+
 
 <body>
     <div id="map"></div>

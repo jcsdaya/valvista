@@ -47,38 +47,43 @@
 <div class="row">
 <div class="col-6">
 <div  class="content">
-                <h2>{{business.name}} Reviews<h5>⭐4.8 Rating (3 Reviews)</h5></h2>
+                <h2>{{business.name}} Reviews<h5> {% if business.avg_rating %}
+                    {% for i in "12345" %}
+                        {% if i <= business.avg_rating|floatformat:0 %}
+                            ⭐ 
+                            {%else%}
+                            ☆
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    (No ratings yet)
+                {% endif %} ({{ business.rating_count }} Reviews) </h5></h2>
                 <div class="container__right">
-                    <div class="card">
-                        <div class="card__content">
-                            <span><i class="ri-double-quotes-l"></i></span>
-                            <div class="card__details">
-                                <p>⭐⭐⭐⭐⭐</p>
-                                <p>There's a lot I learned here. About the history of Valenzuela and the life story and achievements of Dr. Pio</p>
-                                <h4>- Timothy Ting</h4>
+                    {% if ratings %}
+                    {% for rating in ratings %}
+                        <div class="card">
+                            <div class="card__content">
+                                <span><i class="ri-double-quotes-l"></i></span>
+                                <div class="card__details">
+                                    <div class="rating-card">
+                                        <p>
+                                            {% for i in "12345" %}
+                                                {% if forloop.counter <= rating.score %}
+                                                    ⭐
+                                                {% else %}
+                                                    ☆
+                                                {% endif %}
+                                            {% endfor %}
+                                        </p>
+                                        <p>{{ rating.comment }} <strong>- {{ rating.name }}</strong></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card">
-                        <div class="card__content">
-                            <span><i class="ri-double-quotes-l"></i></span>
-                            <div class="card__details">
-                                <p>⭐⭐⭐⭐</p>
-                                <p>This place is so beautiful, there's a lot of things you can learn here</p>
-                                <h4>- Juan Andaya</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card__content">
-                            <span><i class="ri-double-quotes-l"></i></span>
-                            <div class="card__details">
-                                <p>⭐⭐⭐⭐⭐</p>
-                                <p>I absolutely loved going here. This is the best place so far in Valenzuela City</p>
-                                <h4>- Haries Cos</h4>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No ratings yet.</p>
+                {% endif %}
                 </div>
             </div>
         </div>

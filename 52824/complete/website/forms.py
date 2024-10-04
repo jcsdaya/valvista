@@ -108,10 +108,11 @@ class SignupForm(forms.ModelForm):
 class RatingForm(forms.ModelForm):
     class Meta:
         model = Rating
-        fields = ['score', 'comment']
-        widgets = {
-            'score': forms.NumberInput(attrs={'min': 1, 'max': 5}),
-        }
+        fields = ['name', 'score', 'comment']
+    
+    name = forms.CharField(max_length=100)
+    score = forms.ChoiceField(choices=[(i, f"{i} Star") for i in range(1, 6)])
+    comment = forms.CharField(widget=forms.Textarea, required=False)
 
 class PromoForm(forms.ModelForm):
  

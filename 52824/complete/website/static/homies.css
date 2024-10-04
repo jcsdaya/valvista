@@ -597,7 +597,7 @@ nav ul li.no-hover a:hover {
   .discover-button {
       margin-top: 20px;
       padding: 10px 20px; 
-      background-color: red; 
+      background-color: #c80000; 
       color: white; 
       border: none; 
       border-radius: 5px; 
@@ -609,6 +609,7 @@ nav ul li.no-hover a:hover {
   .discover-button:hover {
       background-color: rgb(255, 255, 255); 
       animation: buttonGrow 0.2s forwards; 
+      color: #c80000
   }
   
   .carousel-text {

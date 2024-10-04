@@ -223,7 +223,7 @@
     </div>
 
     <div class="list">
-        {% for bussiness in all_business %}
+        {% for business in all_business %}
         {% if not bussiness.archived %}
         {% if bussiness.approval %}
         {% if bussiness.promo %}
@@ -348,7 +348,17 @@ document.addEventListener('DOMContentLoaded', function() {
                             {% endif %}
                             <img src="{{item.thumbnail.url}}" class="img-fluid rounded" alt="{{item.name}}" style="object-fit: cover; height: 220px;"> <!-- Responsive image -->
                             <h2 class="display-4 text-dark">{{item.name}}</h2>
-                            <p class="lead text-dark">⭐⭐⭐⭐
+                            <p class="lead text-dark"> {% if item.avg_rating %}
+                                {% for i in "12345" %}
+                                    {% if i <= item.avg_rating|floatformat:0 %}
+                                        ⭐
+                                        {%else%}
+                                        ☆
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                (No ratings yet)
+                            {% endif %}
                                 {% for category in item.categories.all %}
                                 {{ category.name }}{% if not forloop.last %} /{% endif %}
                                 {% endfor %}
@@ -393,7 +403,17 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <img src="{{ buss.thumbnail.url }}" class="img-fluid rounded" alt="{{ buss.name }}" style="object-fit: cover; height: 250px;"> <!-- Responsive image -->
                                 {% endif %}
                                 <h2 class="display-4 text-dark">{{buss.name}}</h2>
-                                <p class="lead text-dark">⭐⭐⭐⭐
+                                <p class="lead text-dark"> {% if buss.avg_rating %}
+                                    {% for i in "12345" %}
+                                        {% if i <= buss.avg_rating|floatformat:0 %}
+                                            ⭐
+                                            {%else%}
+                                            ☆
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    (No ratings yet)
+                                {% endif %}
                                     {% for category in buss.categories.all %}
                                     {{ category.name }}{% if not forloop.last %} /{% endif %}
                                     {% endfor %}

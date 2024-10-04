@@ -64,7 +64,7 @@ nav ul li a:hover {
 }
 
 .ul-user{
-    margin-left: 1140px;
+    margin-left: 1300px;
   }
 
 
@@ -203,7 +203,7 @@ nav ul li.no-hover a:hover {
 
 .login__forgot {
     font-size: 14px;
-    color: red;
+    color: #c80000;
     text-decoration: none;
 }
 

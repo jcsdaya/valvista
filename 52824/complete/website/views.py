@@ -2,10 +2,10 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.shortcuts import redirect, render,get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .forms import SignupForm,PlaceForm,PromoForm,BusPromoForm
-from business.forms import BusinessForm,BusinessUpdForm
+from .forms import SignupForm,PlaceForm,PromoForm,BusPromoForm,RatingForm
+from business.forms import BusinessForm,BusinessUpdForm,BusinessRating
 from .models import Place,NormalUser,Visitor,Favorite,ItineraryState,PlaceMedia
-from business.models import Business,Media
+from business.models import Business,Media,Rating
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User,Group
 from django.http import HttpResponseForbidden
@@ -14,7 +14,8 @@ from django.urls import reverse
 from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
-
+import qrcode
+from django.db.models import Avg, Count
 
 
 
@@ -24,9 +25,38 @@ def home(request):
     context = get_home_context(request.user)
     return render(request, 'home.html', context)
 
-def ratingform(request):
+
+def ratingform(request,place_id):
+    place = get_object_or_404(Place, id=place_id) 
+    if request.method == 'POST':
+        form = RatingForm(request.POST)
+        if form.is_valid():
+            rating = form.save(commit=False)
+            rating.user = request.user  # Set the user who is rating
+            rating.place = place 
+            rating.save()
+            messages.success(request, 'Your rating has been submitted successfully!')
+            return redirect('success')  # Redirect to a success page or the place page
+    else:
+        form = BusinessRating()
     
-    return render(request, 'ratingform.html', {})
+    return render(request, 'rating.html', {'form': form,'place': place})
+
+def businessrating(request,buss_id):
+    business = get_object_or_404(Business, id=buss_id) 
+    if request.method == 'POST':
+        form = BusinessRating(request.POST)
+        if form.is_valid():
+            rating = form.save(commit=False)
+            rating.user = request.user  # Set the user who is rating
+            rating.business = business 
+            rating.save()
+            messages.success(request, 'Your rating has been submitted successfully!')
+            return redirect('success')  # Redirect to a success page or the place page
+    else:
+        form = BusinessRating()
+    
+    return render(request, 'businessrating.html', {'form': form,'business': business})
 
 
 def add_favorite_place(request, place_id):
@@ -149,6 +179,9 @@ def businesshome(request):
         # Handle the case where the Business instance does not exist
         return HttpResponseForbidden("No associated business found.")
     
+    business = get_object_or_404(Business.objects.annotate(
+        avg_rating=Avg('ratings__score'), rating_count=Count('ratings')), username=request.user.username)
+    ratings = business.ratings.all() 
     if request.method == 'POST':
         form = BusPromoForm(request.POST, request.FILES, instance=business)
         if form.is_valid():
@@ -157,7 +190,7 @@ def businesshome(request):
     else:
         form = BusPromoForm(instance=business)
 
-    context = {'form': form}
+    context = {'form': form,'business':business,'ratings':ratings}
     return render(request, 'businesshome.html', context)
 
 
@@ -413,14 +446,30 @@ def approvebusiness(request,pk):
         return render(request,'approve.html',context)
     
 def viewplace(request,pk):
-       place = get_object_or_404(Place, pk=pk)
-       context = {'place':place}
-       return render(request, 'viewplace.html',context)  
+    place = get_object_or_404(Place.objects.annotate(
+        avg_rating=Avg('ratings__score'), rating_count=Count('ratings')), pk=pk)
+
+    ratings = place.ratings.all() 
+    context = {
+        'place': place,
+        'ratings': ratings,
+        'avg_rating': place.avg_rating,  
+        'rating_count': place.rating_count  
+        }
+    return render(request, 'viewplace.html',context)  
     
 def viewbusiness(request,pk):
-       business = get_object_or_404(Business, pk=pk)
-       context = {'business':business}
-       return render(request, 'viewbusiness.html',context)
+    business = get_object_or_404(Business.objects.annotate(
+        avg_rating=Avg('ratings__score'), rating_count=Count('ratings')), pk=pk)
+
+    ratings = business.ratings.all() 
+    context = {
+        'business': business,
+        'ratings': ratings,
+        'avg_rating': business.avg_rating,  
+        'rating_count': business.rating_count  
+        }
+    return render(request, 'viewbusiness.html',context)  
 
 def bussdeets(request,pk):
     business = get_object_or_404(Business, pk=pk)
@@ -557,6 +606,9 @@ def adpromo(request):
       context = {'all_admin': all_admin,} 
       return render(request,'adpromo.html',context)
 
+def success(request):
+
+    return render(request,'success.html')
 
 
 
@@ -580,7 +632,7 @@ def promo(request,pk):
         context = {'form': form, 'place': place,'all_admin': all_admin} 
         return render(request, 'promo.html', context)
 
-    
+
 
 
 

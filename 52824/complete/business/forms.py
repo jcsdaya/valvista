@@ -1,5 +1,5 @@
 from django import forms
-from .models import Business, Category, Media
+from .models import Business, Category, Media,Rating
 
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
@@ -169,3 +169,12 @@ class BusinessUpdForm(forms.ModelForm):
                 'placeholder': 'Enter map URL (Google Maps)'
             }),
        }
+
+class BusinessRating(forms.ModelForm):
+    class Meta:
+        model = Rating
+        fields = ['name', 'score', 'comment']
+    
+    name = forms.CharField(max_length=100)
+    score = forms.ChoiceField(choices=[(i, f"{i} Star") for i in range(1, 6)])
+    comment = forms.CharField(widget=forms.Textarea, required=False)

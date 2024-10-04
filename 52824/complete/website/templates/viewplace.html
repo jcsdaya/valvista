@@ -61,8 +61,12 @@
                 {{ category.name }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
         </p>
-              <p><strong>Ratings:</strong> ⭐9.5 Excellent (100 review)</p>
-
+              <p><strong>Ratings:</strong>  {% if avg_rating %}
+                {{ avg_rating|floatformat:0 }}⭐ ({{ rating_count }} Reviews)  <!-- Display avg_rating as an integer -->
+            {% else %}
+                (No ratings yet)
+            {% endif %} 
+        </p>
     </div>
     
     <div class="container">
@@ -78,10 +82,12 @@
             <div class="content active">
                 <h2>Description</h2>
                 <p>
-                    {{place.description}}
+                    {{ place.description }}
+                    <br><br>
+                    Operating Hours: {{ place.time }} to {{ place.timeclose }}
                 </p>
             </div>
-
+    
             <div class="content">
                 <h2>Photos</h2>
                 <div class="full-img" id="fullImgBox">
@@ -90,96 +96,97 @@
                 </div>
                 <div class="img-gallery">
                     {% for media in place.photo.all %}
-                <img src="{{media.file.url}}" onclick="openFullImg(this.src)">
-                {% endfor %}
+                        <img src="{{ media.file.url }}" onclick="openFullImg(this.src)">
+                    {% endfor %}
                 </div>
             </div>
-
+    
             <div class="content">
                 <h2>Reviews</h2>
                 <div class="container__right">
-                    <div class="card">
-                        <div class="card__content">
-                            <span><i class="ri-double-quotes-l"></i></span>
-                            <div class="card__details">
-                                <p>⭐⭐⭐⭐⭐</p>
-                                <p>There's a lot I learned here. About the history of Valenzuela and the life story and achievements of Dr. Pio</p>
-                                <h4>- Timothy Ting</h4>
+                    {% if ratings %}
+                        {% for rating in ratings %}
+                            <div class="card">
+                                <div class="card__content">
+                                    <span><i class="ri-double-quotes-l"></i></span>
+                                    <div class="card__details">
+                                        <div class="rating-card">
+                                            <p>
+                                                {% for i in "12345" %}
+                                                    {% if forloop.counter <= rating.score %}
+                                                        ⭐
+                                                    {% else %}
+                                                        ☆
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </p>
+                                            <p>{{ rating.comment }} <strong>- {{ rating.name }}</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card__content">
-                            <span><i class="ri-double-quotes-l"></i></span>
-                            <div class="card__details">
-                                <p>⭐⭐⭐⭐</p>
-                                <p>This place is so beautiful, there's a lot of things you can learn here</p>
-                                <h4>- Juan Andaya</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card__content">
-                            <span><i class="ri-double-quotes-l"></i></span>
-                            <div class="card__details">
-                                <p>⭐⭐⭐⭐⭐</p>
-                                <p>I absolutely loved going here. This is the best place so far in Valenzuela City</p>
-                                <h4>- Haries Cos</h4>
-                            </div>
-                        </div>
-                    </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No ratings yet.</p>
+                    {% endif %}
                 </div>
             </div>
+    
             <div class="content">
                 <h2>Location</h2>
-                <iframe src="{{place.map}}"  width="500" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                <iframe src="{{ place.map }}" width="500" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
+    
             <div class="content">
                 <h2>Announcement</h2>
                 <p>
-                <img style=" width: 550px; height: 250px; " src=" {{place.promos.url}}">
-                {{place.announcement}}
+                    {% if place.promos %}
+                        <img style="width: 550px; height: 250px;" src="{{ place.promos.url }}">
+                    {% else %}
+                        <p>There is no promo ongoing.</p>
+                    {% endif %}
+                    {{ place.announcement }}
                 </p>
             </div>
         </div>
     </div>
-</div>
-
-<script>
-    const tabs = document.querySelectorAll('.tab-btn');
-    const all_content = document.querySelectorAll('.content');
-
-    tabs.forEach((tab, index) => {
-        tab.addEventListener('click', (e) => {
-            tabs.forEach(tab => { tab.classList.remove('activate') })
-            tab.classList.add('activate');
-
-            var line = document.querySelector('.line');
-            line.style.width = e.target.offsetWidth + "px";
-            line.style.left = e.target.offsetLeft + "px";
-
-            all_content.forEach(content => { content.classList.remove('active') });
-            all_content[index].classList.add('active');
-        })
-    })
-
-    var fullImgBox = document.getElementById("fullImgBox")
-    var fullImg = document.getElementById("fullImg")
-
-    function openFullImg(pic) {
-        fullImgBox.style.display = "flex";
-        fullImg.src = pic;
-    }
-
-    function closeFullImg() {
-        fullImgBox.style.display = "none";
-    }
-
-    fullImgBox.addEventListener('click', function(event) {
-    if (event.target === fullImgBox) {
-        closeFullImg();
-    }
-});
-</script>
+    
+    <script>
+        const tabs = document.querySelectorAll('.tab-btn');
+        const all_content = document.querySelectorAll('.content');
+    
+        tabs.forEach((tab, index) => {
+            tab.addEventListener('click', (e) => {
+                tabs.forEach(tab => tab.classList.remove('active'));
+                tab.classList.add('active');
+    
+                var line = document.querySelector('.line');
+                line.style.width = e.target.offsetWidth + "px";
+                line.style.left = e.target.offsetLeft + "px";
+    
+                all_content.forEach(content => content.classList.remove('active'));
+                all_content[index].classList.add('active');
+            });
+        });
+    
+        var fullImgBox = document.getElementById("fullImgBox");
+        var fullImg = document.getElementById("fullImg");
+    
+        function openFullImg(pic) {
+            fullImgBox.style.display = "flex";
+            fullImg.src = pic;
+        }
+    
+        function closeFullImg() {
+            fullImgBox.style.display = "none";
+        }
+    
+        fullImgBox.addEventListener('click', function(event) {
+            if (event.target === fullImgBox) {
+                closeFullImg();
+            }
+        });
+    </script>
+    
 </body>
 </html>

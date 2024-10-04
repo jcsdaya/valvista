@@ -60,84 +60,92 @@
                 {{ category.name }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
         </p>
-        <p><strong>Ratings:</strong> ⭐9.5 Excellent (100 review)</p>
+        <p><strong>Ratings:</strong>  {% if avg_rating %}
+            {{ avg_rating|floatformat:0 }}⭐ ({{ rating_count }} Reviews)  <!-- Display avg_rating as an integer -->
+        {% else %}
+            (No ratings yet)
+        {% endif %} 
+    </p>
+</div>
+
+<div class="container">
+    <div class="tab-box">
+        <button class="tab-btn active">Description</button>
+        <button class="tab-btn">Photos</button>
+        <button class="tab-btn">Reviews</button>
+        <button class="tab-btn">Location</button>
+        <button class="tab-btn">Announcement</button>
+        <div class="line"></div>
     </div>
-    
-    <div class="container">
-        <div class="tab-box">
-            <button class="tab-btn active">Description</button>
-            <button class="tab-btn">Photos</button>
-            <button class="tab-btn">Reviews</button>
-            <button class="tab-btn">Location</button>
-            <button class="tab-btn">Announcement</button>
-            <div class="line"></div>
+    <div class="content-box">
+        <div class="content active">
+            <h2>Description</h2>
+            <p>
+                {{ business.description }}
+                <br><br>
+                Operating Hours: {{ business.time }} to {{ business.timeclose }}
+            </p>
         </div>
-        <div class="content-box">
-            <div class="content active">
-                <h2>Description</h2>
-                <p>
-                    {{business.description}}
-                </p>
-            </div>
 
-            <div class="content">
-                <h2>Photos</h2>
-                <div class="full-img" id="fullImgBox">
-                    <img src="" id="fullImg">
-                    <span onclick="closeFullImg()">X</span>
-                </div>
-                <div class="img-gallery">
+        <div class="content">
+            <h2>Photos</h2>
+            <div class="full-img" id="fullImgBox">
+                <img src="" id="fullImg">
+                <span onclick="closeFullImg()">X</span>
+            </div>
+            <div class="img-gallery">
                 {% for media in business.photos.all %}
-                <img src="{{media.file.url}}" onclick="openFullImg(this.src)">
+                    <img src="{{ media.file.url }}" onclick="openFullImg(this.src)">
                 {% endfor %}
-                </div>
             </div>
+        </div>
 
-            <div class="content">
-                <h2>Reviews</h2>
-                <div class="container__right">
-                    <div class="card">
-                        <div class="card__content">
-                            <span><i class="ri-double-quotes-l"></i></span>
-                            <div class="card__details">
-                                <p>⭐⭐⭐⭐</p>
-                                <p>There's a lot I learned here. About the history of Valenzuela and the life story and achievements of Dr. Pio</p>
-                                <h4>- Timothy Ting</h4>
+        <div class="content">
+            <h2>Reviews</h2>
+            <div class="container__right">
+                {% if ratings %}
+                    {% for rating in ratings %}
+                        <div class="card">
+                            <div class="card__content">
+                                <span><i class="ri-double-quotes-l"></i></span>
+                                <div class="card__details">
+                                    <div class="rating-card">
+                                        <p>
+                                            {% for i in "12345" %}
+                                                {% if forloop.counter <= rating.score %}
+                                                    ⭐
+                                                {% else %}
+                                                    ☆
+                                                {% endif %}
+                                            {% endfor %}
+                                        </p>
+                                        <p>{{ rating.comment }} <strong>- {{ rating.name }}</strong></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card">
-                        <div class="card__content">
-                            <span><i class="ri-double-quotes-l"></i></span>
-                            <div class="card__details">
-                                <p>⭐⭐⭐⭐</p>
-                                <p>This place is so beautiful, there's a lot of things you can learn here</p>
-                                <h4>- Juan Andaya</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card__content">
-                            <span><i class="ri-double-quotes-l"></i></span>
-                            <div class="card__details">
-                                <p>⭐⭐⭐⭐</p>
-                                <p>I absolutely loved going here. This is the best place so far in Valenzuela City</p>
-                                <h4>- Haries Cos</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No ratings yet.</p>
+                {% endif %}
             </div>
-            <div class="content">
-                <h2>Location</h2>
-                <iframe src="{{business.map}}"  width="500" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-            </div>
-            <div class="content">
-                <h2>Announcement</h2>
-                <p>
-                {{business.announcement}}
-                </p>
-            </div>
+        </div>
+
+        <div class="content">
+            <h2>Location</h2>
+            <iframe src="{{ business.map }}" width="500" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <div class="content">
+            <h2>Announcement</h2>
+            <p>
+                {% if place.promos %}
+                    <img style="width: 550px; height: 250px;" src="{{ business.promos.url }}">
+                {% else %}
+                    <p>There is no promo ongoing.</p>
+                {% endif %}
+                {{ business.announcement }}
+            </p>
         </div>
     </div>
 </div>

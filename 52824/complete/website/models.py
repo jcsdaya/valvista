@@ -61,14 +61,21 @@ class Place(models.Model):
         promos = models.ImageField(upload_to="media",blank=True,null=True)
         announcement = models.TextField(max_length=5000, blank=True,null=True)
         
-        def average_rating(self):
-            ratings = Rating.objects.filter(content_type=ContentType.objects.get_for_model(self), object_id=self.id)
-            if ratings.exists():
-                return sum([rating.score for rating in ratings]) / ratings.count()
-            return 0
         
         def __str__ (self):
                 return self.name
+
+class Rating(models.Model):
+    place = models.ForeignKey(Place, related_name='ratings', on_delete=models.CASCADE,null=True, blank=True)
+    name = models.CharField(max_length=100,null=True, blank=True)
+    score = models.IntegerField(choices=[(i, f"{i} Star") for i in range(1, 6)])
+    comment = models.TextField(max_length=1000, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['place', 'name'], name='unique_place_name')
+        ]
         
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -113,19 +120,6 @@ class Favorite(models.Model):
     class Meta:
         unique_together = ('user', 'place', 'business')
 
-
-class Rating(models.Model):
-    user = models.ForeignKey(NormalUser, on_delete=models.CASCADE)
-    score = models.IntegerField()
-    comment = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey('content_type', 'object_id')
-
-    def __str__(self):
-        return f'{self.content_object} - {self.score}'
 
 
 class Itinerary(models.Model):

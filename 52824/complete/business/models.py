@@ -73,6 +73,19 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Rating(models.Model):
+    business = models.ForeignKey(Business, related_name='ratings', on_delete=models.CASCADE,null=True, blank=True)
+    name = models.CharField(max_length=100,null=True, blank=True)
+    score = models.IntegerField(choices=[(i, f"{i} Star") for i in range(1, 6)])
+    comment = models.TextField(max_length=1000, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['business', 'name'], name='unique_business_name')
+        ]
     
 
 
