@@ -152,9 +152,28 @@ nav ul li.no-hover a:hover {
     border-color: #d80404;
 }
 
-.btn {
-    transition: color 0.3s ease;
+.btn{
+    background-color: #c80000;
+    color:white
 }
+.btn:hover{
+    background-color: white;
+    color:#c80000
+}
+
+.btn1{
+    background-color: darkblue;
+    color:white;
+    font-weight: 400;
+
+}
+
+.btn1:hover{
+    background-color: white;
+    color:darkblue
+}
+
+
 
 
 /* ========================================================================= */
@@ -191,7 +210,7 @@ nav ul li.no-hover a:hover {
 .btn-primary {
     font-size: 16px;
     color: white;
-    background-color: #d80404;
+    background-color: #c80000;
     border-color: #fff;
     width: 150px;
     height: 50px;
@@ -202,22 +221,15 @@ nav ul li.no-hover a:hover {
     cursor: pointer;
     margin-left: 1520px;
     margin-top: -90px;
+    border-radius: 10px;
 }
 .btn-primary:hover {
-    background-color: black;
+    background-color: white;
+    color: #c80000;
     border: none;
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
 }
 
-.btn-primary::before{
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 125px;
-    height: 0;
-    border-top: 2px solid white;
-    border-right: 2px solid white;
-}
 
 
 h5, h6 {

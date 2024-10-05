@@ -53,7 +53,7 @@
         <form method="post" action="{%url 'deletevisitor' user.id %} ">
             {% csrf_token %}
                 <input type="submit" name="confirm">
-                <a style="color: red;" href ="{%url 'dashboard'%}">Cancel</a>
+                <a style="color: #c80000;" href ="{%url 'dashboard'%}">Cancel</a>
                 
         </form>
         </div>

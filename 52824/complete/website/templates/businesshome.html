@@ -47,7 +47,7 @@
 <div class="row">
 <div class="col-6">
 <div  class="content">
-                <h2>{{business.name}} Reviews<h5> {% if business.avg_rating %}
+                <h2>{{business.name}} Reviews<h2> {% if business.avg_rating %}
                     {% for i in "12345" %}
                         {% if i <= business.avg_rating|floatformat:0 %}
                             ⭐ 
@@ -90,11 +90,27 @@
         <div  class="col-6">
             <h3> Post Announcement or Promo</h3>
             <form method="post" enctype="multipart/form-data">
+                <p style="margin-top: 3px;"><strong> Announcement:</strong></p>
                 {% csrf_token %}
                 {{form.announcement}}<br>
-                <p><strong> Promo Banner/Picture</strong></p>{{form.promo}}
-                <button type="submit" class="btn btn-danger">Submit</button>
-            </form>
+                <p><strong> Promo Banner/Picture:</strong></p>
+                {% if business.promo %}
+                <div>
+                    <img src="{{ business.promo.url }}" alt="Current Promo Image" style="max-width: 200px; height: auto;border-radius: 10px;">
+                </div>
+                {%else%}
+                <p>No Promo Picture</p>
+            {% endif %}
+         
+            <div>
+                <p><strong>New Promo Image Preview:</strong></p>
+                <img id="newPromoPreview" src="#" alt="New Promo Preview" style="display: none; max-width: 200px; height: auto;border-radius: 10px;">
+            </div>
+            {{form.promo}}
+            <br><br>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+        
         </div>
 </div>
 

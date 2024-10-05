@@ -80,7 +80,7 @@
     <h1>Itinerary Creation</h1>
     <br>
     <div class="selection-wrapper">
-        <label for="place-count">Select number of places:</label>
+        <label for="place-count"><Strong>Select number of places:</Strong></label>
         <select id="place-count" onchange="updateItinerary()">
             <option value="2">2 Places</option>
             <option value="3">3 Places</option>
@@ -89,20 +89,19 @@
     </div>
 
    
-    <button class="btn btn-danger" id="favoriteButton" onclick="saveItineraryState()">Save Itinerary</button>
-    <button id="downloadItineraryBtn" class="btn btn-danger">📩 Download Itinerary</button>
-    <a id="mapButton" class="btn btn-danger" href="{%url 'map'%}"> 🗺️ Map </a>
+    <button class="btn" id="favoriteButton" onclick="saveItineraryState()">Save Itinerary</button>
+    <button id="downloadItineraryBtn" class="btn">📩 Download Itinerary</button>
+    <a id="mapButton" class="btn" href="{%url 'map'%}"> 🗺️ Map </a>
     <form id="itinerary-form" method="POST" action="">
         {% csrf_token %}
         <input type="hidden" name="places" id="places-input">
         <input type="hidden" name="times" id="times-input">
 
         <div class="starrttime">
-            <label for="start-time">Enter starting time:</label>
+            <label for="start-time"><Strong>Enter starting time:</Strong></label>
             <input type="time" id="start-time" onchange="updateItineraryTimes()">
         </div>
-
-
+        <br>
         {% csrf_token %}
 
               <table class="table table-bordered table table-striped">
@@ -137,8 +136,8 @@
             <textarea class="notes-input" rows="5" cols="15" placeholder="Add your notes here..."></textarea>
         </th>
         <th class="button-container" style="width: 100px; height: 100px;">
-            <button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
-            <a style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 50px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
+            <button type="button"  class="btn1" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
+            <a style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 50px;" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
         </th>
     </tr>{% endif %}
     {% endwith %}
@@ -161,8 +160,8 @@
                         <textarea class="notes-input" rows="5" cols="15" placeholder="Add your notes here..."></textarea>
                     </th>
                     <th class="button-container" style="width: 100px; height: 100px;">
-                        <button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
-                        <a style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 50px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
+                        <button type="button"  class="btn1" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
+                        <a style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 50px;" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
                     </th>
                 </tr>
                 {% endif %}
@@ -185,8 +184,8 @@
                         <textarea class="notes-input" rows="5" cols="15" placeholder="Add your notes here..."></textarea>
                     </th>
                     <th class="button-container" style="width: 100px; height: 100px;">
-                        <button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
-                        <a style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 50px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
+                        <button type="button"  class="btn1" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
+                        <a style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 50px;" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
                     </th>
                 </tr>
                 {% endif %}
@@ -209,8 +208,8 @@
                         <textarea class="notes-input" rows="5" cols="15" placeholder="Add your notes here..."></textarea>
                     </th>
                     <th class="button-container" style="width: 100px; height: 100px;">
-                        <button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
-                        <a style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 50px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
+                        <button type="button"  class="btn1" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
+                        <a style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 50px;" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
                     </th>
                 </tr>
                 {% endif %}
@@ -233,15 +232,15 @@
                         <textarea class="notes-input" rows="5" cols="15" placeholder="Add your notes here..."></textarea>
                     </th>
                     <th class="button-container" style="width: 100px; height: 100px;">
-                        <button type="button"  class="btn btn-outline-danger" style="height: 50px;width: 100px; border-radius: 10px;margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
-                        <a style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 50px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
+                        <button type="button"  class="btn1" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
+                        <a style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 50px;" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
                     </th>
                 </tr>
                 {% endif %}
                 {% endwith %}
             </tbody>
         </table>
-        <p><strong>Time:</strong> <span id="end-time"></span></p> 
+        <p><strong>Ending Time:</strong> <span id="end-time"></span></p> 
         <p><strong>Total Duration:</strong> <span id="total-duration"></span> hours</p>
 
     </div>

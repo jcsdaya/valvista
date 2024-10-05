@@ -152,8 +152,26 @@ nav ul li.no-hover a:hover {
     border-color: #d80404;
 }
 
-.btn {
-    transition: color 0.3s ease;
+.btn{
+    background-color: #c80000;
+    color:white
+}
+.btn:hover{
+    background-color: white;
+    color:#c80000
+}
+
+
+.btn1{
+    background-color: darkblue;
+    color:white;
+    font-weight: 400;
+
+}
+
+.btn1:hover{
+    background-color: white;
+    color:darkblue
 }
 
 

@@ -48,28 +48,27 @@
     <div class="right-box">
         <div class="header-text">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Valenzuela_Seal.svg/768px-Valenzuela_Seal.svg.png" alt="Header Image">
-    <h1>Dashboard</h1>
-    <div class="row">
+    <h1>ValVista Admin Dashboard</h1>
+    <div style="margin-top: 15px;" class="row">
         <div class="col">
     <div class="content">
         <div class="box-container">
-            <div class="circle-container circle1"></div>
-            <h2  class="container-text"><a href="{%url 'adpromo'%}" style="width: 40vh;" class="btn btn-outline-danger">Post Announcement/Promos</a></h2>
+
+            <h2  class="container-text"><a href="{%url 'adpromo'%}" style="width: 40vh;" class="btn"><h2>Post Announcement/Promos</h2></a></h2>
         </div>
         <div class="box-container">
-            <div class="circle-container circle1"></div>
+
             <h2  class="container-text"><span style="width: 40vh;" class="badge bg-secondary">Businesses Registered: {{ business_count }}</span></h2>
         </div>
         <div class="box-container">
-            <div class="circle-container circle2"></div>
-            <h2 class="container-text"><span style="width: 40vh;"  class="badge bg-secondary">Users Registered: {{ user_count }}</span></h2>
+           
+            <h2 class="container-text"><span style="width: 40vh;"  class="badge bg-secondary ">Users Registered: {{ user_count }}</span></h2>
         </div>
         <div class="box-container">
-            <div class="circle-container circle4"></div>
-            <h2 class="container-text"><span style="width: 40vh;"  class="badge bg-secondary">Places Registered: {{ place_count }}</span></h2>
+
+            <h2 class="container-text"><span style="width: 40vh;"  class="badge bg-secondary ">Places Registered: {{ place_count }}</span></h2>
         </div>
         <div class="box-container total-visitors">
-            <div class="circle-container"></div>
             <h2 class="container-text"><span style="width: 40vh;"  class="badge bg-secondary">Annual Total Visitors: {{ total_visitors }}</span></h2>
         </div>
     </div>
@@ -93,7 +92,7 @@
                 <td>{{ business.email }}</td>
                 <td>{{ business.refid }}</td>
                 <td>
-                    <a style="color: red;"href="{% url 'deleteowner' business.id %}">Delete</a>
+                    <a style="color: #c80000;"href="{% url 'deleteowner' business.id %}">Delete</a>
                 </td>
             </tr>
             {% endif %}
@@ -118,7 +117,7 @@
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>
                 <td>
-                    <a style="color: red;" href="{% url 'deletevisitor' user.id %}">Delete</a>
+                    <a style="color: #c80000;" href="{% url 'deletevisitor' user.id %}">Delete</a>
                 </td>
             </tr>
             {% endfor %}

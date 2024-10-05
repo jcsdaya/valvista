@@ -38,7 +38,7 @@ def ratingform(request,place_id):
             messages.success(request, 'Your rating has been submitted successfully!')
             return redirect('success')  # Redirect to a success page or the place page
     else:
-        form = BusinessRating()
+        form = RatingForm()
     
     return render(request, 'rating.html', {'form': form,'place': place})
 
@@ -618,7 +618,9 @@ def promo(request,pk):
         return HttpResponseForbidden("You don't have permission to access this page.")
     else:
         all_admin = Place.objects.all()
-        place = get_object_or_404(Place, pk=pk)
+        place = get_object_or_404(Place.objects.annotate(
+        avg_rating=Avg('ratings__score'), rating_count=Count('ratings')), pk=pk)
+        ratings = place.ratings.all() 
         
         if request.POST:
             form = PromoForm(request.POST,request.FILES,instance=place)
@@ -629,7 +631,7 @@ def promo(request,pk):
         else:
             form = PromoForm(instance=place)
 
-        context = {'form': form, 'place': place,'all_admin': all_admin} 
+        context = {'form': form, 'place': place,'all_admin': all_admin,'ratings':ratings} 
         return render(request, 'promo.html', context)
 
 

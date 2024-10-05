@@ -2,34 +2,14 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-        font-family:'Franklin Gothic';
-
+    font-family:'Franklin Gothic';
 }
 
 /* General styles */
 body {
-    background-image: url(https://pbs.twimg.com/media/CQrXAOgUsAAR5HA?format=jpg&name=4096x4096);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-attachment: fixed;
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    height: 100vh;
-    margin: 0; /* Ensure no margin around body */
-    position: relative;
-}
-
-body::before {
-    content: ''; /* Add content to the pseudo-element */
-    position: absolute; /* Make sure it's positioned relative to the body */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.5); /* Adjust the color and opacity */
-    z-index: 1; /* Ensure it's on top */
+    background-color: #f4f4f9;
+    margin: auto;
+    overflow-y: auto;
 }
 
 /* Header styles */
@@ -48,6 +28,7 @@ nav {
 }
 
 .logo {
+    margin-left: 400px;
     margin-top: 1px;
     height: 80px;
     width: 200px;
@@ -64,7 +45,7 @@ nav ul {
 }
 
 .ul-user{
-  margin-left: 300px;
+  margin-left: 800px;
 }
 
 nav ul li {
@@ -89,9 +70,7 @@ nav ul li.no-hover a:hover {
   background-color: transparent; /* Remove background color on hover */
   color: inherit; /* Inherit text color from parent */
 }
-.ul-user{
-    margin-left: 800px;
-  }
+
   
   .menu-icon{
       display: none;
@@ -101,16 +80,6 @@ nav ul li.no-hover a:hover {
       color: #fff;
       font-size: 30px;
   }
-
-  .btn{
-    background-color: #c80000;
-    color:white
-}
-.btn:hover{
-    background-color: white;
-    color:#c80000
-}
-
   
   @media (max-width:600px) {
       nav ul{
@@ -139,7 +108,7 @@ nav ul li.no-hover a:hover {
   }
 /* Right box */
 .right-box {
-    margin: 100px 20px 20px 20px;
+    margin: 40px 20px 20px 20px;
     background-color: #fff;
     padding: 30px;
     border-radius: 15px;
@@ -168,7 +137,15 @@ nav ul li.no-hover a:hover {
     flex: 1;
     display: flex;
     justify-content: flex-end;
-    align-items: center; /* Add this line */
+    align-items: center; /* Add this line */nav ul li a:hover {
+        background-color: white; 
+        border-radius: 5px;
+        color: black;
+      }
+      nav ul li.no-hover a:hover {
+        background-color: transparent; /* Remove background color on hover */
+        color: inherit; /* Inherit text color from parent */
+      }
 }
 
 .image-container img {
@@ -306,20 +283,16 @@ nav ul li.no-hover a:hover {
 
 #placetime,#placetimeclose,#placecost{
 
-    width: 50%;
+    width: 100%;
     
 }
-#placeannouncement,#placemap{
 
-    width: 210%;
-    
-}
 #placetime,#placetimeclose{
 
     height:20%
     
 }
 
-.right-box{
-    z-index: 10;
+#placeusername, #placepass,#placeemail,#placeid{
+    width: 200%;
 }

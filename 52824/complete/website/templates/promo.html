@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="..\media\media\vlogos.png" type="image/png">
+    <link rel="shortcut icon" href="\media\media\vlogos.png" type="image/png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {% load static %}
-    <title>UpdatePlace | ValVista</title>
+    <title>Promo/Review | ValVista</title>
     <link rel="stylesheet" href="{% static 'promo.css' %}">
 </head>
 <header>
@@ -49,27 +49,108 @@
         <div class="header-text">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Valenzuela_Seal.svg/768px-Valenzuela_Seal.svg.png" alt="Header Image">
     
-    <h1>{{place.name}} Post Announcement</h1>
+    <h1>{{place.name}}'s Reviews and Promos</h1>
     <div class="row">
         <div class="col">
-    <div class="content">
-        {% for place in all_admin %}
-        {% if not place.archived %}
-        <div class="box-container">
-            <div class="circle-container circle1"></div>
-            <h2  class="container-text"><a href="{%url 'promo' place.id%}" style="width: 40vh;" class="btn btn-outline-danger">{{place.name}}</a></h2>
-        </div>
-        {% endif %}
-    {% endfor %}
-    </div>
+            <div class="content">
+                <label for="place-select">Select place:</label>
+                <select id="place-select" class="form-select" onchange="window.location.href=this.value;">
+                    <option value="">-- {{place.name}} --</option>
+                    {% for place in all_admin %}
+                    {% if not place.archived %}
+                    <option value="{% url 'promo' place.id %}">{{ place.name }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <br> <br>
+            <div  class="content">
+                <h2>{{place.name}} Reviews</h2> <p>{% if place.avg_rating %}
+                    {% for i in "12345" %}
+                        {% if i <= place.avg_rating|floatformat:0 %}
+                            ⭐ 
+                            {%else%}
+                            ☆
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    (No ratings yet)
+                {% endif %} ({{ place.rating_count }} Reviews)</p>
+                <div class="container__right">
+                    {% if ratings %}
+                    {% for rating in ratings %}
+                        <div class="card">
+                            <div class="card__content">
+                                <span><i class="ri-double-quotes-l"></i></span>
+                                <div class="card__details">
+                                    <div class="rating-card">
+                                        <p>
+                                            {% for i in "12345" %}
+                                                {% if forloop.counter <= rating.score %}
+                                                    ⭐
+                                                {% else %}
+                                                    ☆
+                                                {% endif %}
+                                            {% endfor %}
+                                        </p>
+                                        <p>{{ rating.comment }} <strong>- {{ rating.name }}</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No ratings yet.</p>
+                {% endif %}
+                </div>
+            </div>  
 </div>
 <div style="margin-right: 300px;" class="col">
     <form method="post" enctype="multipart/form-data">
+        <p style="margin-top: 3px;"><strong> Announcement:</strong></p>
         {% csrf_token %}
         {{form.announcement}}<br>
-        <p><strong> Promo Banner/Picture</strong></p>{{form.promos}}
-        <button type="submit" class="btn btn-danger">Submit</button>
-    </form>
+        <p><strong> Promo Banner/Picture:</strong></p>
+        {% if place.promos %}
+        <div>
+            <img src="{{ place.promos.url }}" alt="Current Promo Image" style="max-width: 200px; height: auto;border-radius: 10px;">
+        </div>
+        {%else%}
+        <p>No Promo Picture</p>
+    {% endif %}
+ 
+    <div>
+        <p><strong>New Promo Image Preview:</strong></p>
+        <img id="newPromoPreview" src="#" alt="New Promo Preview" style="display: none; max-width: 200px; height: auto;border-radius: 10px;">
+    </div>
+    {{form.promos}}
+    <br><br>
+    <button type="submit" class="btn">Submit</button>
+</form>
+
+<!-- Add JavaScript to handle the preview of the newly chosen image -->
+<script>
+document.getElementById('placephoto').addEventListener('change', function(event) {
+    const input = event.target;
+    const preview = document.getElementById('newPromoPreview');
+    
+    // Ensure there is a file chosen
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            // Set the src of the image preview to the chosen file
+            preview.src = e.target.result;
+            preview.style.display = 'block';  // Make the preview visible
+        };
+
+        // Read the file
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.style.display = 'none';  // Hide the preview if no file chosen
+    }
+});
+</script>
 </div>
     </div>
     

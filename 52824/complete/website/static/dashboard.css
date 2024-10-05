@@ -154,7 +154,6 @@ nav ul li.no-hover a:hover {
 }
 
 .header-text h2 {
-    color: #343a40;
     font-size: 28px;
     margin-bottom: 10px;
 }
@@ -293,4 +292,38 @@ nav ul li.no-hover a:hover {
 
 #placeusername, #placepass,#placeemail,#placeid{
     width: 200%;
+}
+
+.btn{
+    background-color: #c80000;
+    color:white
+}
+.btn:hover{
+    background-color: white;
+    color:#c80000;
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+}
+
+input{
+    margin-right: 5px;
+    background-color: #c80000;
+    color:white;
+    border: white;
+    width:80px;
+    border-radius: 10px;
+}
+
+input:hover{
+    background-color: white;
+    color:#c80000;
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+}
+
+#place-select {
+    width: 40vh; /* Match the previous width */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1.2rem;
+    margin-top: 1rem;
 }

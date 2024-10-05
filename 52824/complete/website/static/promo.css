@@ -295,3 +295,13 @@ nav ul li.no-hover a:hover {
 #placeusername, #placepass,#placeemail,#placeid{
     width: 200%;
 }
+
+.btn{
+    background-color: #c80000;
+    color:white
+}
+.btn:hover{
+    background-color: white;
+    color:#c80000;
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+}

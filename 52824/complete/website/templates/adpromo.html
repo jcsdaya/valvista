@@ -49,19 +49,24 @@
     <div class="right-box">
         <div class="header-text">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Valenzuela_Seal.svg/768px-Valenzuela_Seal.svg.png" alt="Header Image">
-    <h1>Dashboard</h1>
+    <h1>View Reviews/Announcement/Promos</h1>
     <div class="row">
         <div class="col">
-    <div class="content">
+   
+
+            <div class="content">
+    <label for="place-select">Select place:</label>
+    <select id="place-select" class="form-select" onchange="window.location.href=this.value;">
+        <option value="">-- Select a place --</option>
         {% for place in all_admin %}
         {% if not place.archived %}
-        <div class="box-container">
-            <div class="circle-container circle1"></div>
-            <h2  class="container-text"><a href="{%url 'promo' place.id%}" style="width: 40vh;" class="btn btn-outline-danger">{{place.name}}</a></h2>
-        </div>
+        <option value="{% url 'promo' place.id %}">{{ place.name }}</option>
         {% endif %}
-    {% endfor %}
+        {% endfor %}
+    </select>
+</div>
 
+            
 
 </body>
 </html>

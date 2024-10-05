@@ -127,7 +127,8 @@ class PromoForm(forms.ModelForm):
                 'id': 'placeannouncement',
                 'name': 'placeannouncement',
                 'rows': 8,
-                'columns':10
+                'columns':10,
+                'placeholder':'Enter Announcement here',
             }),
             'promos': forms.ClearableFileInput(attrs={
                 'class': 'custom-file-input',
@@ -149,8 +150,10 @@ class BusPromoForm(forms.ModelForm):
                 'id': 'businessannouncement',
                 'name': 'placeannouncement',
                 'rows': 8,
+                'columns':10,
+                'placeholder':'Enter Announcement here',
             }),
-            'promo': forms.ClearableFileInput(attrs={
+            'promos': forms.ClearableFileInput(attrs={
                 'class': 'custom-file-input',
                 'id': 'placephoto',
                 'name': 'placephoto'

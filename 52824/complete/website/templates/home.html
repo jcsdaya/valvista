@@ -223,22 +223,12 @@
     </div>
 
     <div class="list">
-        {% for business in all_business %}
-        {% if not bussiness.archived %}
-        {% if bussiness.approval %}
-        {% if bussiness.promo %}
-        <div class="item {% if forloop.first %}active{% endif %}" style="background-image: url('{{ bussiness.promo.url }}');">
-            <img style="object-fit: cover;" src="{{ bussiness.promo.url }}" alt="Promo Image">
-        </div>
-        {% endif %}
-        {% endif %}
-        {% endif %}
-        {% endfor %}
+      
         {% for place in all_admin %}
         {% if not place.archived %}
         {% if place.promos %}
-        <div class="item {% if forloop.first %}active{% endif %}" style="background-image: url('{{ place.promos.url }}');">
-            <img style="object-fit: cover;" src="{{ place.promos.url }}" alt="Promo Image">
+        <div class="item {% if forloop.first %}active{% endif %}">
+            <img style="object-fit: cover;" src="../media/media/valvistabg.jpeg" alt="Promo Image">
         </div>
         {% endif %}
         {% endif %}
@@ -544,3 +534,54 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
 </script>
+
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-left">
+            <h2>ValVista</h2>
+            <div class="social-links">
+                <a href="https://www.facebook.com/ValenzuelaCityGov/" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.instagram.com/valenzuelacitygov/?hl=en" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://valenzuela.gov.ph/home" target="_blank"><i class="fa-solid fa-globe"></i></a>
+            </div>
+        </div>
+        <div class="footer-right">
+            <p>"Discover the timeless charm and vibrant spirit of Valenzuela."</p>
+        </div>
+    </div>
+</footer>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+  const footer = document.querySelector("footer");
+  const footerLeft = document.querySelector(".footer-left");
+  const footerRight = document.querySelector(".footer-right");
+  const socialLinks = document.querySelectorAll(".social-links a");
+
+  // Function to add animations when footer comes into view
+  function playAnimations(entries, observer) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Trigger animations when footer is in view
+        footer.style.opacity = "1";
+        footerLeft.style.animation = "fadeInLeft 1.5s forwards";
+        footerRight.style.animation = "fadeInRight 1.5s forwards";
+        
+        // Apply pulsate animation to each social link with a delay
+        socialLinks.forEach((link, index) => {
+          link.style.opacity = "1";
+          link.style.animation = `pulsate 1s ease forwards ${index * 0.2}s`;
+        });
+      }
+    });
+  }
+
+  
+  const observer = new IntersectionObserver(playAnimations, {
+    threshold: 0.1, 
+  });
+
+  observer.observe(footer);
+});
+</script>
+
