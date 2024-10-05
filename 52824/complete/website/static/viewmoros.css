@@ -15,12 +15,13 @@ body{
 
 
 .img-container {
-	max-width: 700px; 
-	margin-top: 200px;
-	padding: 32px; 
-	background: #fff;
+    max-width: 700px; 
+    margin-top: 100px;
+    padding: 32px; 
+    background: #fff;
     border-radius: 20px;
     z-index: 1000;
+    height: 87h; /* Set a height for the container */
 }
 
 .main{
@@ -30,14 +31,14 @@ body{
     margin-right: 50px;
 }
 
-.container{
+.container {
     background-color: white;
     padding: 30px;
     box-shadow: 0 2px 16px rgba(0, 0, 0, .1);
     border-radius: 20px;
     margin-top: 40px;
+    max-height: 500px;
 }
-
 .tab-box{
     width: 100%;
     display: flex;
@@ -136,17 +137,42 @@ body{
 	box-shadow: 0 32px 75px rgba(68, 77, 136, 0.2);
 }
 
-.img-gallery img {
-	width: 100%;
-	cursor: pointer;
+/* Scrollable Photos Section */
+.img-gallery {
+	width: 100%; /* Increased width for a bigger display */
+	margin: 100px auto 50px;
+	margin-top: 10px;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Increased minimum size for larger images */
+	grid-gap: 20px;
+	height: 250px; /* Increased height for a bigger scrollable area */
+	overflow-y: auto; /* Enable vertical scrolling */
 }
 
-.container_right {
+
+
+.img-gallery img:hover {
+	transform: scale(0.8);
+	border-radius: 20px;
+	box-shadow: 0 32px 75px rgba(68, 77, 136, 0.2);
+}
+
+.img-gallery img {
+	width: 70%;
+	cursor: pointer;
+    margin-left: 60px;
+}
+
+/* Scrollable Reviews Section */
+.container__right {
 	display: grid;
 	gap: 2rem;
-  }
+	height: 150px; /* Set a fixed height for scrollable area */
+	overflow-y: auto; /* Enable vertical scrolling */
+}
   
   .card {
+    height: 120px;
 	padding: 2rem;
 	display: flex;
 	align-items: flex-start;

@@ -62,7 +62,7 @@
             {% endfor %}
         </p>
               <p><strong>Ratings:</strong>  {% if avg_rating %}
-                {{ avg_rating|floatformat:0 }}⭐ ({{ rating_count }} Reviews)  <!-- Display avg_rating as an integer -->
+                {{ avg_rating|floatformat:0 }}⭐ ({{ rating_count }} Reviews) 
             {% else %}
                 (No ratings yet)
             {% endif %} 
@@ -134,7 +134,7 @@
     
             <div class="content">
                 <h2>Location</h2>
-                <iframe src="{{ place.map }}" width="500" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                <iframe src="{{place.map}}"  width="550" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
     
             <div class="content">
