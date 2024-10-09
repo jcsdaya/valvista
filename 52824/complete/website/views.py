@@ -490,7 +490,13 @@ def itinerary(request):
     else:
          place = Place.objects.all
          business = Business.objects.all
-         context = {'place':place,'business': business}
+
+         place_times = set(place.time for place in Place.objects.all())
+         business_times = set(business.time for business in Business.objects.all())
+    
+    
+         combined_times = sorted(place_times.union(business_times))
+         context = {'place':place,'business': business, 'combined_times': combined_times}
          return render(request, 'itinerary.html',context)
         
 

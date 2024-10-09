@@ -97,9 +97,13 @@
         <input type="hidden" name="places" id="places-input">
         <input type="hidden" name="times" id="times-input">
 
-        <div class="starrttime">
-            <label for="start-time"><Strong>Enter starting time:</Strong></label>
-            <input type="time" id="start-time" onchange="updateItineraryTimes()">
+        <div class="starttime">
+            <label for="start-time"><strong>Enter starting time:</strong></label>
+            <select id="start-time" onchange="updateItineraryTimes()">
+                {% for time in combined_times %}
+                    <option value="{{ time }}">{{ time }}</option>
+                {% endfor %}
+            </select>
         </div>
         <br>
         {% csrf_token %}
@@ -527,6 +531,10 @@ function saveItineraryState() {
     const category = [];
     console.log('Starting time:', startTime);
 
+    const { hours: startHours, minutes: startMinutes } = parseTime12Hour(startTime);
+    const formattedStartTime = `${startHours.toString().padStart(2, '0')}:${startMinutes.toString().padStart(2, '0')}`;
+    console.log('Formatted Start Time (24-hour):', formattedStartTime);
+
     const budgetInputs = document.querySelectorAll('.budget-input');
     const notesInputs = document.querySelectorAll('.notes-input');
 
@@ -561,7 +569,7 @@ function saveItineraryState() {
         placeIds: placeIds,
         types: types,
         category:category,
-        startTime: startTime,
+        startTime: formattedStartTime,
         budget: budget,
         images: images,
         text: text
@@ -631,7 +639,9 @@ function loadItineraryState() {
 
         // Set start time
         if (startTime) {
-            document.getElementById('start-time').value = startTime;
+            const startTimeDropdown = document.getElementById('start-time').value=startTime;
+            const options = startTimeDropdown.options;
+
         }
 
         // Loop over each .tablecontent directly instead of using nth-child
@@ -771,6 +781,34 @@ const categoryDurations = {
 
 
 
+function parseTime12Hour(timeString) {
+    // Match time and period using a regular expression (with or without space between time and am/pm)
+    const match = timeString.match(/(\d+):(\d+)(am|pm)/i);
+    
+    if (!match) {
+        console.error("Invalid time format:", timeString);
+        return { hours: 12, minutes: 0 };  // Default to 12:00 PM if invalid
+    }
+
+    let [_, hours, minutes, period] = match;
+    hours = parseInt(hours, 10);
+    minutes = parseInt(minutes, 10);
+
+    if (isNaN(hours) || isNaN(minutes)) {
+        console.error("Invalid hours or minutes in:", timeString);
+        return { hours: 12, minutes: 0 };  // Default to 12:00 PM if parsing fails
+    }
+
+    // Convert to 24-hour format
+    if (period.toLowerCase() === 'pm' && hours !== 12) {
+        hours += 12;
+    } else if (period.toLowerCase() === 'am' && hours === 12) {
+        hours = 0;  // Handle midnight case
+    }
+
+    return { hours, minutes };
+}
+
 function formatTime(hours, minutes) {
     const period = hours >= 12 ? 'PM' : 'AM';
     const formattedHours = ((hours % 12) || 12).toString().padStart(2, '0');
@@ -779,11 +817,17 @@ function formatTime(hours, minutes) {
 }
 
 function updateItineraryTimes() {
+    console.log("Start time selected:", document.getElementById('start-time').value);  // Debug log
+    
     const startTimeInput = document.getElementById('start-time');
     const startTime = startTimeInput.value;
     if (!startTime) return;  // Exit if no start time is provided
 
-    let [startHours, startMinutes] = startTime.split(':').map(Number);
+    // Parse the time string (formatted like 10:00am)
+    let { hours: startHours, minutes: startMinutes } = parseTime12Hour(startTime);
+    
+    console.log(`Parsed start time - Hours: ${startHours}, Minutes: ${startMinutes}`);  // Debug log
+
     let totalMinutes = startHours * 60 + startMinutes;
     let totalDuration = 0;  // Initialize total duration in minutes
 
@@ -801,8 +845,8 @@ function updateItineraryTimes() {
             // Select the correct button using the `.btn-category` class
             const button = content.querySelector('button');
             if (button) {
-                const category = content.dataset.category; 
-                console.log(`Index ${index}: Category -`, category); // Debug log
+                const category = content.dataset.category;
+                console.log(`Index ${index}: Category -`, category);  // Debug log
 
                 const duration = categoryDurations[category] || 60;  // Default to 60 minutes
                 totalDuration += duration;
@@ -849,6 +893,7 @@ function updateItineraryTimes() {
         totalHours
     });
 }
+
 
 // Call this function to initialize or update times and duration
 updateItineraryTimes();

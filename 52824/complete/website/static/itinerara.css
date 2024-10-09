@@ -365,7 +365,7 @@ th {
 }
 
 tbody tr {
-    height: 120px; /* Your desired height */
+    height: 30px; /* Your desired height */
 }
 
 .btn{
@@ -394,6 +394,14 @@ input{
 }
 
 #place-count{
+    width: 100px;
+    height: 25px;
+    border-radius: 5px;
+    border:white;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
+}
+
+#start-time{
     width: 100px;
     height: 25px;
     border-radius: 5px;
