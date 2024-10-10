@@ -65,6 +65,9 @@
         
     </nav>
 <body>
+    <div id="notification" class="notification d-none">
+        <p id="notification-message"></p>
+    </div>
 <!-- Modal Structure -->
 <div id="filterModal" class="modal">
     <div class="ssidebar">
@@ -326,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="favorite-btn-wrapper">
                                 <form method="post" action="{% url 'add_favorite_place' item.id %}" class="favorite-form" data-item-id="{{ item.id }}">
                                     {% csrf_token %}
-                                    <button type="button" class="btn-heart" onclick="toggleFavorite({{ item.id }})">
+                                    <button type="button" class="btn-heart" onclick="handleplacebutton({{ item.id }})">
                                         {% if item.id in favorite_places %}
                                             <i id="heart-icon-{{ item.id }}" class="fas fa-heart"></i>
                                         {% else %}
@@ -379,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="favorite-btn-wrapper">
                                     <form method="post" action="{% url 'add_favorite_place' buss.id %}" class="favorite-form" data-item-id="{{ buss.id }}">
                                         {% csrf_token %}
-                                        <button type="button" class="btn-heart" onclick="toggleFavorite({{ buss.id }})">
+                                        <button type="button" class="btn-heart" onclick="toggleFavorite({{ buss.id }})" onclick="showNotification()">
                                             {% if buss.id in favorite_places %}
                                                 <i id="heart-icon-{{ buss.id }}" class="fas fa-heart"></i>
                                             {% else %}
@@ -550,6 +553,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <p>"Discover the timeless charm and vibrant spirit of Valenzuela."</p>
         </div>
     </div>
+  
 </footer>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -583,5 +587,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
   observer.observe(footer);
 });
+
+function showNotification() {
+    const notification = document.getElementById('notification');
+    const message = document.getElementById('notification-message');
+    
+    // Get current date and time
+    message.innerHTML = `<i class="fa-solid fa-bell"></i>  <strong>Added to Favorites</strong>`;
+
+    // Show notification
+    notification.classList.remove('d-none');
+    notification.classList.add('visible');
+
+    // Hide notification after a few seconds
+    setTimeout(() => {
+        notification.classList.remove('visible');
+        notification.classList.add('d-none');
+    }, 5000); // Adjust duration as needed
+}
+
+function handleplacebutton(itemId) {
+    toggleFavorite(itemId); // 
+    showNotification();   
+}
+
+function handlebussbutton(itemId) {
+    toggleFavorite(bussId); // 
+    showNotification();   
+}
+
+
+
 </script>
 

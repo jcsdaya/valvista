@@ -142,8 +142,10 @@ class ItineraryState(models.Model):
     budget = models.JSONField(default=list)
     place_ids = models.JSONField(default=list)
     types = models.JSONField(default=list)
-    start_time = models.TimeField(blank=True, null=True)
+    start_time = models.CharField(blank=True, null=True,max_length=10)
     category = models.JSONField(default=list)
+    time = models.JSONField(default=list)
+    timeclose = models.JSONField(default=list)
 
     def __str__(self):
         return f"Itinerary State for {self.user.username}"

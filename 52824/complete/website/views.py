@@ -585,8 +585,10 @@ def save_itinerary_state(request):
         times = data.get('times', [])
         times2 = data.get('times2', [])
         category = data.get('category', [])
+        time = data.get('time', [])
+        timeclose = data.get('timeclose', [])
         # Save the itinerary state to the database
-        ItineraryState.objects.update_or_create(user=request.user, defaults={'places': places, 'times': times,'times2': times2,'images':images,'place_ids': place_ids,'types': types,"start_time":start_time,"budget":budget,"text":text,"category":category})
+        ItineraryState.objects.update_or_create(user=request.user, defaults={'places': places, 'times': times,'times2': time,'time': timeclose,'timeclose': times2,'images':images,'place_ids': place_ids,'types': types,"start_time":start_time,"budget":budget,"text":text,"category":category})
         return JsonResponse({'success': True})
     return JsonResponse({'success': False})
 
@@ -595,9 +597,9 @@ def load_itinerary_state(request):
     if request.user.is_authenticated:
         itinerary_state = ItineraryState.objects.filter(user=request.user).first()
         if itinerary_state:
-            data = {'places': itinerary_state.places, 'times': itinerary_state.times,'times2': itinerary_state.times2,'images':itinerary_state.images,'placeIds': itinerary_state.place_ids,'types': itinerary_state.types,'startTime': itinerary_state.start_time.strftime('%H:%M'),'budget':itinerary_state.budget,'text':itinerary_state.text,'category':itinerary_state.category}
+            data = {'places': itinerary_state.places, 'times': itinerary_state.times,'times2': itinerary_state.times2,'time': itinerary_state.time,'timeclose': itinerary_state.timeclose,'images':itinerary_state.images,'placeIds': itinerary_state.place_ids,'types': itinerary_state.types,'startTime': itinerary_state.start_time,'budget':itinerary_state.budget,'text':itinerary_state.text,'category':itinerary_state.category}
             return JsonResponse(data)
-    return JsonResponse({'places': [], 'times': [],'times2': [], 'images': [],'placeIds': [],'types': [], 'startTime': '','budget': [],'text': [],'category': []})
+    return JsonResponse({'places': [], 'times': [],'times2': [],'time': [],'timeclose': [], 'images': [],'placeIds': [],'types': [], 'startTime': '','budget': [],'text': [],'category': []})
 
 
 def map(request):

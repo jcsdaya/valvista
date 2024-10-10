@@ -16,18 +16,29 @@
 }
 
 .notification {
-    height: 50px;
+    height: 70px;
     position: fixed;
     top: 120px;
     right: 20px;
-    background-color: rgba(200, 0, 0, 0.7);
+    background-color: #c80000;
     color: white;
     padding: 15px;
     border-radius: 7px;
     z-index: 1000; /* Make sure it's on top */
     transition: opacity 0.5s ease;
-    transform: scale(1); /* Set the initial scale */
-    animation: zoomWiggle 0.5s ease-in-out forwards; /* Apply animation */
+    opacity: 0; /* Start as invisible */
+    animation: slideIn 0.4s ease forwards; /* Apply the slide-in animation */
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(100%); /* Start off-screen to the right */
+        opacity: 0; /* Start as invisible */
+    }
+    100% {
+        transform: translateX(0); /* End at its original position */
+        opacity: 1; /* End fully visible */
+    }
 }
 
 .notification.d-none {

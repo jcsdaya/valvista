@@ -267,7 +267,7 @@
                         {% for place in place %}
                         {% if not place.archived%}
                         <div class="col">
-                            <div class="card" data-place-id='{{ place.id }}' onclick="selectItem('{{ place.id }}', '{{ place.name }}', '{{ place.thumbnail.url }}', 'place', '{% firstof place.categories.first.name 'No Category' %}')">
+                            <div class="card" data-place-id='{{ place.id }}' onclick="selectItem('{{ place.id }}', '{{ place.name }}', '{{ place.thumbnail.url }}', 'place', '{% firstof place.categories.first.name 'No Category' %}','{{ place.time }}','{{ place.timeclose    }}')">
                                 <img style="height: 148px; width: 100%;object-fit: cover;" src="{{ place.thumbnail.url }}" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ place.name }}</h5>
@@ -378,7 +378,7 @@ function toggleInputs(row, disable, keepValue) {
 
 
 
-function selectItem(id, name, imageUrl, type, category) {
+function selectItem(id, name, imageUrl, type, category,time,timeclose) {
     id = String(id);  // Ensure id is a string
 
     // Get the active row in the itinerary
@@ -393,6 +393,8 @@ function selectItem(id, name, imageUrl, type, category) {
     activeContent.dataset.placeId = id;
     activeContent.dataset.type = type;
     activeContent.dataset.category = category;
+    activeContent.dataset.time = time;
+    activeContent.dataset.timeclose = timeclose;
     const nameCell = activeContent.querySelector('.place-name');
     if (nameCell) {
         // Select the img element inside the .place-name
@@ -450,6 +452,8 @@ function selectItem(id, name, imageUrl, type, category) {
     localStorage.setItem('selectedItemId', id);
     localStorage.setItem('selectedItemType', type);
     localStorage.setItem('selectedItemCategory', category);
+    localStorage.setItem('selectedItemTime', time);
+    localStorage.setItem('selectedItemTimeClose', timeclose);
 
     const button = activeContent.querySelector('button');
     if (button) {
@@ -529,11 +533,9 @@ function saveItineraryState() {
     const budget = [];
     const text = [];
     const category = [];
+    const time = [];
+    const timeclose = [];
     console.log('Starting time:', startTime);
-
-    const { hours: startHours, minutes: startMinutes } = parseTime12Hour(startTime);
-    const formattedStartTime = `${startHours.toString().padStart(2, '0')}:${startMinutes.toString().padStart(2, '0')}`;
-    console.log('Formatted Start Time (24-hour):', formattedStartTime);
 
     const budgetInputs = document.querySelectorAll('.budget-input');
     const notesInputs = document.querySelectorAll('.notes-input');
@@ -545,6 +547,8 @@ function saveItineraryState() {
         const placeName = content.querySelector('.place-name').textContent;
         const type = content.dataset.type;
         const categorys = content.dataset.category;
+        const time1 = content.dataset.time;
+        const timecloses = content.dataset.timeclose;
         const imgElement = content.querySelector('img');
         const imageSrc = imgElement ? imgElement.src : '';
 
@@ -553,6 +557,8 @@ function saveItineraryState() {
         placeIds.push(placeId);
         types.push(type);
         category.push(categorys);
+        time.push(time1);
+        timeclose.push(timecloses);
         times.push({ id: timeInputId, value: content.querySelector(`#${timeInputId}`)?.value || '' });
         times2.push({ id: time1InputId, value: content.querySelector(`#${time1InputId}`)?.value || '' });
         budget.push(budgetInputs[index]?.value || '');
@@ -569,7 +575,9 @@ function saveItineraryState() {
         placeIds: placeIds,
         types: types,
         category:category,
-        startTime: formattedStartTime,
+        time:time,
+        timeclose:timeclose,
+        startTime: startTime,
         budget: budget,
         images: images,
         text: text
@@ -606,7 +614,7 @@ function showNotification() {
     // Get current date and time
     const now = new Date();
     const dateTimeString = now.toLocaleString(); // Adjust format as needed
-    message.textContent = `Itinerary saved successfully on ${dateTimeString}`;
+    message.innerHTML = `<i class="fa-solid fa-bell"></i> <strong>Itinerary saved successfully on ${dateTimeString}</strong>`;
 
     // Show notification
     notification.classList.remove('d-none');
@@ -639,9 +647,8 @@ function loadItineraryState() {
 
         // Set start time
         if (startTime) {
-            const startTimeDropdown = document.getElementById('start-time').value=startTime;
-            const options = startTimeDropdown.options;
-
+            const startTimeDropdown = document.getElementById('start-time');
+            startTimeDropdown.value = startTime; // Set the dropdown's selected value directly
         }
 
         // Loop over each .tablecontent directly instead of using nth-child

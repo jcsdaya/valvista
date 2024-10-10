@@ -456,13 +456,25 @@ function setupSearchFunctionality(map, marker) {
     const searchResults = document.getElementById('search-results');
     const geocoder = L.Control.Geocoder.nominatim();
 
+    // Define Valenzuela City bounds
+    const valenzuelaBounds = L.latLngBounds(
+        L.latLng(14.6505, 120.9403), // SW corner
+        L.latLng(14.7333, 121.1000)  // NE corner
+    );
+
     locationInput.addEventListener('input', function() {
         const query = locationInput.value;
         searchResults.innerHTML = ''; // Clear previous results
 
         if (query.length > 0) {
             geocoder.geocode(query, function(results) {
-                results.forEach(result => {
+                // Filter results to only include those within Valenzuela City
+                const filteredResults = results.filter(result => {
+                    const latLng = result.center;
+                    return valenzuelaBounds.contains(latLng);
+                });
+
+                filteredResults.forEach(result => {
                     const latLng = result.center;
                     const listItem = document.createElement('li');
                     listItem.textContent = result.name || 'Unnamed Location';
@@ -481,10 +493,18 @@ function setupSearchFunctionality(map, marker) {
                     });
                     searchResults.appendChild(listItem);
                 });
+
+                // Handle the case where no results are found within the bounds
+                if (filteredResults.length === 0) {
+                    const noResultItem = document.createElement('li');
+                    noResultItem.style.display = 'none';
+                    searchResults.appendChild(noResultItem);
+                }
             });
         }
     });
 }
+
 
 function main() {
     const map = initializeMap();
