@@ -267,7 +267,7 @@
                         {% for place in place %}
                         {% if not place.archived%}
                         <div class="col">
-                            <div class="card" data-place-id='{{ place.id }}' onclick="selectItem('{{ place.id }}', '{{ place.name }}', '{{ place.thumbnail.url }}', 'place', '{% firstof place.categories.first.name 'No Category' %}','{{ place.time }}','{{ place.timeclose    }}')">
+                            <div class="card" data-place-id='{{ place.id }}' onclick="selectItem('{{ place.id }}', '{{ place.name }}', '{{ place.thumbnail.url }}', 'place', '{% firstof place.categories.first.name 'No Category' %}','{{ place.time }}','{{ place.timeclose}}')">
                                 <img style="height: 148px; width: 100%;object-fit: cover;" src="{{ place.thumbnail.url }}" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ place.name }}</h5>
@@ -281,7 +281,7 @@
                         {% if not bus.archived %}
                         {% if bus.approval %}
                         <div class="col">
-                            <div class="card"  data-place-id='{{ bus.id }}' onclick="selectItem('{{ bus.id }}', '{{ bus.name }}', '{{ bus.thumbnail.url }}', 'business', '{% firstof bus.categories.first.name 'No Category' %}')">
+                            <div class="card"  data-place-id='{{ bus.id }}' onclick="selectItem('{{ bus.id }}', '{{ bus.name }}', '{{ bus.thumbnail.url }}', 'business', '{% firstof bus.categories.first.name 'No Category' %}','{{ bus.time }}','{{ bus.timeclose}}')">
                                 <img style="height: 148px; width: 100%;object-fit: cover;" src="{{ bus.thumbnail.url }}" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ bus.name }}</h5>
@@ -440,6 +440,7 @@ function selectItem(id, name, imageUrl, type, category,time,timeclose) {
     if (time1Input) {
         time1Input.id = `time1Input${id}`;
         time1Input.value = '';
+        
     } else {
         console.error(`Time Input 2 not found for place ID: ${id}`);
     }
@@ -638,6 +639,8 @@ function loadItineraryState() {
         const placeIds = data.placeIds;
         const types = data.types;
         const category = data.category;
+        const time= data.time;
+        const timeclose= data.timeclose;
         const startTime = data.startTime;
         const budget = data.budget;
         const text = data.text;
@@ -681,6 +684,11 @@ function loadItineraryState() {
                 content.dataset.category = categoryValue; 
                 const nameCell = content.querySelector('.place-name');
                 let img = nameCell.querySelector('img');
+
+                const savedTime = time[index];  // Time when place opens
+                const savedTimeClose = timeclose[index];  // Time when place closes
+                content.dataset.time = savedTime; // Save the time to the dataset
+                content.dataset.timeclose = savedTimeClose; 
 
 if (!img) {
     img = document.createElement('img');

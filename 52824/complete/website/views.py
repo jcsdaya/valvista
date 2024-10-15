@@ -588,7 +588,7 @@ def save_itinerary_state(request):
         time = data.get('time', [])
         timeclose = data.get('timeclose', [])
         # Save the itinerary state to the database
-        ItineraryState.objects.update_or_create(user=request.user, defaults={'places': places, 'times': times,'times2': time,'time': timeclose,'timeclose': times2,'images':images,'place_ids': place_ids,'types': types,"start_time":start_time,"budget":budget,"text":text,"category":category})
+        ItineraryState.objects.update_or_create(user=request.user, defaults={'places': places, 'times': times,'times2': times2,'time': time,'timeclose': timeclose,'images':images,'place_ids': place_ids,'types': types,"start_time":start_time,"budget":budget,"text":text,"category":category})
         return JsonResponse({'success': True})
     return JsonResponse({'success': False})
 
