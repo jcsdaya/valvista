@@ -24,7 +24,7 @@
         <li><a href="{%url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
 
         {% if user.is_authenticated%}
-        <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i>Favorites</a></li>
+        <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i> Favorites</a></li>
         {%else%}
         <li><a ></i></a></li>
         {%endif%}
@@ -114,9 +114,9 @@
                                             <p>
                                                 {% for i in "12345" %}
                                                     {% if forloop.counter <= rating.score %}
-                                                        ⭐
-                                                    {% else %}
-                                                        ☆
+                                                    <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
+                                                    {%else%}
+                                                    <i class="fa-regular fa-star"></i>
                                                     {% endif %}
                                                 {% endfor %}
                                             </p>

@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js"></script>
     <title>Itinerary | ValVista</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'itinerara.css' %}">
@@ -30,7 +32,7 @@
   
             {% if user.is_authenticated%}
             {% if not user.is_Business and not business.approval%}
-            <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i>Favorites</a></li>
+            <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i> Favorites</a></li>
             {%else%}
             <li><a ></i></a></li>
             {%endif%}
@@ -71,54 +73,49 @@
         }
     </script>
     <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script>
-    <br>   <br>   <br>   <br>   <br>   <br>
-    <!-- Itinerary Selection -->
-    <div style="max-width: 1200px;"class=" container">
+    <br>   <br>   <br>   <br>  
+   
+
+<!-- Itinerary Selection -->
+<div style="max-width: 1200px;" class="container" id="itineraryContainer">
     <div class="right-box">
         <div class="header-text">
- 
-    <h1>Itinerary Creation</h1>
-    <br>
-    <div class="selection-wrapper">
-        <label for="place-count"><Strong>Select number of places:</Strong></label>
-        <select id="place-count" onchange="updateItinerary()">
-            <option value="2">2 Places</option>
-            <option value="3">3 Places</option>
-            <option value="5" selected>5 Places</option>
-        </select>
-    </div>
+            <h1>Itinerary Creation</h1>
+            <br>
+            <div class="selection-wrapper">
+                <label for="place-count"><strong>Select number of places:</strong></label>
+                <select id="place-count" onchange="updateItinerary()">
+                    <option value="2">2 Places</option>
+                    <option value="3">3 Places</option>
+                    <option value="5" selected>5 Places</option>
+                </select>
+            </div>
 
-   
-    <button class="btn" id="favoriteButton" onclick="saveItineraryState()">Save Itinerary</button>
-    <button id="downloadItineraryBtn" class="btn">📩 Download Itinerary</button>
-    <a id="mapButton" class="btn" href="{%url 'map'%}"> 🗺️ Map </a>
-    <form id="itinerary-form" method="POST" action="">
-        {% csrf_token %}
-        <input type="hidden" name="places" id="places-input">
-        <input type="hidden" name="times" id="times-input">
+            <button class="btn" id="favoriteButton" onclick="saveItineraryState()">Save Itinerary</button>
+            <button id="downloadItineraryBtn" class="btn" onclick="downloadItinerary()">📩 Download Itinerary</button>
+            <a id="mapButton" class="btn" href="{%url 'map'%}"> 🗺️ Map </a>
+            <form id="itinerary-form" method="POST" action="">
+                {% csrf_token %}
+                <input type="hidden" name="places" id="places-input">
+                <input type="hidden" name="times" id="times-input">
 
-        <div class="starttime">
-            <label for="start-time"><strong>Enter starting time:</strong></label>
-            <select id="start-time" onchange="updateItineraryTimes()">
-                {% for time in combined_times %}
-                    <option value="{{ time }}">{{ time }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <br>
-        {% csrf_token %}
+                <div class="starttime">
+                    <label for="start-time"><strong>Enter starting time:</strong></label>
+                    <input type="time" id="start-time" onchange="updateItineraryTimes()">
+                </div>
+                <br>
+                {% csrf_token %}
 
-              <table class="table table-bordered table table-striped">
-            <thead >
-                <tr>
-                    <th>Name of Place</th>
-                    <th>Time In</th>
-                    <th>Time Out</th>
-                    <th>Budget</th>
-                    <th>Notes/Reminders</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name of Place</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Budget</th>
+                            <th>Notes/Reminders</th>
+                            <th class="actions-column">Actions</th> 
+                    </thead>
             
             <tbody id="itineraryBody">
                 {% with place.0 as first_place %}
@@ -129,15 +126,16 @@
             <img id="place-img" src="{{ first_place.thumbnail.url }}" alt="{{ first_place.name }}">   
             <span class="place-name">{{ first_place.name }}</span>
             </th>
-        <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p></th>
-        <th><p class="time1-input"><input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
+        <th><p class="time-input"><input class="inputtime"  type="text" id="timeInput{{ first_place.id }}" placeholder=></p></th>
+        <th><p class="time1-input"><input class="inputtime" type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
         <th>
-            <p style="width: 100px;" class="inline-input">
-                <input  style="width: 130px;" type="text" class="budget-input" placeholder="Enter budget">
-            </p>
+            <div class="input-container">
+                <span class="currency-symbol">₱</span>
+                <input type="number" class="budget-input" min="0" step="0.50">
+            </div>
         </th>
         <th >
-            <textarea class="notes-input" rows="5" cols="15" placeholder="Add your notes here..."></textarea>
+            <textarea class="notes-input" rows="5" cols="30" placeholder="Add your notes here..."></textarea>
         </th>
         <th class="button-container" style="width: 100px; height: 100px;">
             <button type="button"  class="btn1" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
@@ -153,15 +151,16 @@
                     <img id="place-img" src="{{ first_place.thumbnail.url }}" alt="{{ first_place.name }}">   
                     <span class="place-name">{{ first_place.name }}</span>
                     </th>
-                    <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
-                    <th><p class="time1-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
+                    <th><p class="time-input"><input class="inputtime" type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
+                    <th><p class="time1-input"> <input class="inputtime" type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
                     <th>
-                        <p style="width: 100px;" class="inline-input">
-                            <input style="width: 130px;" type="text" class="budget-input" placeholder="Enter budget">
-                        </p>
+                        <div class="input-container">
+                            <span class="currency-symbol">₱</span>
+                            <input type="number" class="budget-input" min="0" step="0.50">
+                        </div>
                     </th>
                     <th >
-                        <textarea class="notes-input" rows="5" cols="15" placeholder="Add your notes here..."></textarea>
+                        <textarea class="notes-input" rows="5" cols="30" placeholder="Add your notes here..."></textarea>
                     </th>
                     <th class="button-container" style="width: 100px; height: 100px;">
                         <button type="button"  class="btn1" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
@@ -177,15 +176,16 @@
                         <img id="place-img" src="{{ first_place.thumbnail.url }}" alt="{{ first_place.name }}">   
                         <span class="place-name">{{ first_place.name }}</span>
                         </th>
-                    <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
-                    <th><p class="time1-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
+                    <th><p class="time-input"><input class="inputtime" type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
+                    <th><p class="time1-input"> <input class="inputtime" type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
                     <th>
-                        <p style="width: 100px;" class="inline-input">
-                            <input  style="width: 130px;" type="text" class="budget-input" placeholder="Enter budget">
-                        </p>
+                        <div class="input-container">
+                            <span class="currency-symbol">₱</span>
+                            <input type="number" class="budget-input" min="0" step="0.50">
+                        </div>
                     </th>
                     <th >
-                        <textarea class="notes-input" rows="5" cols="15" placeholder="Add your notes here..."></textarea>
+                        <textarea class="notes-input" rows="5" cols="30" placeholder="Add your notes here..."></textarea>
                     </th>
                     <th class="button-container" style="width: 100px; height: 100px;">
                         <button type="button"  class="btn1" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
@@ -201,15 +201,16 @@
                         <img id="place-img" src="{{ first_place.thumbnail.url }}" alt="{{ first_place.name }}">   
                         <span class="place-name">{{ first_place.name }}</span>
                         </th>
-                    <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
-                    <th><p class="time1-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
+                    <th><p class="time-input"><input class="inputtime" type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
+                    <th><p class="time1-input"> <input class="inputtime" type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
                     <th>
-                        <p style="width: 100px;" class="inline-input">
-                            <input  style="width: 130px;" type="text" class="budget-input" placeholder="Enter budget">
-                        </p>
+                        <div class="input-container">
+                            <span class="currency-symbol">₱</span>
+                            <input type="number" class="budget-input"  min="0" step="0.50">
+                        </div>
                     </th>
                     <th >
-                        <textarea class="notes-input" rows="5" cols="15" placeholder="Add your notes here..."></textarea>
+                        <textarea class="notes-input" rows="5" cols="30" placeholder="Add your notes here..."></textarea>
                     </th>
                     <th class="button-container" style="width: 100px; height: 100px;">
                         <button type="button"  class="btn1" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
@@ -225,15 +226,16 @@
                         <img id="place-img" src="{{ first_place.thumbnail.url }}" alt="{{ first_place.name }}">   
                         <span class="place-name">{{ first_place.name }}</span>
                         </th>
-                    <th><p class="time-input"><input type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
-                    <th><p class="time1-input"> <input type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
-                    <th>
-                        <p style="width: 100px;" class="inline-input">
-                            <input  style="width: 130px;" type="text" class="budget-input" placeholder="Enter budget">
-                        </p>
+                    <th><p class="time-input"><input class="inputtime" type="text" id="timeInput{{ first_place.id }}" placeholder=></p> </th>
+                    <th><p class="time1-input"> <input class="inputtime" type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
+                    <th style="width: 100px;">
+                        <div class="input-container">
+                            <span class="currency-symbol">₱</span>
+                            <input type="number" class="budget-input"  min="0" step="0.50">
+                        </div>
                     </th>
                     <th >
-                        <textarea class="notes-input" rows="5" cols="15" placeholder="Add your notes here..."></textarea>
+                        <textarea class="notes-input" rows="5" cols="30" placeholder="Add your notes here..."></textarea>
                     </th>
                     <th class="button-container" style="width: 100px; height: 100px;">
                         <button type="button"  class="btn1" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
@@ -246,12 +248,76 @@
         </table>
         <p><strong>Ending Time:</strong> <span id="end-time"></span></p> 
         <p><strong>Total Duration:</strong> <span id="total-duration"></span> hours</p>
+        <p><strong>Total Money Spent:</strong>₱<span id="total-spent">0.00</span></strong>
+    </div>
+    </div>
+</div>
+</div>
+</div>
+<script>
+    function downloadItinerary() {
+      const itineraryContainer = document.getElementById('itineraryContainer');
+      const buttonsToHide = document.querySelectorAll('#favoriteButton, #downloadItineraryBtn, #mapButton, .selection-wrapper, .starttime');
+      const actionColumnsToHide = document.querySelectorAll('.actions-column, .button-container');
+  
+      const toggleVisibility = (elements, display) => {
+          elements.forEach(element => {
+              element.style.display = display;
+          });
+      };
+  
+      toggleVisibility(buttonsToHide, 'none');
+      toggleVisibility(actionColumnsToHide, 'none');
+  
+      // Wait a moment to ensure elements are hidden
+      setTimeout(() => {
+          html2canvas(itineraryContainer, {
+              scale: 2, // Higher scale for better image quality
+              backgroundColor: 'white',
+              useCORS: true,
+              logging: true,
+          }).then(canvas => {
+              const imgData = canvas.toDataURL('image/png');
+              const pdf = new jsPDF('p', 'mm', 'a4');
+  
+              const imgWidth = 190;
+              const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  
+              // Adjust height for page break handling
+              const pageHeight = pdf.internal.pageSize.height;
+              let heightLeft = imgHeight;
+  
+              let position = 10;
+  
+              // Add image to PDF and handle page breaks
+              while (heightLeft >= 0) {
+                  pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                  heightLeft -= pageHeight;
+                  position -= pageHeight; // Move position down for the next page
+  
+                  if (heightLeft >= 0) {
+                      pdf.addPage(); // Add a new page
+                  }
+              }
+  
+              pdf.save('itinerary.pdf');
+  
+              // Restore buttons and action columns after PDF is saved
+              toggleVisibility(buttonsToHide, '');
+              toggleVisibility(actionColumnsToHide, '');
+          }).catch(error => {
+              console.error('Error generating PDF:', error);
+              // Restore visibility if PDF generation fails
+              toggleVisibility(buttonsToHide, '');
+              toggleVisibility(actionColumnsToHide, '');
+          });
+      }, 200); // Delay to ensure proper rendering
+  }
+  
+  </script>
 
-    </div>
-    </div>
-</div>
-</div>
-</div>
+
+
 
 
 
@@ -267,7 +333,7 @@
                         {% for place in place %}
                         {% if not place.archived%}
                         <div class="col">
-                            <div class="card" data-place-id='{{ place.id }}' onclick="selectItem('{{ place.id }}', '{{ place.name }}', '{{ place.thumbnail.url }}', 'place', '{% firstof place.categories.first.name 'No Category' %}','{{ place.time }}','{{ place.timeclose}}')">
+                            <div class="card" data-place-id='{{ place.id }}' onclick="selectItem('{{ place.id }}', '{{ place.name }}', '{{ place.thumbnail.url }}', 'place', '{% firstof place.categories.first.name 'No Category' %}','{{ place.time }}','{{ place.timeclose    }}')">
                                 <img style="height: 148px; width: 100%;object-fit: cover;" src="{{ place.thumbnail.url }}" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ place.name }}</h5>
@@ -281,7 +347,7 @@
                         {% if not bus.archived %}
                         {% if bus.approval %}
                         <div class="col">
-                            <div class="card"  data-place-id='{{ bus.id }}' onclick="selectItem('{{ bus.id }}', '{{ bus.name }}', '{{ bus.thumbnail.url }}', 'business', '{% firstof bus.categories.first.name 'No Category' %}','{{ bus.time }}','{{ bus.timeclose}}')">
+                            <div class="card"  data-place-id='{{ bus.id }}' onclick="selectItem('{{ bus.id }}', '{{ bus.name }}', '{{ bus.thumbnail.url }}', 'business', '{% firstof bus.categories.first.name 'No Category' %}')">
                                 <img style="height: 148px; width: 100%;object-fit: cover;" src="{{ bus.thumbnail.url }}" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ bus.name }}</h5>
@@ -430,6 +496,8 @@ function selectItem(id, name, imageUrl, type, category,time,timeclose) {
     let timeInput = activeContent.querySelector(`[id^='timeInput']`);
     let time1Input = activeContent.querySelector(`[id^='time1Input']`);
 
+    validateTimeFields(time, timeclose, timeInput, time1Input);
+
     if (timeInput) {
         timeInput.id = `timeInput${id}`;
         timeInput.value = ''; // Clear the value or set a new default
@@ -440,10 +508,11 @@ function selectItem(id, name, imageUrl, type, category,time,timeclose) {
     if (time1Input) {
         time1Input.id = `time1Input${id}`;
         time1Input.value = '';
-        
     } else {
         console.error(`Time Input 2 not found for place ID: ${id}`);
     }
+
+
 
     updateItineraryTimes(); 
 
@@ -639,12 +708,12 @@ function loadItineraryState() {
         const placeIds = data.placeIds;
         const types = data.types;
         const category = data.category;
-        const time= data.time;
-        const timeclose= data.timeclose;
         const startTime = data.startTime;
         const budget = data.budget;
         const text = data.text;
         const images = data.images;
+        const time = data.time;
+        const timeclose = data.timeclose;
 
         console.log('Starting time:', startTime);
 
@@ -679,16 +748,18 @@ function loadItineraryState() {
                 const placeId = placeIds[index]; 
                 content.dataset.placeId = placeId;
                 content.dataset.type = types[index];
+                content.dataset.time = time
+                const timeValue = time[index];
+                const timeCloseValue = timeclose[index];
 
+
+                
                 const categoryValue = category[index]; 
                 content.dataset.category = categoryValue; 
+                content.dataset.time = timeValue;
+                content.dataset.timeclose = timeCloseValue;
                 const nameCell = content.querySelector('.place-name');
                 let img = nameCell.querySelector('img');
-
-                const savedTime = time[index];  // Time when place opens
-                const savedTimeClose = timeclose[index];  // Time when place closes
-                content.dataset.time = savedTime; // Save the time to the dataset
-                content.dataset.timeclose = savedTimeClose; 
 
 if (!img) {
     img = document.createElement('img');
@@ -716,6 +787,8 @@ if (img && images && images.length > index) {
                     time1Input.id = time1InputId;
                     time1Input.value = times2[index]?.value || '';
                 }
+                
+                validateTimeFields(timeValue, timeCloseValue, timeInput, time1Input);
 
 
                 if (placeIds && placeIds.length > index && types && types.length > index) {
@@ -746,7 +819,10 @@ if (img && images && images.length > index) {
             input.value = category[index] || ''; // Set the category values accordingly
         });
         });
+        calculateTotalBudget();
         updateItineraryTimes();
+
+        
     })
     .catch(error => {
         console.error('Error loading itinerary state:', error);
@@ -787,10 +863,10 @@ function updateProgress(position) {
 }
 
 const categoryDurations = {
-    'Leisure': 1 * 60, // 1.5 hours in minutes
-    'Dining': 2 * 60, // 1 hour in minutes
-    'Historical': 3 * 60, // 2 hours in minutes
-    'Educational': 4 * 60, // 2 hours in minutes
+    'Leisure': 2 * 60, // 1.5 hours in minutes
+    'Dining': 1 * 60, // 1 hour in minutes
+    'Historical': 1.5 * 60, // 2 hours in minutes
+    'Educational': 2 * 60, // 2 hours in minutes
     // Add more categories and durations as needed
 };
 
@@ -825,21 +901,25 @@ function parseTime12Hour(timeString) {
 }
 
 function formatTime(hours, minutes) {
-    const period = hours >= 12 ? 'PM' : 'AM';
+    const period = hours >= 12 ? 'pm' : 'am';
     const formattedHours = ((hours % 12) || 12).toString().padStart(2, '0');
     const formattedMinutes = minutes.toString().padStart(2, '0');
-    return `${formattedHours}:${formattedMinutes} ${period}`;
+    return `${formattedHours}:${formattedMinutes}${period}`;
 }
 
 function updateItineraryTimes() {
-    console.log("Start time selected:", document.getElementById('start-time').value);  // Debug log
+    console.log("Start time selected:", document.getElementById('start-time').value); 
     
     const startTimeInput = document.getElementById('start-time');
     const startTime = startTimeInput.value;
-    if (!startTime) return;  // Exit if no start time is provided
+    if (!startTime) return;  
+
+    const [hours, minutes] = startTime.split(':').map(Number);
+    const formattedTime = formatTime(hours, minutes);
+    console.log(`Formatted start time (12hr): ${formattedTime}`);
 
     // Parse the time string (formatted like 10:00am)
-    let { hours: startHours, minutes: startMinutes } = parseTime12Hour(startTime);
+    let { hours: startHours, minutes: startMinutes } = parseTime12Hour(formattedTime);
     
     console.log(`Parsed start time - Hours: ${startHours}, Minutes: ${startMinutes}`);  // Debug log
 
@@ -884,8 +964,15 @@ function updateItineraryTimes() {
                     console.error(`Time inputs not found for place ID ${content.dataset.placeId}`);
                 }
 
-                startHours = endHours;
-                startMinutes = endMinutes;
+                const randomGap = getRandomGap(); 
+                totalMinutes += randomGap; 
+                startHours = endHours + Math.floor(randomGap / 60);
+                startMinutes = endMinutes + (randomGap % 60);
+
+                if (startMinutes >= 60) {
+                    startHours += Math.floor(startMinutes / 60);
+                    startMinutes = startMinutes % 60;
+                }
             } else {
                 console.error(`Button not found for index ${index}`);
             }
@@ -909,28 +996,98 @@ function updateItineraryTimes() {
     });
 }
 
+function getRandomGap() {
+    const gaps = [15, 20, 25, 30];  
+    const randomIndex = Math.floor(Math.random() * gaps.length);  
+    return gaps[randomIndex];  
+}
+function convertTo24Hour(timeStr) {
+    // Use regular expressions to capture the time and meridian (AM/PM)
+    const [time, meridian] = timeStr.match(/(\d{1,2}:\d{2})\s*([APap][Mm])/)?.slice(1) || [];
 
-// Call this function to initialize or update times and duration
-updateItineraryTimes();
+    if (!time || !meridian) {
+        console.error("Invalid time format");
+        return null; // Return null if time format is invalid
+    }
+
+    let [hours, minutes] = time.split(':').map(Number);
+
+    // Convert to 24-hour format
+    if (meridian.toLowerCase() === 'pm' && hours < 12) {
+        hours += 12;
+    } else if (meridian.toLowerCase() === 'am' && hours === 12) {
+        hours = 0;
+    }
+
+    // Return the time in HH:MM 24-hour format (e.g., "13:30" for 1:30 PM)
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+}
 
 
+function validateTimeFields(time, closetime, timeInput, time1Input) {
+    // Convert place's opening and closing times to 24-hour format
+    const openTime24 = convertTo24Hour(time);
+    const closeTime24 = convertTo24Hour(closetime);
 
-document.getElementById('downloadItineraryBtn').addEventListener('click', function() {
-    const itineraryContent = document.getElementById('itinerary-content');
+    // Make sure the input elements have valid values before processing
+    if (timeInput && timeInput.value) {
+        const timeInputValue24 = convertTo24Hour(timeInput.value);
+        console.log(openTime24);
+        console.log(timeInputValue24);
+        if (timeInputValue24 < openTime24) {
+            console.log("place close")
+            showError(timeInput, 'Place is still closed at the selected time.');
+        } else {
+            removeError(timeInput); // Remove error message if the time is valid
+        }
+    }
 
-    html2canvas(itineraryContent, { scale: 2 }).then(canvas => {
-        // Convert the canvas to a JPG data URL
-        const imageData = canvas.toDataURL('image/jpeg', 0.8); // 0.8 is the quality level (0.0 to 1.0)
+    if (time1Input && time1Input.value) {
+        const time1InputValue24 = convertTo24Hour(time1Input.value);
+        if (time1InputValue24 > closeTime24) {
+            console.log("place now close")
+            showError(time1Input, 'Place is already closed at the selected time.');
+        } else {
+            removeError(time1Input); // Remove error message if the time is valid
+        }
+    }
+}
 
-        // Create a link element to trigger the download
-        const link = document.createElement('a');
-        link.href = imageData;
-        link.download = 'itinerary.jpg'; // The filename of the downloaded image
-        link.click();
+// Function to show error message below the input field
+function showError(inputElement, message) {
+    let errorElement = inputElement.nextElementSibling;
+    if (!errorElement || !errorElement.classList.contains('error-message')) {
+        errorElement = document.createElement('div');
+        errorElement.classList.add('error-message');
+        inputElement.parentElement.appendChild(errorElement);
+    }
+    errorElement.innerText = message;
+}
+
+function removeError(inputElement) {
+    const errorElement = inputElement.nextElementSibling;
+    if (errorElement && errorElement.classList.contains('error-message')) {
+        errorElement.remove(); // Remove the error message
+    }
+}
+
+function calculateTotalBudget() {
+    const budgetInputs = document.querySelectorAll('.budget-input'); // Select all budget inputs
+    let total = 0;
+
+    // Loop through each input and sum their values
+    budgetInputs.forEach(input => {
+        const value = parseFloat(input.value) || 0; // Parse value to float or use 0 if empty
+        total += value; // Add value to total
     });
-});
-document.getElementById('printButton').addEventListener('click', function() {
-    window.print();
+
+    // Update the total spent display
+    document.getElementById('total-spent').textContent = total.toFixed(2); // Format to 2 decimal places
+}
+
+// Attach the event listener to each budget input
+document.querySelectorAll('.budget-input').forEach(input => {
+    input.addEventListener('input', calculateTotalBudget); // Calculate total on input
 });
 
     </script>

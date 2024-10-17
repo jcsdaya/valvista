@@ -20,15 +20,15 @@
         <nav>
             <a href="{%url 'home' %}"><img class="logo"src ="..\media\media\valvista logo.png" alt="logo"></a>
             <ul class="nav-links">
-                <li><a href="{%url 'dashboard' %}"><i class="fa-solid fa-map-location-dot"></i>Dashboard</a></li>
+                <li><a href="{%url 'dashboard' %}"><i class="fa-solid fa-map-location-dot"></i> Dashboard</a></li>
                 {% if user.is_authenticated%}
-                <li><a href="{%url 'placelist' %}"><i class="fa-solid fa-heart"></i>Place List</a></li>
+                <li><a href="{%url 'placelist' %}"><i class="fa-solid fa-heart"></i> Place List</a></li>
                 {%else%}
                 <li><a ></i></a></li>
                 {%endif%}
-                <li><a href="{%url 'businessadmin' %}"><i class="fa-solid fa-clipboard-list"></i>Business List</a></li>
-                <li><a href="{%url 'approvallist' %}"><i class="fa-solid fa-map-location-dot"></i>Approval List</a></li>
-                <li><a href="{%url 'archives' %}"><i class="fa-solid fa-map-location-dot"></i>Archive</a></li>
+                <li><a href="{%url 'businessadmin' %}"><i class="fa-solid fa-clipboard-list"></i> Business List</a></li>
+                <li><a href="{%url 'approvallist' %}"><i class="fa-solid fa-map-location-dot"></i> Approval List</a></li>
+                <li><a href="{%url 'archives' %}"><i class="fa-solid fa-map-location-dot"></i> Archive</a></li>
                 
             </ul>
             <ul class="nav-links ul-user">

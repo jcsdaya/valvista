@@ -29,7 +29,7 @@
   
             {% if user.is_authenticated%}
             {% if not user.is_Business and not business.approval%}
-            <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i>Favorites</a></li>
+            <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i> Favorites</a></li>
             {%else%}
             <li><a ></i></a></li>
             {%endif%}

@@ -167,7 +167,6 @@ body{
 .container__right {
 	display: grid;
 	gap: 2rem;
-	height: 150px; /* Set a fixed height for scrollable area */
 	overflow-y: auto; /* Enable vertical scrolling */
 }
   
@@ -227,8 +226,8 @@ body{
 
 .logo {
     margin-top: 1px;
-    height: 80px;
-    width: 200px;
+    height: 70px;
+    width: 160px;
     filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
   }
   

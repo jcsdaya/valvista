@@ -4,7 +4,7 @@
   }
 
   .custom-background{
-    background-image: url("/media/media/museum.jpg");
+    background-image: url("https://static.vecteezy.com/system/resources/previews/014/729/973/non_2x/abstract-white-3d-background-with-red-and-white-lines-paper-cut-style-textured-usable-for-decorative-web-layout-poster-banner-corporate-brochure-and-seminar-template-design-vector.jpg");
     background-repeat: repeat;
     background-position: center;
     background-size: contain;
@@ -85,10 +85,11 @@ nav {
 
 .logo {
     margin-top: 1px;
-    height: 80px;
-    width: 200px;
+    height: 70px;
+    width: 160px;
     filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
   }
+  
   
   
 
@@ -317,11 +318,10 @@ nav ul li.no-hover a:hover {
     .container{
         width: 1800px;
         background-color: white;
-        padding: 30px;
+        padding: 20px;
         box-shadow: 0 2px 16px rgba(0, 0, 0, .1);
         border-radius: 20px;
-        margin-top: 40px;
-        margin-bottom: 40px;
+        margin-bottom: 0px;
     }
 
 #myTextArea1,#myTextArea2,#myTextArea3,#myTextArea4,#myTextArea{
@@ -343,6 +343,9 @@ nav ul li.no-hover a:hover {
     justify-content: center;
     text-align: center;
     height: 100%; /* Fill the height of the th */
+    width: 10%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 table {
@@ -359,7 +362,6 @@ th {
     width: 150px; /* Adjust the size of the image */
     height: 100px;
     margin-bottom: 10px; /* Add some space between the image and the name */
-    margin-left: 50px;
     border-radius: 10px;
     filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
 }
@@ -416,6 +418,37 @@ input{
     width: 100px;
     height: 25px;
     border-radius: 5px;
+    border:white;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
+}
+
+.input-container {
+    position: relative;
+    width: 160px; /* Adjust based on your input width */
+}
+
+.currency-symbol {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px; /* Adjust size */
+    color: black; /* Change to any color you want */
+}
+
+.budget-input {
+    width: 70%; /* Full width within the container */
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    margin-left: 25px;
+    font-size: 20px;
+}
+
+.inputtime{
+    width: 150px;
+    font-size: 20px;
+}
+
+.notes-input{
     border:white;
     filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
 }

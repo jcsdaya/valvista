@@ -22,15 +22,15 @@
         </div>
 
         <ul class="nav-links">
-            <li><a href="{%url 'dashboard' %}"><i class="fa-solid fa-table-columns"></i>Dashboard</a></li>
+            <li><a href="{%url 'dashboard' %}"><i class="fa-solid fa-table-columns"></i> Dashboard</a></li>
             {% if user.is_authenticated%}
-            <li><a href="{%url 'placelist' %}"><i class="fa-solid fa-list"></i>Place List</a></li>
+            <li><a href="{%url 'placelist' %}"><i class="fa-solid fa-list"></i> Place List</a></li>
             {%else%}
             <li><a ></i></a></li>
             {%endif%}
-            <li><a href="{%url 'businessadmin' %}"><i class="fa-solid fa-list"></i></i>Business List</a></li>
-            <li><a href="{%url 'approvallist' %}"><i class="fa-solid fa-check-to-slot"></i>Approval List</a></li>
-            <li><a href="{%url 'archives' %}"><i class="fa-solid fa-box-archive"></i>Archive</a></li>
+            <li><a href="{%url 'businessadmin' %}"><i class="fa-solid fa-list"></i></i> Business List</a></li>
+            <li><a href="{%url 'approvallist' %}"><i class="fa-solid fa-check-to-slot"></i> Approval List</a></li>
+            <li><a href="{%url 'archives' %}"><i class="fa-solid fa-box-archive"></i> Archive</a></li>
             {% if user.is_authenticated%}
             <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
             <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>

@@ -32,7 +32,7 @@
 
         {% if user.is_authenticated%}
         {% if not user.is_Business and not business.approval%}
-        <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i>Favorites</a></li>
+        <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i> Favorites</a></li>
         {%else%}
         <li><a ></i></a></li>
         {%endif%}
@@ -129,18 +129,36 @@
 
 
         //fix na to
-        function initializeMap() {
-            const map = L.map('map').setView(INITIAL_LAT_LNG, 12); // Increased zoom level
-            map.setMaxBounds(VALENZUELA_BOUNDS);
+       function initializeMap() {
+    // Define bounds for Valenzuela City (adjust the coordinates as necessary)
+    const VALENZUELA_BOUNDS = L.latLngBounds(
+        [14.5630, 121.0361], // Southwest corner
+        [14.8461, 120.8875]  // Northeast corner
+    );
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 18,
-                minZoom: 6
-            }).addTo(map);
+    // Initialize the map within Valenzuela bounds
+    const map = L.map('map', {
+        center: [14.69240, 120.97024], // Center of Valenzuela
+        zoom: 14, // Adjust initial zoom level as necessary
+        maxBounds: VALENZUELA_BOUNDS, // Restrict map to Valenzuela City
+        maxBoundsViscosity: 1.0, // Makes it harder to drag outside bounds
+        worldCopyJump: false, // Prevent world tile wrapping outside bounds
+    });
 
-            return map;
-        }
+    // Set max/min zoom levels to control how far users can zoom
+    map.setMaxBounds(VALENZUELA_BOUNDS);
+    map.setMinZoom(14);
+    map.setMaxZoom(18); // Allow zooming in but restrict zooming out too much
+
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 18, // Set maximum zoom to match what is set above
+        minZoom: 14  // Set minimum zoom to match what is set above
+    }).addTo(map);
+
+    return map;
+}
 
         function initializeMarker(map) {
             return L.marker(INITIAL_LAT_LNG, { icon: blueIcon }).addTo(map); // Use blue icon for current location
@@ -318,8 +336,8 @@ function handleError(error) {
 
                 // Check if the location is within Valenzuela City
                 const valenzuelaBounds = L.latLngBounds(
-                    L.latLng(14.6505, 120.9403), // SW corner
-                    L.latLng(14.7333, 121.1000)  // NE corner
+                    L.latLng(14.3648, 120.8564), // SW corner - South part of NCR near Cavite
+                    L.latLng(14.9972, 121.2000)  // NE corner - Upper part of Bulakan  // NE corner
                 );
 
                 if (valenzuelaBounds.contains(latLng)) {

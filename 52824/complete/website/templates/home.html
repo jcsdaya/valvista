@@ -27,9 +27,9 @@
             <li><a href="{%url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
   
             {% if user.is_authenticated%}
-            <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i>Favorites</a></li>
+            <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i> Favorites</a></li>
             {%else%}
-            <li><a href="{%url 'login' %}"><i class="fa-solid fa-heart"></i>Favorites</a></li>
+            <li><a href="{%url 'login' %}"><i class="fa-solid fa-heart"></i> Favorites</a></li>
             {%endif%}
 			{% if user.is_authenticated%}
             <li><a href="{%url 'itinerary' %}"><i class="fa-solid fa-clipboard-list"></i> Itinerary Creation</a></li>
@@ -189,6 +189,11 @@
         }
         }
     });
+    const resultsContainer = document.getElementById('resultsContainer');
+    if (resultsContainer) {
+        resultsContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+
 });
     // Function to check budget ranges
     function budgetMatches(itemBudget, selectedBudget) {
@@ -217,10 +222,10 @@
     </script>
 
 
-<!-- slider -->
 <div class="slider">
     <div class="carousel-text">
-        <h1>Welcome to <span class="valvista">Valvista</span></h1>
+        <h1>Welcome to </h1>
+        <h2><span class="valvista">VAL</span> <span class="valsit">VISTA</span></h2>
         <p>Your guide to exploring Valenzuela City</p>
         <button id="discover-more" class="discover-button">Discover More</button>
     </div>
@@ -244,74 +249,7 @@
 <!-- Add landscape line with animation -->
 <div class="landscape-line"></div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const landscapeLine = document.querySelector('.landscape-line');
 
-    // Slider functionality
-    let currentIndex = 0;
-    const items = document.querySelectorAll('.slider .list .item');
-    const totalItems = items.length;
-    const prevButton = document.getElementById('prev');
-    const nextButton = document.getElementById('next');
-
-    function showSlide(index) {
-        items.forEach((item, i) => {
-            item.classList.toggle('active', i === index);
-        });
-        resetAnimations(); // Reset animations when the slide changes
-    }
-
-    function resetAnimations() {
-        const title = document.querySelector('.carousel-text h1');
-        const subtitle = document.querySelector('.carousel-text p');
-        const button = document.getElementById('discover-more');
-        const overlay = document.querySelector('.overlay');
-
-        title.style.opacity = 0;
-        subtitle.style.opacity = 0;
-        button.style.opacity = 0;
-        overlay.style.opacity = 0; // Reset overlay opacity
-
-        // Force reflow to restart the animations
-        void title.offsetWidth; // Trigger reflow
-        void subtitle.offsetWidth; // Trigger reflow
-        void button.offsetWidth; // Trigger reflow
-        void overlay.offsetWidth; // Trigger reflow for overlay
-
-        // Animate back in
-        setTimeout(() => {
-            title.style.opacity = 1;
-            subtitle.style.opacity = 1;
-            button.style.opacity = 1;
-            overlay.style.opacity = 1; // Animate overlay back in
-        }, 100); // Delay slightly before showing the text again
-    }
-
-    // Scroll functionality for Discover More button
-    const discoverButton = document.getElementById('discover-more');
-    discoverButton.addEventListener('click', function() {
-        const resultsContainer = document.getElementById('resultsContainer');
-        if (resultsContainer) {
-            const offset = 100; // Adjust this value as needed
-            const elementPosition = resultsContainer.getBoundingClientRect().top + window.pageYOffset;
-            const offsetPosition = elementPosition - offset;
-
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
-        }
-    });
-
-    // Add event listeners for buttons
-    if (totalItems > 1) {
-        nextButton.addEventListener('click', nextSlide);
-        prevButton.addEventListener('click', prevSlide);
-        setInterval(nextSlide, 10000); // Change slide every 10 seconds
-    }
-});
-</script>
 
 <div class="container my-5" id="resultsContainer">
     <div class="anicontainer">
@@ -333,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         {% if item.id in favorite_places %}
                                             <i id="heart-icon-{{ item.id }}" class="fas fa-heart"></i>
                                         {% else %}
-                                            <i id="heart-icon-{{ item.id }}" class="far fa-heart"></i>
+                                            <i id="heart-icon-{{ item.id }}" class="fa-regular fa-heart"></i>
                                         {% endif %}
                                     </button>
                                 </form>
@@ -344,9 +282,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             <p class="lead text-dark"> {% if item.avg_rating %}
                                 {% for i in "12345" %}
                                     {% if i <= item.avg_rating|floatformat:0 %}
-                                        ⭐
+                                    <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
                                         {%else%}
-                                        ☆
+                                        <i class="fa-regular fa-star"></i>
                                     {% endif %}
                                 {% endfor %}
                             {% else %}
@@ -399,9 +337,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <p class="lead text-dark"> {% if buss.avg_rating %}
                                     {% for i in "12345" %}
                                         {% if i <= buss.avg_rating|floatformat:0 %}
-                                            ⭐
-                                            {%else%}
-                                            ☆
+                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
+                                        {%else%}
+                                        <i class="fa-regular fa-star"></i>
                                         {% endif %}
                                     {% endfor %}
                                 {% else %}

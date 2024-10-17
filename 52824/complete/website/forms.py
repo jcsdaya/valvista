@@ -111,7 +111,7 @@ class RatingForm(forms.ModelForm):
         fields = ['name', 'score', 'comment']
     
     name = forms.CharField(max_length=100)
-    score = forms.ChoiceField(choices=[(i, f"{i} Star") for i in range(1, 6)])
+    score = forms.IntegerField(widget=forms.HiddenInput()) 
     comment = forms.CharField(widget=forms.Textarea, required=False)
 
 class PromoForm(forms.ModelForm):

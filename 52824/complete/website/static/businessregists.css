@@ -24,10 +24,11 @@ header {
 
 .logo {
     margin-top: 1px;
-    height: 80px;
-    width: 200px;
+    height: 70px;
+    width: 160px;
     filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
   }
+  
   
 
 nav {
