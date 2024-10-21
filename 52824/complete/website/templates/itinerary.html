@@ -873,12 +873,12 @@ const categoryDurations = {
 
 
 function parseTime12Hour(timeString) {
-    // Match time and period using a regular expression (with or without space between time and am/pm)
-    const match = timeString.match(/(\d+):(\d+)(am|pm)/i);
+    // Match time and period using a regular expression (with or without a space between time and am/pm)
+    const match = timeString.match(/(\d+):(\d+)\s?(am|pm)/i);  // Updated regex to allow an optional space
     
     if (!match) {
         console.error("Invalid time format:", timeString);
-        return { hours: 12, minutes: 0 };  // Default to 12:00 PM if invalid
+        return { hours: 12, minutes: 0, period: 'pm' };  // Default to 12:00 PM if invalid
     }
 
     let [_, hours, minutes, period] = match;
@@ -887,25 +887,56 @@ function parseTime12Hour(timeString) {
 
     if (isNaN(hours) || isNaN(minutes)) {
         console.error("Invalid hours or minutes in:", timeString);
-        return { hours: 12, minutes: 0 };  // Default to 12:00 PM if parsing fails
+        return { hours: 12, minutes: 0, period: 'pm' };  // Default to 12:00 PM if parsing fails
     }
 
-    // Convert to 24-hour format
-    if (period.toLowerCase() === 'pm' && hours !== 12) {
-        hours += 12;
-    } else if (period.toLowerCase() === 'am' && hours === 12) {
-        hours = 0;  // Handle midnight case
-    }
-
-    return { hours, minutes };
+    // No conversion to 24-hour format here, keep the period as it is
+    return { hours, minutes, period };
 }
 
 function formatTime(hours, minutes) {
     const period = hours >= 12 ? 'pm' : 'am';
     const formattedHours = ((hours % 12) || 12).toString().padStart(2, '0');
     const formattedMinutes = minutes.toString().padStart(2, '0');
-    return `${formattedHours}:${formattedMinutes}${period}`;
+    return {
+        formattedTime: `${formattedHours}:${formattedMinutes}${period}`,
+        hours: formattedHours,
+        minutes: formattedMinutes,
+        period: period,
+    };
 }
+
+function formatTimeInput(hours, minutes, startPeriod) {
+    let period = startPeriod;  // Start with the provided period
+
+    // Handle special cases for midnight and noon
+    if (hours === 12 && period === 'pm') {
+        period = 'am';  // Noon stays as 12:00 PM
+    } else if (hours === 12 && period === 'am') {
+        period = 'pm';  // Midnight stays as 12:00 AM
+    } 
+    
+    // If we're in the 'am' period but hours are at or above 12, switch to 'pm'
+    if (startPeriod === 'pm' && hours < 12) {
+        period = 'pm';  // Keep PM for times after 12:00 PM
+    } 
+    else if (startPeriod === 'pm' && hours >= 12) {
+        hours -= 12;
+        period = 'am';  // Switch to PM after noon
+    }
+    
+    else if (startPeriod === 'am' && hours >= 12) {
+        hours -= 12;
+        period = 'pm';  // Switch to PM after noon
+    }
+
+    // Ensure minutes have two digits
+    const formattedMinutes = minutes.toString().padStart(2, '0');
+
+    return `${hours}:${formattedMinutes} ${period}`;
+}
+
+
 
 function updateItineraryTimes() {
     console.log("Start time selected:", document.getElementById('start-time').value); 
@@ -916,15 +947,15 @@ function updateItineraryTimes() {
 
     const [hours, minutes] = startTime.split(':').map(Number);
     const formattedTime = formatTime(hours, minutes);
-    console.log(`Formatted start time (12hr): ${formattedTime}`);
 
     // Parse the time string (formatted like 10:00am)
-    let { hours: startHours, minutes: startMinutes } = parseTime12Hour(formattedTime);
+    let { hours: startHours, minutes: startMinutes, period: startPeriod } = parseTime12Hour(formattedTime.formattedTime);
     
-    console.log(`Parsed start time - Hours: ${startHours}, Minutes: ${startMinutes}`);  // Debug log
+    console.log(`Parsed start time - Hours: ${startHours}, Minutes: ${startMinutes},Period: ${startPeriod}`);  // Debug log
 
     let totalMinutes = startHours * 60 + startMinutes;
-    let totalDuration = 0;  // Initialize total duration in minutes
+    let totalDuration = 0;  
+    let currentPeriod = startPeriod; 
 
     // Clear previous times
     document.querySelectorAll('#timeInput').forEach(input => input.value = '');
@@ -935,65 +966,71 @@ function updateItineraryTimes() {
 
     // Only process visible rows and skip the hidden ones
     document.querySelectorAll('.tablecontent').forEach((content, index) => {
-        const row = content.closest('tr');  // Get the parent row
-        if (row && row.style.display !== 'none') {  // Only process visible rows
-            // Select the correct button using the `.btn-category` class
-            const button = content.querySelector('button');
-            if (button) {
-                const category = content.dataset.category;
-                console.log(`Index ${index}: Category -`, category);  // Debug log
+    const row = content.closest('tr');  // Get the parent row
+    if (row && row.style.display !== 'none') {  // Only process visible rows
+        // Select the correct button using the `.btn-category` class
+        const button = content.querySelector('button');
+        if (button) {
+            const category = content.dataset.category;
+            console.log(`Index ${index}: Category -`, category);  // Debug log
 
-                const duration = categoryDurations[category] || 60;  // Default to 60 minutes
-                totalDuration += duration;
+            const duration = categoryDurations[category] || 60;  // Default to 60 minutes
+            totalDuration += duration;
 
-                totalMinutes += duration;
-                let endHours = Math.floor(totalMinutes / 60);
-                let endMinutes = totalMinutes % 60;
+            // Calculate time without adding random gap yet
+            totalMinutes += duration;
+            let endHours = Math.floor(totalMinutes / 60);
+            let endMinutes = totalMinutes % 60;
 
-                const formattedStartTime = formatTime(startHours, startMinutes);
-                const formattedEndTime = formatTime(endHours, endMinutes);
+            const formattedStartTime = formatTimeInput(startHours, startMinutes, currentPeriod);
+            const formattedEndTime = formatTimeInput(endHours, endMinutes, currentPeriod);
 
-                // Use dataset.placeId to target the correct inputs
-                const timeInput = content.querySelector(`#timeInput${content.dataset.placeId}`);
-                const time1Input = content.querySelector(`#time1Input${content.dataset.placeId}`);
+            // Use dataset.placeId to target the correct inputs
+            const timeInput = content.querySelector(`#timeInput${content.dataset.placeId}`);
+            const time1Input = content.querySelector(`#time1Input${content.dataset.placeId}`);
 
-                if (timeInput && time1Input) {
-                    timeInput.value = formattedStartTime;
-                    time1Input.value = formattedEndTime;
-                } else {
-                    console.error(`Time inputs not found for place ID ${content.dataset.placeId}`);
-                }
-
-                const randomGap = getRandomGap(); 
-                totalMinutes += randomGap; 
-                startHours = endHours + Math.floor(randomGap / 60);
-                startMinutes = endMinutes + (randomGap % 60);
-
-                if (startMinutes >= 60) {
-                    startHours += Math.floor(startMinutes / 60);
-                    startMinutes = startMinutes % 60;
-                }
+            if (timeInput && time1Input) {
+                timeInput.value = formattedStartTime;
+                time1Input.value = formattedEndTime;
             } else {
-                console.error(`Button not found for index ${index}`);
+                console.error(`Time inputs not found for place ID ${content.dataset.placeId}`);
             }
+            
+
+            // Now add the random gap only to the next start time
+            const randomGap = getRandomGap(); 
+            totalMinutes += randomGap; 
+
+            startHours = endHours + Math.floor(randomGap / 60);
+            startMinutes = endMinutes + (randomGap % 60);
+
+            if (startMinutes >= 60) {
+                startHours += Math.floor(startMinutes / 60);
+                startMinutes = startMinutes % 60;
+            }
+
+        } else {
+            console.error(`Button not found for index ${index}`);
         }
-    });
+    }
+});
 
-    // Calculate and display total end time and duration
-    const totalEndHours = Math.floor(totalMinutes / 60);
-    const totalEndMinutes = totalMinutes % 60;
-    const formattedTotalEndTime = formatTime(totalEndHours, totalEndMinutes);
-    document.getElementById('end-time').textContent = formattedTotalEndTime;
+// Calculate and display total end time and duration (this happens AFTER the loop, so it doesn't include the random gap)
+const totalEndHours = Math.floor((totalMinutes) / 60);  // Use totalDuration here, not totalMinutes (no gap)
+const totalEndMinutes = totalMinutes % 60;
+const formattedTotalEndTime = formatTime(totalEndHours, totalEndMinutes);
+document.getElementById('end-time').textContent = formattedTotalEndTime.formattedTime;  // Display the end time without random gap
 
-    const totalHours = (totalDuration / 60).toFixed(2);  // Total duration in hours
-    document.getElementById('total-duration').textContent = totalHours;
+// Calculate total duration in hours
+const totalHours = (totalDuration / 60).toFixed(2);  // Total duration in hours
+document.getElementById('total-duration').textContent = totalHours;
 
-    console.log('Itinerary times updated:', {
-        startTime,
-        totalEndTime: formattedTotalEndTime,
-        totalDuration,
-        totalHours
-    });
+console.log('Itinerary times updated:', {
+    startTime,
+    totalEndTime: formattedTotalEndTime,
+    totalDuration,
+    totalHours
+});
 }
 
 function getRandomGap() {

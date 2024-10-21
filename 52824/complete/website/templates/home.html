@@ -230,6 +230,12 @@
         <button id="discover-more" class="discover-button">Discover More</button>
     </div>
 
+
+    <script>
+        document.getElementById("discover-more").addEventListener("click", function() {
+            document.getElementById("resultsContainer").scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
     <div class="list">
       
         {% for place in all_admin %}

@@ -3,15 +3,17 @@
     font-family: Franklin Gothic;
   }
 
-  .custom-background{
-    background-image: url("https://static.vecteezy.com/system/resources/previews/014/729/973/non_2x/abstract-white-3d-background-with-red-and-white-lines-paper-cut-style-textured-usable-for-decorative-web-layout-poster-banner-corporate-brochure-and-seminar-template-design-vector.jpg");
-    background-repeat: repeat;
-    background-position: center;
-    background-size: contain;
-    justify-content: center;
-    align-items: flex-start;
-    height: 120%;
-    position: relative;
+  body::before{
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: -1;
+    background: url("https://static.vecteezy.com/system/resources/previews/014/729/973/non_2x/abstract-white-3d-background-with-red-and-white-lines-paper-cut-style-textured-usable-for-decorative-web-layout-poster-banner-corporate-brochure-and-seminar-template-design-vector.jpg");
 
 }
 
