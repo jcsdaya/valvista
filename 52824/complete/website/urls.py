@@ -41,7 +41,6 @@ urlpatterns = [
   path('load_itinerary_state/', views.load_itinerary_state, name='load_itinerary_state'),
   path('deleteowner/<str:pk>/', views.deleteowner, name="deleteowner"),
   path('deletevisitor/<str:pk>/', views.deletevisitor, name="deletevisitor"),
-  path('viewrating/<str:pk>/', views.viewrating, name="viewrating"),
   path('ratingform/<int:place_id>', views.ratingform, name='ratingform'),
   path('businessrating/<int:buss_id>', views.businessrating, name='businessrating'),
   path('bussdeets/<str:pk>/', views.bussdeets, name="bussdeets"),

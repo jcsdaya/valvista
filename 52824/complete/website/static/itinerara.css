@@ -498,3 +498,8 @@ input{
     border-radius: 5px;
     z-index: 5000;
 }
+
+.vallogo{
+    height: 75px;
+    width: 75px;
+}

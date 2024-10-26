@@ -543,7 +543,7 @@ function showNotification(messageText) {
     const message = document.getElementById('notification-message');
     
     // Set the notification message based on the action
-    message.innerHTML = `<i class="fa-solid fa-bell"></i>${messageText}`;
+    message.innerHTML = `<i class="fa-solid fa-bell"></i> ${messageText}`;
     
     // Show notification
     notification.classList.remove('d-none');
@@ -564,11 +564,11 @@ function handleplacebutton(itemId) {
     if (heartIcon.classList.contains('fas')) {
         // Currently a favorite, so we remove it
 
-        messageText = "Removed from Favorites";
+        messageText = " Removed from Favorites";
     } else {
         // Not a favorite, so we add it
 
-        messageText = "Added to Favorites";
+        messageText = " Added to Favorites";
     }
 
     toggleFavorite(itemId); // Update the favorite status in the backend

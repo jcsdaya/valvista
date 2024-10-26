@@ -12,7 +12,7 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {% load static %}
     {% load custom_filters %}
-    <title>UpdatePlace | ValVista</title>
+    <title>Business Details | ValVista</title>
     <link rel="stylesheet" href="{% static 'RegUpdForm.css' %}">
 </head>
     {% if user.is_authenticated %}
@@ -20,7 +20,7 @@
     <header>
         <nav>
             <div class="logo">
-                <a href="{%url 'home' %}"><img class="logo"src ="..\media\media\valvista logo.png" alt="logo"></a>
+                <a href="{%url 'dashboard' %}"><img class="logo"src ="..\media\media\valvista logo.png" alt="logo"></a>
             </div>
     
             <ul class="nav-links">

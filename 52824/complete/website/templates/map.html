@@ -100,7 +100,7 @@
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
     <script>
-        const INITIAL_LAT_LNG = [14.69240, 120.97024]; // Center of the NCR
+        const INITIAL_LAT_LNG = [14.7006, 120.9541]; // Center of the NCR
         const VALENZUELA_BOUNDS = [
             [14.5630, 121.0361],  // Southwest corner
             [14.8461, 120.8875]   // Northeast corner
@@ -112,16 +112,15 @@
 
         // Define the icons
         const pinnedIcon = L.icon({
-            iconUrl: 'https://img.icons8.com/?size=100&id=XieTOK4V0QEI&format=png&color=000000',
-            iconSize: [25, 30], // Adjust as needed
+            iconUrl: '../media/media/placeholder.png',
+            iconSize: [30, 30], // Adjust as needed
             iconAnchor: [15, 30], // Adjust as needed
             popupAnchor: [0, -30] // Adjust as needed
         });
 
         const blueIcon = L.icon({
-            iconUrl: 'https://img.icons8.com/?size=100&id=Ksi56bgUOZyJ&format=png&color=000000', // Default Leaflet blue icon
-            shadowUrl: 'https://unpkg.com/leaflet@1.8.0/dist/images/marker-shadow.png',
-            iconSize: [25, 41],
+            iconUrl: '../media/media/map-pin-solid.png', // Default Leaflet blue icon
+            iconSize: [30, 30],
             iconAnchor: [12, 41],
             popupAnchor: [1, -34],
             shadowSize: [41, 41]
@@ -378,7 +377,7 @@ function handleError(error) {
         function pinLocations(map, marker) {
     const locations = [
         { name: 'Dr. Pio Valenzuela Museum', lat: 14.70859, lng: 120.94507, imageUrl: 'https://valenzuela.gov.ph/ckuploads/images/The-City-Museo-ni-Dr.-Pio-Valenzuela.jpg' },
-        { name: 'Valenzuela peoples park', lat: 14.69240, lng: 120.97024, imageUrl: 'https://en.wikipedia.org/wiki/File:Valenzuela_People%27s_Park_(MacArthur_Highway,_Valenzuela;_10-03-2021).jpg' },
+        { name: 'Valenzuela peoples park', lat: 14.69240, lng: 120.97024, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Valenzuela_People%27s_Park%2C_Mar_2024.jpg/256px-Valenzuela_People%27s_Park%2C_Mar_2024.jpg' },
         { name: 'San Diego de Alcala Church', lat: 14.70770 , lng: 120.94591, imageUrl: 'https://valenzuela.gov.ph/ckuploads/images/SnDiego_Polo_20110224_9501.jpg' },
         { name: 'SM City Valenzuela', lat: 14.68549, lng: 120.97730, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/SM_City_Valenzuela%2C_Mar_2024.jpg/1024px-SM_City_Valenzuela%2C_Mar_2024.jpg' },
         { name: 'Tagalag Fishing Village Valenzuela', lat: 14.71800, lng: 120.94188, imageUrl: 'https://mirror.pia.gov.ph/uploads/2023/03/6ac28a48a588d512c783267872234484-800-1200.jpeg' },

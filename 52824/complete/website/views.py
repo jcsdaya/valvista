@@ -21,9 +21,12 @@ from django.contrib.auth.hashers import make_password
 
  
 def home(request):
-    
-    context = get_home_context(request.user)
-    return render(request, 'home.html', context)
+    excluded_groups = ['Business', 'Admin']
+    if any(request.user.groups.filter(name=group).exists() for group in excluded_groups):
+        return redirect('login')
+    else:
+        context = get_home_context(request.user)
+        return render(request, 'home.html', context)
 
 
 def ratingform(request,place_id):
@@ -36,7 +39,7 @@ def ratingform(request,place_id):
             rating.place = place 
             rating.save()
             messages.success(request, 'Your rating has been submitted successfully!')
-            return redirect('success')  # Redirect to a success page or the place page
+            return redirect('ratingform', place_id=place_id)
     else:
         form = RatingForm()
     
@@ -212,17 +215,6 @@ def businesshome(request):
     context = {'form': form,'business':business,'ratings':ratings}
     return render(request, 'businesshome.html', context)
 
-
-@login_required
-def viewrating(request,pk):
-    if not request.user.groups.filter(name='Business').exists():
-        return redirect('login')
-    else:
-       business = get_object_or_404(Business, pk=pk)
-       current_user_business = Business.objects.get(username=request.user.username)
-       all_bus = Business.objects.filter(username=current_user_business)
-       context = {'all_bus':all_bus,'business':business}
-       return render(request, 'viewrating.html',context)
 
 @login_required
 def businesslist(request):
@@ -465,30 +457,38 @@ def approvebusiness(request,pk):
         return render(request,'approve.html',context)
     
 def viewplace(request,pk):
-    place = get_object_or_404(Place.objects.annotate(
-        avg_rating=Avg('ratings__score'), rating_count=Count('ratings')), pk=pk)
+    excluded_groups = ['Business', 'Admin']
+    if any(request.user.groups.filter(name=group).exists() for group in excluded_groups):
+        return redirect('login')
+    else:
+        place = get_object_or_404(Place.objects.annotate(
+            avg_rating=Avg('ratings__score'), rating_count=Count('ratings')), pk=pk)
 
-    ratings = place.ratings.all() 
-    context = {
-        'place': place,
-        'ratings': ratings,
-        'avg_rating': place.avg_rating,  
-        'rating_count': place.rating_count  
-        }
-    return render(request, 'viewplace.html',context)  
+        ratings = place.ratings.all() 
+        context = {
+            'place': place,
+            'ratings': ratings,
+            'avg_rating': place.avg_rating,  
+            'rating_count': place.rating_count  
+            }
+        return render(request, 'viewplace.html',context)  
     
 def viewbusiness(request,pk):
-    business = get_object_or_404(Business.objects.annotate(
-        avg_rating=Avg('ratings__score'), rating_count=Count('ratings')), pk=pk)
+    excluded_groups = ['Business', 'Admin']
+    if any(request.user.groups.filter(name=group).exists() for group in excluded_groups):
+        return redirect('login')
+    else:
+        business = get_object_or_404(Business.objects.annotate(
+            avg_rating=Avg('ratings__score'), rating_count=Count('ratings')), pk=pk)
 
-    ratings = business.ratings.all() 
-    context = {
-        'business': business,
-        'ratings': ratings,
-        'avg_rating': business.avg_rating,  
-        'rating_count': business.rating_count  
-        }
-    return render(request, 'viewbusiness.html',context) 
+        ratings = business.ratings.all() 
+        context = {
+            'business': business,
+            'ratings': ratings,
+            'avg_rating': business.avg_rating,  
+            'rating_count': business.rating_count  
+            }
+        return render(request, 'viewbusiness.html',context) 
 
 
 @login_required
@@ -522,20 +522,6 @@ def itinerary(request):
          combined_times = sorted(place_times.union(business_times))
          context = {'place':place,'business': business, 'combined_times': combined_times}
          return render(request, 'itinerary.html',context)
-        
-
-def placepopup(request):
-    places = Place.objects.all()
-    businesses = Business.objects.all()
-    return render(request, 'popup_template.html', {'places': places, 'businesses': businesses})
-
-
-def update_place(request, place_id):
-    if request.method == 'POST':
-        place = Place.objects.get(pk=place_id)
-        place.name = request.POST.get('name')
-        place.picture = request.FILES.get('picture')
-        place.save()
 
 
 @login_required

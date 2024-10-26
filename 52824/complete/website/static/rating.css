@@ -205,7 +205,6 @@ textarea {
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
-    min-height: 50px;
 }
   
   
@@ -245,4 +244,14 @@ textarea {
     background-color: rgb(255, 255, 255); 
     animation: buttonGrow 0.2s forwards; 
     color: #c80000
+}
+
+
+#success-message {
+    background-color: #c80000; /* Background color */
+    color: white;              /* Text color */
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+
 }

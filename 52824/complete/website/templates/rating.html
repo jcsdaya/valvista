@@ -18,16 +18,24 @@
 <header>
 <nav>
     <div class="logo">
-        <a ><img  class="logo"src ="\media\media\valvista logo.png" alt="logo"></a>
+        <a href="{%url 'home'%}" ><img  class="logo"src ="\media\media\valvista logo.png" alt="logo"></a>
     </div>
 </nav>
 </header>
 <br><br><br><br>
 <body>
+
+  {% if messages %}
+  <div id="success-message" class="alert alert-success">
+      {% for message in messages %}
+          <p>{{ message }}</p>
+      {% endfor %}
+  </div>
+  {% endif %}
 <div class="right-box">
     <div class="header-text">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Valenzuela_Seal.svg/768px-Valenzuela_Seal.svg.png" alt="Header Image">
-<h1> ValVista</h1>
+
 <h1>Rate {{ place.name }}</h1>
 <form method="POST">
     {% csrf_token %}
@@ -68,7 +76,7 @@
   
   
 </div>
-
+</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 const stars = document.querySelectorAll('.star');
@@ -99,6 +107,12 @@ stars.forEach(star => {
   }
 });
 }
+const successMessage = document.getElementById('success-message');
+          if (successMessage) {
+              setTimeout(() => {
+                  window.location.href = "{% url 'home' %}";
+              }, 5000);  // Redirect after 5 seconds
+          }
 });
 
 </script>
