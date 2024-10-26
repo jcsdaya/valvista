@@ -98,7 +98,7 @@ class NormalUser(models.Model):
 @receiver(post_save, sender=NormalUser)
 def create_user(sender, instance, created, **kwargs):
     if created:
-        user = User.objects.create_user(username=instance.username, password=str(instance.password))
+        user = User.objects.create_user(username=instance.username, password=str(instance.password),email=str(instance.email))
 
         group_name = 'NormalUsers'
         group, created = Group.objects.get_or_create(name=group_name)

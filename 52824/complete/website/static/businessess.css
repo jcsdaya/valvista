@@ -335,10 +335,8 @@ nav ul li.no-hover a:hover {
     border-radius: 5px;
     z-index: 5000;
     opacity: 1;
-    transition: opacity 0.5s ease-in-out; /* Smooth fade effect */
-    transition: opacity 0.5s ease;
-    opacity: 0; /* Start as invisible */
     animation: slideIn 0.4s ease forwards; /* Apply the slide-in animation */
+    overflow: hidden;
   }
   
  
@@ -353,9 +351,6 @@ nav ul li.no-hover a:hover {
     }
   }
 
-.notification.fade-out {
-    opacity: 0; /* Fade out */
-}
 
 .d-none {
     display: none; /* Hide element */
