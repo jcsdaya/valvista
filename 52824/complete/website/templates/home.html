@@ -403,34 +403,40 @@
     $(window).on('load', checkAnimation);
     
     function toggleFavorite(itemId) {
-        var form = $('.favorite-form[data-item-id="' + itemId + '"]');
-        $.ajax({
-            url: form.attr('action'),
-            type: 'POST',
-            data: form.serialize(),
-            success: function(response) {
-                // Toggle the heart icon
-                var icon = $('#heart-icon-' + itemId);
-                if (icon.hasClass('fas')) {
-                    icon.removeClass('fas').addClass('far');
-                } else {
-                    icon.removeClass('far').addClass('fas');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('An error occurred:', error);
-            }
-        });
-    }
+    const form = $('.favorite-form[data-item-id="' + itemId + '"]');
+    
+    $.ajax({
+        url: form.attr('action'),
+        type: 'POST',
+        data: form.serialize(),
+        headers: {
+            'X-CSRFToken': getCSRFToken() // Add CSRF token for Django
+        },
+        success: function(response) {
+    // Check if the icon is selected
+    const icon = $('#heart-icon-' + itemId);
+    console.log('Icon selected:', icon); // Debugging line
 
-    // Ensure CSRF token is included in AJAX requests
-    $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-            }
-        }
+    if (icon.hasClass('fas')) {
+        icon.removeClass('fas').addClass('fa-regular');
+        console.log('Changed to unfilled'); // Debugging line
+    } else {
+        icon.removeClass('fa-regular').addClass('fas');
+        console.log('Changed to filled'); // Debugging line
+    }
+}
     });
+}
+
+function getCSRFToken() {
+    // Retrieve CSRF token from cookies if using Django
+    const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrftoken'))
+        ?.split('=')[1];
+    return cookieValue;
+}
+
 
     // Redirect functions
     function redirectToPlace(pk) {
@@ -532,17 +538,17 @@
   observer.observe(footer);
 });
 
-function showNotification() {
+function showNotification(messageText) {
     const notification = document.getElementById('notification');
     const message = document.getElementById('notification-message');
     
-    // Get current date and time
-    message.innerHTML = `<i class="fa-solid fa-bell"></i>  <strong>Added to Favorites</strong>`;
-
+    // Set the notification message based on the action
+    message.innerHTML = `<i class="fa-solid fa-bell"></i>${messageText}`;
+    
     // Show notification
     notification.classList.remove('d-none');
     notification.classList.add('visible');
-
+    
     // Hide notification after a few seconds
     setTimeout(() => {
         notification.classList.remove('visible');
@@ -551,13 +557,38 @@ function showNotification() {
 }
 
 function handleplacebutton(itemId) {
-    toggleFavorite(itemId); // 
-    showNotification();   
+    const heartIcon = document.getElementById(`heart-icon-${itemId}`);
+    let messageText = "";
+
+    // Check the current class of the heart icon
+    if (heartIcon.classList.contains('fas')) {
+        // Currently a favorite, so we remove it
+
+        messageText = "Removed from Favorites";
+    } else {
+        // Not a favorite, so we add it
+
+        messageText = "Added to Favorites";
+    }
+
+    toggleFavorite(itemId); // Update the favorite status in the backend
+    showNotification(messageText); // Show notification with appropriate message
 }
 
-function handlebussbutton(itemId) {
-    toggleFavorite(bussId); // 
-    showNotification();   
+function handleplacebutton(bussId) {
+    const heartIcon = document.getElementById(`heart-icon-${bussId}`);
+    let messageText = "";
+
+    // Check the current class of the heart icon
+    if (heartIcon.classList.contains('fas')) {
+
+        messageText = "Removed from Favorites";
+    } else {
+        messageText = "Added to Favorites";
+    }
+
+    toggleFavorite(bussId); // Update the favorite status in the backend
+    showNotification(messageText); // Show notification with appropriate message
 }
 
 

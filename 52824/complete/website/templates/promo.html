@@ -17,7 +17,7 @@
 <header>
     <nav>
         <div class="logo">
-            <a href="{%url 'home' %}"><img class="logo"src ="\media\media\valvista logo.png" alt="logo"></a>
+            <a href="{%url 'dashboard' %}"><img class="logo"src ="\media\media\valvista logo.png" alt="logo"></a>
         </div>
 
         <ul class="nav-links">
@@ -68,9 +68,9 @@
                 <h2>{{place.name}} Reviews</h2> <p>{% if place.avg_rating %}
                     {% for i in "12345" %}
                         {% if i <= place.avg_rating|floatformat:0 %}
-                            ⭐ 
+                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
                             {%else%}
-                            ☆
+                            <i class="fa-regular fa-star"></i>
                         {% endif %}
                     {% endfor %}
                 {% else %}
@@ -87,9 +87,9 @@
                                         <p>
                                             {% for i in "12345" %}
                                                 {% if forloop.counter <= rating.score %}
-                                                    ⭐
+                                                <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
                                                 {% else %}
-                                                    ☆
+                                                <i class="fa-regular fa-star"></i>
                                                 {% endif %}
                                             {% endfor %}
                                         </p>
@@ -127,6 +127,7 @@
     <br><br>
     <button type="submit" class="btn">Submit</button>
 </form>
+</div>
 
 <!-- Add JavaScript to handle the preview of the newly chosen image -->
 <script>
@@ -151,7 +152,7 @@ document.getElementById('placephoto').addEventListener('change', function(event)
     }
 });
 </script>
-</div>
+
     </div>
     
 </div>

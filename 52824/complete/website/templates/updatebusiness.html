@@ -12,7 +12,7 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {% load static %}
     {% load custom_filters %}
-    <title>UpdatePlace | ValVista</title>
+    <title>UpdateBusiness | ValVista</title>
     <link rel="stylesheet" href="{% static 'UpdateBusiness.css' %}">
 </head>
     {% if user.is_authenticated %}
@@ -37,7 +37,7 @@
             </ul>
             <ul class="nav-links ul-user">
                 {% if user.is_authenticated%}
-                <li style="margin-left: -500px;" class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
+                <li style="margin-left: -400px;" class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
                 <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
                 {%else%}
                 <li><a style="margin-left: 400px;" href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
@@ -132,7 +132,13 @@
                         <label for="description">Map</label>
                     </div>
                     <div class="custom-file">
-                        <label class="custom-file-label" for="thumbnail">Choose Thumbnail Photo<br> {{ form.thumbnail }}</label><br><br>
+                        <div class="form-group">
+                            <label>Current Thumbnail:</label>
+                            <img src="{{ business.thumbnail.url }}" alt="Thumbnail" width="200">
+                        </div>
+                    
+                        <label class="custom-file-label" for="thumbnail">Choose Thumbnail Photo<br>
+                             {{ form.thumbnail }}</label><br><br>
                         <div class="form-group">
                             <label for="photo">Current Photos:</label>
                             {% for photos in business.photos.all %}

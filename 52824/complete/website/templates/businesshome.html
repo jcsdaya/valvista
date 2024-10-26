@@ -50,9 +50,9 @@
                 <h2>{{business.name}} Reviews<h2> {% if business.avg_rating %}
                     {% for i in "12345" %}
                         {% if i <= business.avg_rating|floatformat:0 %}
-                            ⭐ 
+                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
                             {%else%}
-                            ☆
+                            <i class="fa-regular fa-star"></i>
                         {% endif %}
                     {% endfor %}
                 {% else %}
@@ -69,9 +69,9 @@
                                         <p>
                                             {% for i in "12345" %}
                                                 {% if forloop.counter <= rating.score %}
-                                                    ⭐
+                                                <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
                                                 {% else %}
-                                                    ☆
+                                                <i class="fa-regular fa-star"></i>
                                                 {% endif %}
                                             {% endfor %}
                                         </p>
@@ -108,11 +108,43 @@
             </div>
             {{form.promo}}
             <br><br>
-            <button type="submit" class="btn">Submit</button>
+            <button onclick="showNotification()" type="submit" class="btn">Submit</button>
         </form>
         
         </div>
 </div>
+</div>
+</div>
+{% if messages %}
+<div id="notification" class="notification">
+    {% for message in messages %}
+        <p id="notification-message" class="message">{{ message }}</p>
+    {% endfor %}
+</div>
+    </div>
+   
+{% endif %}
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const notification = document.getElementById('notification');
+    
+    if (notification) {
+        // Show notification
+        notification.classList.remove('d-none');
+        
+        // Hide notification after a few seconds
+        setTimeout(() => {
+            notification.classList.add('fade-out'); // Start fading out
+            // Remove notification after the fade-out transition
+            setTimeout(() => {
+                notification.classList.add('d-none'); // Hide it completely
+                notification.classList.remove('fade-out'); // Reset for future use
+            }, 500); // This matches the CSS transition duration
+        }, 5000); // Time before starting the fade-out
+    }
+});
+</script>
 </body>
 </html>

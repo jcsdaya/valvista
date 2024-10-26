@@ -12,32 +12,37 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {% load static %}
     <title>Add Place | ValVista</title>
-    <link rel="stylesheet" href="{% static 'RegUpdForm.css' %}">
+    <link rel="stylesheet" href="{% static 'addplace.css' %}">
 </head>
 <header>
     <nav>
-        <div class="logo">
-            <a href="{%url 'home' %}"><img class="logo"src ="..\media\media\valvista logo.png" alt="logo"></a>
-        </div>
-        <ul class="nav-links">
-            <li><a href="{%url 'dashboard' %}"><i class="fa-solid fa-map-location-dot"></i> Dashboard</a></li>
-            {% if user.is_authenticated%}
-            <li><a href="{%url 'placelist' %}"><i class="fa-solid fa-heart"></i> Place List</a></li>
-            {%else%}
-            <li><a ></i></a></li>
-            {%endif%}
-            <li><a href="{%url 'businessadmin' %}"><i class="fa-solid fa-clipboard-list"></i> Business List</a></li>
-            <li><a href="{%url 'approvallist' %}"><i class="fa-solid fa-map-location-dot"></i> Approval List</a></li>
-            <li><a href="{%url 'archives' %}"><i class="fa-solid fa-map-location-dot"></i> Archive</a></li>
-            {% if user.is_authenticated%}
-            <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
-            <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
-            {%else%}
-            <li><a href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
-            {%endif%}
-            
-        </ul>
-    </nav>
+        <nav>
+            <div class="logo">
+                <a href="{%url 'dashboard' %}"><img class="logo"src ="..\media\media\valvista logo.png" alt="logo"></a>
+            </div>
+    
+            <ul class="nav-links">
+                <li><a href="{%url 'dashboard' %}"><i class="fa-solid fa-table-columns"></i> Dashboard</a></li>
+                {% if user.is_authenticated%}
+                <li><a href="{%url 'placelist' %}"><i class="fa-solid fa-list"></i> Place List</a></li>
+                {%else%}
+                <li><a ></i></a></li>
+                {%endif%}
+                <li><a href="{%url 'businessadmin' %}"><i class="fa-solid fa-list"></i></i> Business List</a></li>
+                <li><a href="{%url 'approvallist' %}"><i class="fa-solid fa-check-to-slot"></i> Approval List</a></li>
+                <li><a href="{%url 'archives' %}"><i class="fa-solid fa-box-archive"></i> Archive</a></li>
+            </ul>
+            <ul class="nav-links ul-user">
+                {% if user.is_authenticated%}
+                <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
+                <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
+                {%else%}
+                <li><a style="margin-left: 400px;" href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+                
+                {%endif%}
+                
+            </ul>
+        </nav>
   </header>
   <br>  <br>  <br>  <br>
   <div class="right-box">
@@ -100,11 +105,36 @@
                     <label for="description">Map</label>
                 </div>
                 <div class="custom-file">
-                    <label class="custom-file-label" for="thumbnail">Choose Thumbnail Photo<br> {{ form.thumbnail }}</label><br><br>
-                    <label class="custom-file-label" for="photo">Choose Photos<br> {{ form.photo }}</label><br><br>
+                    {% if place.thumbnail %}
+                    <div class="form-group">
+                        <label>Current Thumbnail:</label>
+                        <img src="{{ place.thumbnail.url }}" alt="Thumbnail" width="200">
+                    </div>
+                    {% else %}
+                    <p>No photos available.</p>
+                {% endif %}
+                
+                    <label class="custom-file-label" for="thumbnail">Choose Thumbnail Photo<br>
+                         {{ form.thumbnail }}</label><br><br>
+
+
+                    <div class="form-group">
+                        <label for="photo">Current Photos:</label>
+                        {% for photo in place.photo.all %}
+                            <img src="{{ photo.file.url }}" alt="Photo" style="width: 100px; height: 100px;">
+                        {% empty %}
+                            <p>No photos available.</p>
+                        {% endfor %}
+                    </div>
+
+                    
+                    <div class="form-group">
+                        <label for="photo">Upload New Photos:</label>
+                        {{ form.photo }}
+                    </div>
                 </div>
                         <div class="subbut" style="text-align: center;">
-                            <button type="submit" class="btn btn-danger">Submit</button>
+                            <button class="btn" type="submit" >Submit</button>
                         </div>
                     </div>
                 </div>

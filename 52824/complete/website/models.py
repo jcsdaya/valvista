@@ -135,6 +135,7 @@ class Itinerary(models.Model):
 class ItineraryState(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     places = models.JSONField(default=list)
+    place_count = models.JSONField(default=list)
     times = models.JSONField(default=list)
     times2 = models.JSONField(default=list)
     images = models.JSONField(default=list)

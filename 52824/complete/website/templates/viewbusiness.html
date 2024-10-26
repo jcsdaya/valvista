@@ -61,7 +61,7 @@
             {% endfor %}
         </p>
         <p><strong>Ratings:</strong>  {% if avg_rating %}
-            {{ avg_rating|floatformat:0 }}⭐ ({{ rating_count }} Reviews)  <!-- Display avg_rating as an integer -->
+            {{ avg_rating|floatformat:0 }}<i class="fa-solid fa-star" style="color: #FFD43B;"></i> ({{ rating_count }} Reviews)  <!-- Display avg_rating as an integer -->
         {% else %}
             (No ratings yet)
         {% endif %} 

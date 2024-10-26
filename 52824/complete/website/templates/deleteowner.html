@@ -21,9 +21,9 @@
         </div>
 
         <ul class="nav-links">
-            <li><a href="{%url 'dashboard' %}"><i class="fa-solid fa-table-columns"></i>Dashboard</a></li>
+            <li><a href="{%url 'dashboard' %}"><i class="fa-solid fa-table-columns"></i> Dashboard</a></li>
             {% if user.is_authenticated%}
-            <li><a href="{%url 'placelist' %}"><i class="fa-solid fa-list"></i>Place List</a></li>
+            <li><a href="{%url 'placelist' %}"><i class="fa-solid fa-list"></i> Place List</a></li>
             {%else%}
             <li><a ></i></a></li>
             {%endif%}

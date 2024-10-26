@@ -5,9 +5,8 @@ from django.contrib.auth.decorators import login_required
 from .forms import SignupForm,PlaceForm,PromoForm,BusPromoForm,RatingForm
 from business.forms import BusinessForm,BusinessUpdForm,BusinessRating
 from .models import Place,NormalUser,Visitor,Favorite,ItineraryState,PlaceMedia
-from business.models import Business,Media,Rating
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User,Group
+from business.models import Business,Media
+from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
 from .utils import get_home_context
 from django.urls import reverse
@@ -16,6 +15,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 import qrcode
 from django.db.models import Avg, Count
+from django.contrib.auth.hashers import make_password
 
 
 
@@ -58,35 +58,44 @@ def businessrating(request,buss_id):
     
     return render(request, 'businessrating.html', {'form': form,'business': business})
 
-
+@login_required
 def add_favorite_place(request, place_id):
-    place = get_object_or_404(Place, id=place_id)
-    favorite, created = Favorite.objects.get_or_create(user=request.user, place=place)
-
-    if not created:
-        favorite.delete()
-
-    # Use 'HTTP_REFERER' to go back to the previous page
-    referer = request.META.get('HTTP_REFERER', reverse('home'))
-
-    return redirect(referer)
-
-
-def add_favorite_business(request, business_id):
-    business = get_object_or_404(Business, id=business_id)
-    favorite, created = Favorite.objects.get_or_create(user=request.user, business=business)
-    if not created:
-        favorite.delete()
-    if request.get_full_path() == reverse('userhome'):
-        return redirect('home')  
+    if not request.user.groups.filter(name='NormalUsers').exists():
+        return redirect('login')
     else:
-        return redirect('home')
+        place = get_object_or_404(Place, id=place_id)
+        favorite, created = Favorite.objects.get_or_create(user=request.user, place=place)
+
+        if not created:
+            favorite.delete()
+
+        # Use 'HTTP_REFERER' to go back to the previous page
+        referer = request.META.get('HTTP_REFERER', reverse('home'))
+
+        return redirect(referer)
+
+@login_required
+def add_favorite_business(request, business_id):
+    if not request.user.groups.filter(name='NormalUsers').exists():
+        return redirect('login')
+    else:
+        business = get_object_or_404(Business, id=business_id)
+        favorite, created = Favorite.objects.get_or_create(user=request.user, business=business)
+        if not created:
+            favorite.delete()
+        if request.get_full_path() == reverse('userhome'):
+            return redirect('home')  
+        else:
+            return redirect('home')
 
 
-
+@login_required
 def favorite_list(request):
-    favorites = Favorite.objects.filter(user=request.user)
-    return render(request, 'favorite.html', {'favorites': favorites})
+    if not request.user.groups.filter(name='NormalUsers').exists():
+        return redirect('login')
+    else:
+        favorites = Favorite.objects.filter(user=request.user)
+        return render(request, 'favorite.html', {'favorites': favorites})
         
 
 def loginuser(request):
@@ -94,12 +103,21 @@ def loginuser(request):
     if request.method =="POST":
         username = request.POST['username']
         password = request.POST['password']
-        print(f"Username: {username}, Password: {password}")
+        remember_me = request.POST.get('remember_me')
         user = authenticate(request, username=username, password=password)
+        hashed_password = make_password(password)
+        print(f"Username: {username}, Password: {hashed_password}")
         print("User object type:", type(user))
+        print( remember_me)
         if user is not None:
             login(request, user)
             print(f"Authenticated User: {user}")
+
+            if remember_me:
+                request.session.set_expiry(1209600)  # 2 weeks in seconds
+            else:
+                request.session.set_expiry(0)  # Session expires on browser close
+
             if user.groups.filter(name='NormalUsers').exists():
                 return redirect('home')
             elif user.groups.filter(name='Business').exists():
@@ -132,7 +150,7 @@ def register(request):
 @login_required
 def addplace(request):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     form = PlaceForm()
     if request.POST:
         form = PlaceForm(request.POST, request.FILES)
@@ -153,7 +171,7 @@ def addplace(request):
 @login_required
 def adminhome(request):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
        all_admin = Place.objects.all
        context = {'all_admin':all_admin}
@@ -162,7 +180,7 @@ def adminhome(request):
 @login_required
 def userhome(request):
     if not request.user.groups.filter(name='NormalUsers').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         context = get_home_context(request.user)
         return render(request, 'userhome.html',context)
@@ -170,7 +188,7 @@ def userhome(request):
 @login_required
 def businesshome(request):
     if not request.user.groups.filter(name='Business').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     
     # Fetch the Business instance related to the current user
     try:
@@ -186,6 +204,7 @@ def businesshome(request):
         form = BusPromoForm(request.POST, request.FILES, instance=business)
         if form.is_valid():
             form.save()
+            messages.success(request, "Announcement/Promo Posted Successfully") 
             return redirect('businesshome')
     else:
         form = BusPromoForm(instance=business)
@@ -197,7 +216,7 @@ def businesshome(request):
 @login_required
 def viewrating(request,pk):
     if not request.user.groups.filter(name='Business').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
        business = get_object_or_404(Business, pk=pk)
        current_user_business = Business.objects.get(username=request.user.username)
@@ -209,7 +228,7 @@ def viewrating(request,pk):
 def businesslist(request):
     excluded_groups = ['Business', 'Admin']
     if not any(request.user.groups.filter(name=group).exists() for group in excluded_groups):
-        return HttpResponseForbidden("You don't have permission to access this page.")
+       return redirect('login')
     else:
         current_user_business = Business.objects.get(username=request.user.username)
         all_bus = Business.objects.filter(username=current_user_business)
@@ -219,7 +238,7 @@ def businesslist(request):
 @login_required
 def businessadmin(request):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         all_buss = Business.objects.all
         context = {'all_buss':all_buss}
@@ -229,7 +248,7 @@ def businessadmin(request):
 @login_required
 def  admindelete(request,pk):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         business = get_object_or_404(Business, pk=pk)
         if request.POST:
@@ -242,7 +261,7 @@ def  admindelete(request,pk):
 @login_required
 def archives(request):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         all_buss = Business.objects.all
         all_admin = Place.objects.all
@@ -252,7 +271,7 @@ def archives(request):
 @login_required
 def dashboard(request):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         previous_visits = Visitor.objects.filter(ip_address=request.META.get('REMOTE_ADDR', None), user_agent=request.META.get('HTTP_USER_AGENT', None))
         if previous_visits.exists():
@@ -286,7 +305,7 @@ def dashboard(request):
 def updatebusiness(request, pk):
     excluded_groups = ['Business', 'Admin']
     if not any(request.user.groups.filter(name=group).exists() for group in excluded_groups):
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         business = get_object_or_404(Business, pk=pk)
 
@@ -330,7 +349,7 @@ def  deletebusiness(request,pk):
     excluded_groups = ['Business', 'Admin']
     user_groups = request.user.groups.values_list('name', flat=True)
     if not any(request.user.groups.filter(name=group).exists() for group in excluded_groups):
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         business = get_object_or_404(Business, pk=pk)
         if request.POST:
@@ -355,7 +374,7 @@ def businesssign(request):
 @login_required
 def placelist(request):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+         return redirect('login')
     else:
        all_admin = Place.objects.all
        context = {'all_admin':all_admin}
@@ -364,7 +383,7 @@ def placelist(request):
 @login_required
 def updatePlace(request,pk):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+         return redirect('login')
     else:
         place = get_object_or_404(Place, pk=pk)
         
@@ -397,7 +416,7 @@ def updatePlace(request,pk):
 @login_required
 def  deleteplace(request,pk):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         place = get_object_or_404(Place, pk=pk)
         if request.POST:
@@ -410,7 +429,7 @@ def  deleteplace(request,pk):
 @login_required
 def approvallist(request):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:        
         all_approval = Business.objects.filter(approval=False)
         all_approval1 = Business.objects.filter(approval=False)
@@ -421,7 +440,7 @@ def approvallist(request):
 @login_required
 def declinebusiness(request,pk):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         business = get_object_or_404(Business, pk=pk)
         if request.POST:
@@ -435,7 +454,7 @@ def declinebusiness(request,pk):
 @login_required    
 def approvebusiness(request,pk):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         business = get_object_or_404(Business, pk=pk)
         if request.POST:
@@ -469,24 +488,29 @@ def viewbusiness(request,pk):
         'avg_rating': business.avg_rating,  
         'rating_count': business.rating_count  
         }
-    return render(request, 'viewbusiness.html',context)  
+    return render(request, 'viewbusiness.html',context) 
 
+
+@login_required
 def bussdeets(request,pk):
-    business = get_object_or_404(Business, pk=pk)
-    form = BusinessUpdForm(instance=business)
-    photos = request.FILES.getlist('photos')
-    for photos in photos:
-            photo_instance = Media(file=photos)
-            photo_instance.save()
-            business.photos.add(photo_instance)
-    context = {'business':business,'form':form}
-    return render(request, 'bussdeets.html',context)
+    if not request.user.groups.filter(name='Admin').exists():
+        return redirect('login')
+    else:
+        business = get_object_or_404(Business, pk=pk)
+        form = BusinessUpdForm(instance=business)
+        photos = request.FILES.getlist('photos')
+        for photos in photos:
+                photo_instance = Media(file=photos)
+                photo_instance.save()
+                business.photos.add(photo_instance)
+        context = {'business':business,'form':form}
+        return render(request, 'bussdeets.html',context)
 
 
 @login_required
 def itinerary(request):
     if not request.user.groups.filter(name='NormalUsers').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
          place = Place.objects.all
          business = Business.objects.all
@@ -517,7 +541,7 @@ def update_place(request, place_id):
 @login_required
 def declinebus(request,pk):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         business = get_object_or_404(Business, pk=pk)
         if request.POST:
@@ -532,7 +556,7 @@ def declinebus(request,pk):
 @login_required
 def deleteowner(request,pk):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         business = get_object_or_404(Business, pk=pk)
         if request.POST:
@@ -547,11 +571,11 @@ def deleteowner(request,pk):
 @login_required
 def deletevisitor(request,pk):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         user = get_object_or_404(NormalUser, pk=pk)
         if request.POST:
-            user = NormalUser.objects.get(username=user.username)
+            user = User.objects.get(username=user.username)
             user.delete()
             return redirect('dashboard')
         context={'user':user}
@@ -560,7 +584,7 @@ def deletevisitor(request,pk):
 @login_required    
 def approvebus(request,pk):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         business = get_object_or_404(Business, pk=pk)
         if request.POST:
@@ -576,6 +600,7 @@ def save_itinerary_state(request):
     if request.method == 'POST' and request.user.is_authenticated:
         data = json.loads(request.body)
         places = data.get('places', [])
+        place_count = data.get('placeCount', 5) 
         text = data.get('text', [])
         images = data.get('images', [])
         place_ids = data.get('placeIds', [])
@@ -588,7 +613,7 @@ def save_itinerary_state(request):
         time = data.get('time', [])
         timeclose = data.get('timeclose', [])
         # Save the itinerary state to the database
-        ItineraryState.objects.update_or_create(user=request.user, defaults={'places': places, 'times': times,'times2': times2,'time': time,'timeclose': timeclose,'images':images,'place_ids': place_ids,'types': types,"start_time":start_time,"budget":budget,"text":text,"category":category})
+        ItineraryState.objects.update_or_create(user=request.user, defaults={'places': places, 'place_count': place_count, 'times': times,'times2': times2,'time': time,'timeclose': timeclose,'images':images,'place_ids': place_ids,'types': types,"start_time":start_time,"budget":budget,"text":text,"category":category})
         return JsonResponse({'success': True})
     return JsonResponse({'success': False})
 
@@ -597,9 +622,9 @@ def load_itinerary_state(request):
     if request.user.is_authenticated:
         itinerary_state = ItineraryState.objects.filter(user=request.user).first()
         if itinerary_state:
-            data = {'places': itinerary_state.places, 'times': itinerary_state.times,'times2': itinerary_state.times2,'time': itinerary_state.time,'timeclose': itinerary_state.timeclose,'images':itinerary_state.images,'placeIds': itinerary_state.place_ids,'types': itinerary_state.types,'startTime': itinerary_state.start_time,'budget':itinerary_state.budget,'text':itinerary_state.text,'category':itinerary_state.category}
+            data = {'places': itinerary_state.places,'placeCount': itinerary_state.place_count, 'times': itinerary_state.times,'times2': itinerary_state.times2,'time': itinerary_state.time,'timeclose': itinerary_state.timeclose,'images':itinerary_state.images,'placeIds': itinerary_state.place_ids,'types': itinerary_state.types,'startTime': itinerary_state.start_time,'budget':itinerary_state.budget,'text':itinerary_state.text,'category':itinerary_state.category}
             return JsonResponse(data)
-    return JsonResponse({'places': [], 'times': [],'times2': [],'time': [],'timeclose': [], 'images': [],'placeIds': [],'types': [], 'startTime': '','budget': [],'text': [],'category': []})
+    return JsonResponse({'places': [],'place_count': [], 'times': [],'times2': [],'time': [],'timeclose': [], 'images': [],'placeIds': [],'types': [], 'startTime': '','budget': [],'text': [],'category': []})
 
 
 def map(request):
@@ -608,7 +633,7 @@ def map(request):
 @login_required
 def adpromo(request):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
       all_admin = Place.objects.all()
       context = {'all_admin': all_admin,} 
@@ -623,7 +648,7 @@ def success(request):
 @login_required
 def promo(request,pk):
     if not request.user.groups.filter(name='Admin').exists():
-        return HttpResponseForbidden("You don't have permission to access this page.")
+        return redirect('login')
     else:
         all_admin = Place.objects.all()
         place = get_object_or_404(Place.objects.annotate(
@@ -641,6 +666,8 @@ def promo(request,pk):
 
         context = {'form': form, 'place': place,'all_admin': all_admin,'ratings':ratings} 
         return render(request, 'promo.html', context)
+    
+
 
 
 

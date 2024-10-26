@@ -75,10 +75,10 @@
 
          <div class="login__check">
             <div class="login__check-group">
-               <input type="checkbox" class="login__check-input" id="login-check">
+               <input type="checkbox" class="login__check-input" id="login-check" name="remember_me">
                <label for="login-check" class="login__check-label">Remember me</label>
             </div>
-            <a href="#" class="login__forgot">Forgot Password?</a>
+            <a href="{% url 'reset_password' %}" class="login__forgot">Forgot Password?</a>
          </div>
 
          <button  type="submit" class="login__button">Login</button>
