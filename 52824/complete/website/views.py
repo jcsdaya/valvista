@@ -122,15 +122,18 @@ def loginuser(request):
                 request.session.set_expiry(0)  # Session expires on browser close
 
             if user.groups.filter(name='NormalUsers').exists():
+                messages.success(request, "Login Success.")
                 return redirect('home')
             elif user.groups.filter(name='Business').exists():
                 business_user = Business.objects.get(username=username)
                 if business_user.approval == True: 
+                    messages.success(request, "Login Success.")
                     return redirect('businesshome')
                 else:
                     error_message = "Please wait as your account is on pending request"
                     return render(request,'login.html',{'error_message':error_message})
             else:
+                messages.success(request, "Login Success.")
                 return redirect('dashboard')
         else:
             error_message = "Invalid username or password."
@@ -138,6 +141,7 @@ def loginuser(request):
 
 def logout_view(request):
     logout(request)
+    messages.success(request, "Logged out.")
     return redirect('home')    
 
 def register(request):

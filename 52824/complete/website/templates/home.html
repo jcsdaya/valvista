@@ -68,6 +68,15 @@
     <div id="notification" class="notification d-none">
         <p id="notification-message"></p>
     </div>
+    {% if messages %}
+    <div id="messages" class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="fa-solid fa-bell"></i> {{ message }}
+            </div>
+        {% endfor %}
+        {% endif %}
+    </div>
 <!-- Modal Structure -->
 <div id="filterModal" class="modal">
     <div class="ssidebar">
@@ -590,6 +599,16 @@ function handleplacebutton(bussId) {
     toggleFavorite(bussId); // Update the favorite status in the backend
     showNotification(messageText); // Show notification with appropriate message
 }
+
+function showMessage() {
+                const notification = document.getElementById('messages');
+
+                setTimeout(() => {
+        notification.classList.remove('visible');
+        notification.classList.add('d-none');
+    }, 5000); // Adjust duration as needed
+}
+window.onload = showMessage;
 
 
 
