@@ -45,7 +45,16 @@
     </nav>
   </header>
   
-  <br><br><br><br><br><br><br>
+  <br><br><br><br><br><br>
+  {% if messages %}
+    <div id="messages" class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="fa-solid fa-bell"></i> {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
   <h1 style="margin-left: 700px;"> ValVista Approval List</h1>
   <div class="table-responsive">
     <div class="container">
@@ -77,4 +86,15 @@
 </div>
 
   </div>
+  <script>
+    function showNotification() {
+        const notification = document.getElementById('messages');
+
+        setTimeout(() => {
+notification.classList.remove('visible');
+notification.classList.add('d-none');
+}, 5000); // Adjust duration as needed
+}
+window.onload = showNotification;
+</script>
         

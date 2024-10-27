@@ -107,7 +107,7 @@ nav ul li.no-hover a:hover {
   }
 /* Right box */
 .right-box {
-    margin: 40px 20px 20px 20px;
+    margin: 10px 20px 20px 20px;
     background-color: #fff;
     padding: 30px;
     border-radius: 15px;
@@ -294,4 +294,14 @@ nav ul li.no-hover a:hover {
 
 #placeusername, #placepass,#placeemail,#placeid{
     width: 200%;
+}
+
+.btn{
+    background-color: #c80000;
+    color:white
+}
+.btn:hover{
+    background-color: white;
+    color:#c80000;
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
 }

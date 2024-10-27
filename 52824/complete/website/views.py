@@ -55,7 +55,7 @@ def businessrating(request,buss_id):
             rating.business = business 
             rating.save()
             messages.success(request, 'Your rating has been submitted successfully!')
-            return redirect('success')  # Redirect to a success page or the place page
+            return redirect('businessrating', buss_id=buss_id)  # Redirect to a success page or the place page
     else:
         form = BusinessRating()
     
@@ -168,6 +168,7 @@ def addplace(request):
                 photo_instance.save()
                 place.photo.add(photo_instance)
                 place.save()
+                messages.success(request, "Place Added successfully.")
         return redirect('placelist')
     return render(request, 'addplace.html',{'form':form})
 
@@ -322,8 +323,10 @@ def updatebusiness(request, pk):
 
                 # Check for user groups and redirect accordingly
                 if request.user.groups.filter(name='Admin').exists():
+                    messages.success(request, "Updated Business successfully.")
                     return redirect('businessadmin')
                 else:
+                    messages.success(request, "Updated Business successfully.")
                     return redirect('businesslist')
             else:
                 # Debugging output if form is not valid
@@ -348,8 +351,10 @@ def  deletebusiness(request,pk):
             business.archived = True
             business.save()  
             if 'Admin' in user_groups:
+                messages.success(request, "Business Removed successfully.")
                 return redirect('businessadmin')
             elif 'Business' in user_groups:
+                messages.success(request, "Business Removed successfully.")
                 return redirect('businesslist')
         context={'business':business}
         return render(request,'deletebusiness.html',context)
@@ -398,7 +403,7 @@ def updatePlace(request,pk):
                         photo_instance = PlaceMedia(file=photo)
                         photo_instance.save()
                         place.photo.add(photo_instance)
-
+                messages.success(request, "Place updated successfully.")
                 return redirect('placelist')
         else:
             form = PlaceForm(instance=place)
@@ -414,6 +419,7 @@ def  deleteplace(request,pk):
         if request.POST:
             place.archived = True
             place.save()
+            messages.success(request, "Place is deleted successfully.")
             return redirect('placelist')
         context={'item':place}
         return render(request,'deleteplace.html',context)
@@ -439,6 +445,7 @@ def declinebusiness(request,pk):
             user = User.objects.get(username=business.username)
             business.delete()
             user.delete()
+            messages.success(request, "Business Denied successfully.")
             return redirect('approvallist')
         context={'business':business}
         return render(request,'decline.html',context)
@@ -452,6 +459,7 @@ def approvebusiness(request,pk):
         if request.POST:
             business.approval = True
             business.save()
+            messages.success(request, "Business Approved successfully.")
             return redirect('approvallist')
         context={'business':business}
         return render(request,'approve.html',context)
@@ -549,6 +557,7 @@ def deleteowner(request,pk):
             user = User.objects.get(username=business.username)
             business.delete()
             user.delete()
+            messages.success(request, "Business Owner deleted successfully.")
             return redirect('dashboard')
         context={'business':business}
         return render(request,'deleteowner.html',context)
@@ -563,6 +572,7 @@ def deletevisitor(request,pk):
         if request.POST:
             user = User.objects.get(username=user.username)
             user.delete()
+            messages.success(request, "Visitor account deleted successfully.")
             return redirect('dashboard')
         context={'user':user}
         return render(request,'deletevisitor.html',context)
@@ -646,6 +656,7 @@ def promo(request,pk):
             if form.is_valid():
                 place = form.save(commit=False)
                 place.save()
+                messages.success(request, "Promo added successfully.")
                 return redirect('adpromo')
         else:
             form = PromoForm(instance=place)

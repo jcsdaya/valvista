@@ -44,7 +44,16 @@
     </nav>
   </header>
   
-  <br><br><br><br><br><br><br><br>
+  <br><br><br><br><br><br>
+  {% if messages %}
+    <div id="messages" class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="fa-solid fa-bell"></i> {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
         <h1 style="margin-left: 800px;" >ValVista Business List</h1>
         <div  style="padding-left: 70px;" class="row row-cols-1 row-cols-md-4 g-4 py-5">
             {% for bus in all_buss %}

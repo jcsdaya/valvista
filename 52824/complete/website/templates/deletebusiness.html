@@ -72,6 +72,15 @@
     {% endif %}
 {% endif %}
 <br><br><br><br><br><br>
+{% if messages %}
+<div id="messages" class="messages">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <i class="fa-solid fa-bell"></i> {{ message }}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
 <div class="right-box">
     <div class="header-text">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Valenzuela_Seal.svg/768px-Valenzuela_Seal.svg.png" alt="Header Image">
@@ -89,4 +98,15 @@
 </div>
 </form>
 </body>
+<script>
+    function showNotification() {
+        const notification = document.getElementById('messages');
+
+        setTimeout(() => {
+notification.classList.remove('visible');
+notification.classList.add('d-none');
+}, 5000); // Adjust duration as needed
+}
+window.onload = showNotification;
+</script>
 </html>

@@ -46,7 +46,16 @@
     </nav>
   </header>
   
-        <br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br>
+        {% if messages %}
+    <div id="messages" class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="fa-solid fa-bell"></i> {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
         <h1 style="margin-left: 800px;"> ValVista Place List</h1>
         <div style="padding-left: 70px;" class="row row-cols-1 row-cols-md-4 g-4 py-5">
         <a class="btn btn-primary" href="{%url 'addplace'%}" role="button">Add Place</a>
@@ -68,3 +77,15 @@
         </div>
         {% endif %}
         {% endfor %}
+
+        <script>
+            function showNotification() {
+                const notification = document.getElementById('messages');
+
+                setTimeout(() => {
+        notification.classList.remove('visible');
+        notification.classList.add('d-none');
+    }, 5000); // Adjust duration as needed
+}
+window.onload = showNotification;
+        </script>

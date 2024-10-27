@@ -24,6 +24,14 @@
 </header>
 <br><br><br><br>
 <body>
+
+  {% if messages %}
+  <div id="success-message" class="alert alert-success">
+      {% for message in messages %}
+          <p>{{ message }}</p>
+      {% endfor %}
+  </div>
+  {% endif %}
 <div class="right-box">
     <div class="header-text">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Valenzuela_Seal.svg/768px-Valenzuela_Seal.svg.png" alt="Header Image">
@@ -98,7 +106,14 @@ stars.forEach(star => {
   }
 });
 }
+const successMessage = document.getElementById('success-message');
+          if (successMessage) {
+              setTimeout(() => {
+                  window.location.href = "{% url 'home' %}";
+              }, 5000);  // Redirect after 5 seconds
+          }
 });
+
 
 </script>
 </body>

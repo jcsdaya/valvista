@@ -163,15 +163,15 @@ nav ul li.no-hover a:hover {
 
 
 .btn1{
-    background-color: darkblue;
+    background-color: darkblue !important;
     color:white;
     font-weight: 400;
 
 }
 
 .btn1:hover{
-    background-color: white;
-    color:darkblue
+    background-color: white !important;
+    color:darkblue !important;
 }
 
 
@@ -243,3 +243,32 @@ h5, h6 {
     color: black;
     margin-top: 10px; /* Add some top margin to headings */
 }
+
+.alert {
+    height: 70px;
+    position: fixed;
+    top: 120px;
+    right: 20px;
+    background-color: #c80000;
+    color: white;
+    padding: 15px;
+    border-radius: 7px;
+    z-index: 2000; /* Make sure it's on top */
+    transition: opacity 0.5s ease;
+    opacity: 0; /* Start as invisible */
+    animation: slideIn 0.4s ease forwards; /* Apply the slide-in animation */
+}
+
+@keyframes slideIn {
+  0% {
+      transform: translateX(100%); /* Start off-screen to the right */
+      opacity: 0; /* Start as invisible */
+  }
+  100% {
+      transform: translateX(0); /* End at its original position */
+      opacity: 1; /* End fully visible */
+  }
+}
+
+
+  

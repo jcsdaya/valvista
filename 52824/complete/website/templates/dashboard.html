@@ -44,6 +44,15 @@
     </nav>
   </header>
     <br><br><br><br>
+    {% if messages %}
+    <div id="messages" class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="fa-solid fa-bell"></i> {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
     <div style="max-width: 1600px;"class=" container">
     <div class="right-box">
         <div class="header-text">
@@ -129,4 +138,16 @@
 </div>
 </div>
 </body>
+
+<script>
+    function showNotification() {
+        const notification = document.getElementById('messages');
+
+        setTimeout(() => {
+notification.classList.remove('visible');
+notification.classList.add('d-none');
+}, 5000); // Adjust duration as needed
+}
+window.onload = showNotification;
+</script>
 </html>

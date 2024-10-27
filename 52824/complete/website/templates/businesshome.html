@@ -38,6 +38,15 @@
   </header>
 
   <br><br>
+  {% if messages %}
+  <div id="messages" class="messages">
+      {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">
+              <i class="fa-solid fa-bell"></i> {{ message }}
+          </div>
+      {% endfor %}
+  </div>
+{% endif %}
     <div style="margin-top:60px;z-index: 50;"class=" container">
     <div class="right-box">
         <div class="header-text">
@@ -115,36 +124,20 @@
 </div>
 </div>
 </div>
-{% if messages %}
-<div id="notification" class="notification">
-    {% for message in messages %}
-        <p id="notification-message" class="message"><i class="fa-solid fa-bell"></i> {{ message }}</p>
-    {% endfor %}
 </div>
-    </div>
-   
-{% endif %}
+
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const notification = document.getElementById('notification');
-    
-    if (notification) {
-        // Show notification
-        notification.classList.remove('d-none');
-        
-        // Hide notification after a few seconds
+    function showNotification() {
+        const notification = document.getElementById('messages');
+
         setTimeout(() => {
-            notification.classList.add('fade-out'); // Start fading out
-            // Remove notification after the fade-out transition
-            setTimeout(() => {
-                notification.classList.add('d-none'); // Hide it completely
-                notification.classList.remove('fade-out'); // Reset for future use
-            }, 500); // This matches the CSS transition duration
-        }, 5000); // Time before starting the fade-out
-    }
-});
-</script>
+notification.classList.remove('visible');
+notification.classList.add('d-none');
+}, 5000); // Adjust duration as needed
+}
+window.onload = showNotification;
+</script> 
 </body>
 </html>
