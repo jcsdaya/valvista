@@ -47,6 +47,12 @@ class Place(models.Model):
         ('201-500','201-500'),
         ('501+','501+'),     
         ]
+        STATUS_CHOICES = [
+        ('Open','Open'),
+        ('Closed','Closed'),
+        ('Temporarily Closed','Temporarily Closed'),
+        ('For Renovation','For Renovation'),     
+        ]
         name = models.CharField (max_length=100)
         location = models.CharField (max_length=100)
         description = models.CharField (max_length=1000)
@@ -60,6 +66,7 @@ class Place(models.Model):
         map = models.CharField(max_length=2000,blank=True,null=True)
         promos = models.ImageField(upload_to="media",blank=True,null=True)
         announcement = models.TextField(max_length=5000, blank=True,null=True)
+        status = models.CharField(max_length=100, blank=True,null=True,choices= STATUS_CHOICES)
         
         
         def __str__ (self):
@@ -88,7 +95,7 @@ class Category(models.Model):
 class NormalUser(models.Model):
        username = models.CharField (max_length=50,unique=True)
        favorites = models.TextField(blank=True,null=True)
-       email = models.EmailField (max_length=50)
+       email = models.EmailField (max_length=50, unique=True)
        password = models.CharField (max_length=50)
 
        

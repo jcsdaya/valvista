@@ -35,6 +35,12 @@ class Business(models.Model):
         ('201-500','201-500'),
         ('501+','501+'),     
         ]
+        STATUS_CHOICES = [
+        ('Open','Open'),
+        ('Closed','Closed'),
+        ('Temporarily Closed','Temporarily Closed'),
+        ('For Renovation','For Renovation'),     
+        ]
         refid = models.IntegerField(blank=True,null=True)
         username = models.CharField (max_length=100,unique=True)
         name = models.CharField (max_length=100,unique=True)
@@ -53,6 +59,7 @@ class Business(models.Model):
         archived = models.BooleanField(default=False)
         approval = models.BooleanField(default= False,blank=True,null=True)
         map = models.CharField(max_length=2000,blank=True,null=True)
+        status = models.CharField(max_length=100, blank=True,null=True,choices= STATUS_CHOICES)
         
 
         def __str__(self):

@@ -117,7 +117,7 @@ class BusinessUpdForm(forms.ModelForm):
     photos =  MultipleFileField()
     class Meta:
         model = Business
-        fields = ['name','location','description','categories' ,'time', 'timeclose', 'cost', 'photos', 'thumbnail','map']
+        fields = ['name','location','description','categories' ,'time', 'timeclose', 'cost', 'photos', 'thumbnail','map','status']
        
         widgets = {
             'name': forms.TextInput(attrs={
@@ -167,6 +167,12 @@ class BusinessUpdForm(forms.ModelForm):
                 'id': 'placemap',
                 'name': 'placemap',
                 'placeholder': 'Enter map URL (Google Maps)'
+            }),
+             'status': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'placestatus',
+                'name': 'placestatus',
+                'placeholder': 'Enter status'
             }),
        }
 

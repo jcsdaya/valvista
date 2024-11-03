@@ -1,0 +1,9 @@
+{% load i18n %}
+
+{% blocktrans %}Hello {{ user.get_username }},{% endblocktrans %}
+
+{% blocktrans %}You requested a password reset for your account at {{ site_name }}. To reset your password, click the link below:{% endblocktrans %}
+
+{{ url }}
+
+{% blocktrans %}Thank you!{% endblocktrans %}

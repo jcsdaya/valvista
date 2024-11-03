@@ -78,10 +78,16 @@
 
 <!-- Itinerary Selection -->
 <div style="max-width: 1200px;" class="container" id="itineraryContainer">
+    <header class="header">
+        <img class="logoss" src="../media/media/valvista logo.png" alt="Valvista Logo" />
+    </header>
     <div class="right-box">
         <div class="header-text">
-            
-            <h1><img class = "vallogo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Valenzuela_Seal.svg/768px-Valenzuela_Seal.svg.png" alt="Header Image">  Itinerary Creation</h1>
+            <div class="fav-title-container">
+                <h1 class="animate-character">
+           
+            <img class = "vallogo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Valenzuela_Seal.svg/768px-Valenzuela_Seal.svg.png" alt="Header Image"> My Itinerary</h1>
+        </div>
             <br>
             <div class="selection-wrapper">
                 <label for="place-count"><strong>Select number of places:</strong></label>
@@ -255,6 +261,16 @@
         </table>
         <p><strong>Total Duration:</strong> <span id="total-duration"></span> hours</p>
         <p><strong>Total Money Spent:</strong>₱<span id="total-spent">0.00</span></strong>
+
+            <footer class="puter">
+                <p class="footer-title">
+                    <img class="logoss" src="../media/media/valvista logo.png" alt="Valvista Logo" />
+                </p>
+                <p class="footer-subtitle">&copy; 2024 All rights reserved.</p>
+                <p class="footer-subtitle">Explore Valenzuela City with us!</p>
+            </footer>
+            
+</div>
     </div>
     </div>
 </div>
@@ -1027,6 +1043,10 @@ function updateItineraryTimes() {
             if (timeInput && time1Input) {
                 timeInput.value = formattedStartTime;
                 time1Input.value = formattedEndTime;
+
+                const openTime = content.dataset.time;
+                const closeTime = content.dataset.timeclose;
+                validateTimeFields(openTime, closeTime, timeInput, time1Input);
             } else {
                 console.error(`Time inputs not found for place ID ${content.dataset.placeId}`);
             }

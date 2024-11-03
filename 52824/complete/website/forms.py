@@ -32,7 +32,7 @@ class PlaceForm(forms.ModelForm):
         model = Place
         fields = [
             'name', 'location', 'description', 'categories', 'time', 'timeclose', 'cost', 'photo',
-            'thumbnail', 'map','promos','announcement'
+            'thumbnail', 'map','promos','announcement','status'
         ]
         widgets = {
             'name': forms.TextInput(attrs={
@@ -71,6 +71,12 @@ class PlaceForm(forms.ModelForm):
                 'id': 'placecost',
                 'name': 'placecost',
                 'placeholder': 'Enter cost'
+            }),
+            'status': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'placestatus',
+                'name': 'placestatus',
+                'placeholder': 'Enter status'
             }),
             'thumbnail': forms.ClearableFileInput(attrs={
                 'class': 'custom-file-input',

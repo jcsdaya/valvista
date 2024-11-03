@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 from .views import logout_view
 from . import views
 from django.contrib.auth import views as auth_views
+from .views import CustomPasswordResetView
 
 urlpatterns = [
   path('home/',views.home,name="home"),
@@ -49,7 +50,7 @@ urlpatterns = [
   path('promo/<str:pk>/',views.promo, name="promo"),
   path('success',views.success,name="success"),
   path('resetpass/', auth_views.PasswordResetView.as_view(template_name = "passwordreset.html"), name="reset_password"),
-  path('resetpass_sent/', auth_views.PasswordResetDoneView.as_view(template_name = "resetemail.html"), name="password_reset_done"),
+  path('resetpass_sent/', CustomPasswordResetView.as_view(template_name = "resetemail.html"), name="password_reset_done"),
   path('reset/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name = "reset.html"), name="password_reset_confirm"),
   path('resetpass_complete/', auth_views.PasswordResetCompleteView.as_view(template_name = "resetdone.html"), name="password_reset_complete"),
 ]

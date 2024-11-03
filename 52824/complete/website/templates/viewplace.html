@@ -91,12 +91,14 @@
             <div class="content">
                 <h2>Photos</h2>
                 <div class="full-img" id="fullImgBox">
+                    <span class="arrow left-arrow" onclick="prevImage()">&#10094;</span>
                     <img src="" id="fullImg">
-                    <span onclick="closeFullImg()">X</span>
+                    <span class="arrow right-arrow" onclick="nextImage()">&#10095;</span>
+                    <span onclick="closeFullImg()" class="close-btn">X</span>
                 </div>
                 <div class="img-gallery">
                     {% for media in place.photo.all %}
-                        <img src="{{ media.file.url }}" onclick="openFullImg(this.src)">
+                        <img src="{{ media.file.url }}" onclick="openFullImg(this.src, {{ forloop.counter0 }})">
                     {% endfor %}
                 </div>
             </div>
@@ -169,24 +171,53 @@
             });
         });
     
-        var fullImgBox = document.getElementById("fullImgBox");
-        var fullImg = document.getElementById("fullImg");
-    
-        function openFullImg(pic) {
-            fullImgBox.style.display = "flex";
-            fullImg.src = pic;
+    const fullImgBox = document.getElementById("fullImgBox");
+    const fullImg = document.getElementById("fullImg");
+    let currentIndex = 0;
+    const images = Array.from(document.querySelectorAll(".img-gallery img")).map(img => img.src);
+
+    function openFullImg(pic, index) {
+        fullImgBox.style.display = "flex";
+        fullImg.src = pic;
+        currentIndex = index;
+    }
+
+    function closeFullImg() {
+        fullImgBox.style.display = "none";
+    }
+
+    function nextImage() {
+        currentIndex = (currentIndex + 1) % images.length;
+        fullImg.src = images[currentIndex];
+    }
+
+    function prevImage() {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        fullImg.src = images[currentIndex];
+    }
+
+    fullImgBox.addEventListener('click', function(event) {
+        if (event.target === fullImgBox) {
+            closeFullImg();
         }
+    });
+
+    document.addEventListener('keydown', function(event) {
+    if (event.key === 'ArrowLeft') {
+        // Left arrow key pressed, go to previous image
+        prevImage();
+    } else if (event.key === 'ArrowRight') {
+        // Right arrow key pressed, go to next image
+        nextImage();
+    }
+    else if (event.key === 'Escape'){
+        closeFullImg();
+    }
+});
+</script>
+
+
     
-        function closeFullImg() {
-            fullImgBox.style.display = "none";
-        }
-    
-        fullImgBox.addEventListener('click', function(event) {
-            if (event.target === fullImgBox) {
-                closeFullImg();
-            }
-        });
-    </script>
     
 </body>
 </html>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>  
  <html>  
  <head>  
@@ -13,7 +14,8 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
       {% load static %}
 	  <title>Favorites | ValVista</title>
-	  <link rel="stylesheet" href="{% static 'favoritos.css' %}">
+	  <link rel="stylesheet" href="{% static 'favoritos.css' %}?v=2">
+
 	  
  </head>  
  <header>
@@ -58,9 +60,33 @@
     </nav>
 </header>
 <br><br><br><br>
-<h2  style="margin-left: 50px;">My Favorites</h2>
+<div style="max-width: 1800px;"class=" container">
+    <div class="right-box">
+<div class="FAV">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="fav-title-container">
+                <h3 class="animate-character">MY FAVORITES</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+   const particleContainer = document.querySelector('.fav-title-container');
+for (let i = 0; i < 20; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`; // Keep it circular
+    particle.style.left = `${Math.random() * 100}%`; // Random horizontal position
+    particle.style.top = `${Math.random() * 100}%`; // Random vertical position
+    particle.style.animationDuration = `${Math.random() * 2 + 2}s`; // Randomize speed
+    particleContainer.appendChild(particle);
+}
+</script>
 
-<ul style="margin-top: -60px;">
+
+<ul style="margin-top: -40px;">
     <div class="row row-cols-1 row-cols-md-5 g-4 py-5">
   {% for favorite in favorites %}
     {% if favorite.place %}
@@ -68,12 +94,9 @@
       <li>
         
         <div class="card">
-            <img
-                class="card__background"
-                src="{{ favorite.place.thumbnail.url }}"
-            />
-            <div class="card__content | flow">
-                <div class="card__content--container | flow">
+            <img class="card__background" src="{{ favorite.place.thumbnail.url }}" />
+            <div class="card__content flow">
+                <div class="card__content--container flow">
                     <h2 class="card__title">{{ favorite.place.name }}</h2>
                     <p class="card__description">{{ favorite.place.location }}</p>
                     <p class="card__description">
@@ -83,17 +106,48 @@
                             {{ favorite.place.cost }}
                         {% endif %}
                     </p>
-
                     <p class="card__description">{{ favorite.place.time }} to {{ favorite.place.timeclose }}</p>
-                    <form method="post" action="{% url 'add_favorite_place' favorite.place.id %}">
+        
+                    <!-- Unfavorite Button -->
+                    <form method="post" action="{% url 'add_favorite_place' favorite.place.id %}" onsubmit="return openDialog(event, '{{ favorite.place.id }}');">
                         {% csrf_token %}
                         <button type="submit" class="unfavorite-button">Unfavorite</button>
                     </form>
-                                 
+        
+                    <button class="card__button" onclick="redirectToPlace('{{ favorite.place.id }}')">View More</button>
                 </div>
-                <button class="card__button" onclick="redirectToPlace('{{ favorite.place.id }}')">View More</button>
             </div>
         </div>
+        
+        <!-- Confirmation Dialog -->
+        <div id="confirmation-dialog-{{ favorite.place.id }}" class="dialog" style="display: none;">
+            <div class="dialog-content">
+                <p>Are you sure you want to unfavorite this place?</p>
+                <button class="dialog-button" onclick="confirmUnfavorite('{{ favorite.place.id }}');">Yes</button>
+                <button class="dialog-button" onclick="closeDialog('{{ favorite.place.id }}');">No</button>
+            </div>
+        </div>
+        
+        <!-- Inline JavaScript -->
+        <script>
+            // Open dialog function
+            function openDialog(event, placeId) {
+                event.preventDefault(); // Prevent form submission
+                document.getElementById("confirmation-dialog-" + placeId).style.display = "flex"; // Show dialog with flexbox
+            }
+        
+            // Confirm unfavorite function
+            function confirmUnfavorite(placeId) {
+                const form = document.querySelector(`form[action*="${placeId}"]`); // Find the correct form
+                form.submit(); // Submit the form
+            }
+        
+            // Close dialog function
+            function closeDialog(placeId) {
+                document.getElementById("confirmation-dialog-" + placeId).style.display = "none"; // Hide dialog
+            }
+        </script>
+        
       </li>
     {% elif favorite.business %}
       <li>
@@ -132,6 +186,8 @@
   {% endfor %}
 </div>
 </ul>
+    </div>
+</div>
 <script>
     function redirectToPlace(pk) {
         window.location.href = "{% url 'viewplace' 0 %}".replace('0', pk);

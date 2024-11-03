@@ -503,3 +503,85 @@ input{
     height: 75px;
     width: 75px;
 }
+/* Footer styles */
+.puter {
+    background-color: #c80000;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.footer-title {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.footer-subtitle {
+    font-size: 16px;
+    margin: 5px 0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.highlight-text {
+    color: #1e3a8a;
+    font-size: inherit;
+}
+
+.highlight-text-red {
+    color: #c80000;
+    font-size: inherit;
+}
+.header {
+    background-color: #c80000;
+    text-align: center; 
+    padding: 20px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+}
+
+.logoss {
+    max-width: 200px; 
+    height: auto; 
+    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
+}
+
+.animate-character {
+    text-transform: uppercase;
+    background-image: linear-gradient(
+        -225deg,
+        #000000 50%,
+        #000000 100%
+    );
+    background-size: 60% auto;
+    background-clip: text;
+    color: transparent;
+    font-size: 50px;
+    margin-top: 20px; /* Added gap at the top */
+    margin-bottom: 10px; /* Reduced gap at the bottom */
+    transition: text-shadow 0.3s ease, transform 0.3s ease; /* Smooth transition for text shadow and transform */
+}
+
+
+.animate-character::after {
+    content: '';
+    display: block;
+    height: 4px; 
+    background: #c80000;
+    border-radius: 5px;
+    margin: 5px auto 0; /* Reduced gap above the line */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease; /* Smooth transition for the background */
+}
+
+
+
+
+
+
+

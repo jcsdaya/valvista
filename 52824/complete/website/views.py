@@ -16,6 +16,8 @@ from django.views.decorators.csrf import csrf_exempt
 import qrcode
 from django.db.models import Avg, Count
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.views import PasswordResetView
+from django.utils.translation import gettext_lazy as _
 
 
 
@@ -669,6 +671,11 @@ def promo(request,pk):
         return render(request, 'promo.html', context)
     
 
+class CustomPasswordResetView(PasswordResetView):
+    email_template_name = 'pass_reset_email.html'
+
+    def send_mail(self, subject, message, from_email, to_email, **kwargs):
+        super().send_mail(subject, message, from_email, to_email, **kwargs)
 
 
 

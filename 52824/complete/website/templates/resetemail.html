@@ -13,7 +13,7 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {% load static %}
     <title>Reset Email Sent | ValVista</title>
-    <link rel="stylesheet" href="{% static 'reset.css' %}">
+    <link rel="stylesheet" href="{% static 'reset message.css' %}">
 </head>
 <header>
     <div style= "background-image: url('https://valenzuela.gov.ph/ckuploads/images/cityhall_facade.jpg'); background-size: cover;background-position: center;"></div>
@@ -45,6 +45,7 @@
     <p>We have emailed you for your requested password reset, if an account exists with an email you enetered, you should recieve them shortly. 
         If you don't recieve an email, please make sure you have a registered account with the email you have entered or check your spam folder.
     </p>
+    <a href="{%url 'login' %}">< Go back to login</a>
 </div>
 
 </body>
