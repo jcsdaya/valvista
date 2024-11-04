@@ -7,7 +7,7 @@
 
 /* General styles */
 body {
-    background-color: rgb(255, 255, 255);
+    background-color: #f4f4f9;
     font-family:'Franklin Gothic';
     margin: auto; /* Added to remove default margin */
     overflow-y: auto;
@@ -182,8 +182,9 @@ nav ul li.no-hover a:hover {
   }
 
   .card {
+    background-color: #dddddd;
     border-radius: 30px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+    box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 2px 2px;
     width: 350px; /* Set a fixed width for all cards */
     height: 400px; /* Set a fixed height for all cards */
     position: relative;
@@ -262,4 +263,38 @@ h5, h6 {
       opacity: 1; /* End fully visible */
   }
 }
+
+.right-box {
+    margin: 0px 30px 30px 30px;
+    background-color: rgba(252, 252, 252, 1);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1);
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+h1{
+    color: black;
+    font-size: 70px;
+}
+
+.d-flex{
+    margin-left: 500px;
+}
+
+h1::after{
+        content: '';
+        display: block;
+        height: 4px; 
+        background: linear-gradient(90deg, #c80000, #c80000); 
+        border-radius: 5px;
+        margin: 5px auto 0; /* Reduced gap above the line */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        transition: background 0.3s ease; /* Smooth transition for the background */
+
+     
+}
+
+
   

@@ -12,7 +12,7 @@
     {% load static %}
     {% load custom_filters %}
     <title>Delete Business | ValVista</title>
-    <link rel="stylesheet" href="{% static 'deleteplace.css' %}">
+    <link rel="stylesheet" href="{% static 'delete.css' %}">
 </head>
 <body>
     {% if user.is_authenticated %}
@@ -85,14 +85,15 @@
     <div class="header-text">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Valenzuela_Seal.svg/768px-Valenzuela_Seal.svg.png" alt="Header Image">
 <h1>ValVista Delete Business</h1>
-<p>Are you sure you want to delete {{ business }}?</p>
+</div>
 <form method="post" action="{% url 'deletebusiness' business.id %}">
     {% csrf_token %}
-    <input type="submit" name="confirm" value="Confirm">
+    <p>Are you sure you want to delete {{ business }}?</p>
+    <button type="submit">Delete</button>
     {% if user|has_group:'Admin' %}
-        <a style="color: #c80000;" href="{% url 'businessadmin' %}">Cancel</a>
+    <a style="color: #c80000; font-size: 20px;" href ="{%url 'businessadmin'%}">Cancel</a>
     {% elif user|has_group:'Business' %}
-        <a style="color: #c80000;" href="{% url 'businesslist' %}">Cancel</a>
+    <a style="color: #c80000; font-size: 20px;" href ="{%url 'businesslist'%}">Cancel</a>
     {% endif %}
 </div>
 </div>

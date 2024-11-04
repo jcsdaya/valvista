@@ -13,11 +13,12 @@ from django.urls import reverse
 from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
-import qrcode
 from django.db.models import Avg, Count
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.views import PasswordResetView
 from django.utils.translation import gettext_lazy as _
+from .forms import NormalUserEditForm, BusinessEditForm
+from django.views.decorators.http import require_POST
 
 
 
@@ -150,9 +151,8 @@ def register(request):
       if request.method == 'POST':
         form = SignupForm(request.POST or  None)
         if form.is_valid():
-            new_user = form.save()
-            new_user = authenticate(username = form.cleaned_data['username'],password = form.cleaned_data['password'])
-            login(request,new_user)
+            form.save()
+            authenticate(username = form.cleaned_data['username'],password = form.cleaned_data['password'])
         return redirect('login')
       return render(request, 'register.html',{})
    
@@ -416,6 +416,22 @@ def updatePlace(request,pk):
 
         context = {'form': form, 'place': place} 
         return render(request, 'updateplace.html', context)
+    
+@require_POST
+@login_required
+def delete_photo(request):
+    if not request.user.groups.filter(name='Admin').exists():
+        return JsonResponse({'success': False, 'error': 'Unauthorized'}, status=403)
+    
+    photo_id = request.POST.get('photo_id')
+    photo = get_object_or_404(PlaceMedia, pk=photo_id)
+    
+    # Delete the file and the instance
+    photo.file.delete(save=False)  # Delete file from filesystem
+    photo.delete()  # Delete photo instance
+
+    return JsonResponse({'success': True})
+
 @login_required
 def  deleteplace(request,pk):
     if not request.user.groups.filter(name='Admin').exists():
@@ -574,14 +590,55 @@ def deletevisitor(request,pk):
     if not request.user.groups.filter(name='Admin').exists():
         return redirect('login')
     else:
-        user = get_object_or_404(NormalUser, pk=pk)
+        normaluser = get_object_or_404(NormalUser, pk=pk)
         if request.POST:
-            user = User.objects.get(username=user.username)
+            user = User.objects.get(username=normaluser.username)
             user.delete()
+            normaluser.delete()
             messages.success(request, "Visitor account deleted successfully.")
             return redirect('dashboard')
-        context={'user':user}
+        context={'normaluser':normaluser}
         return render(request,'deletevisitor.html',context)
+    
+from django.contrib.auth.models import User
+
+@login_required
+def edituser(request, pk):
+    normal_user = get_object_or_404(NormalUser, pk=pk)
+    
+    if not request.user.groups.filter(name='Admin').exists():
+        return redirect('login')
+
+    if request.method == 'POST':
+        form = NormalUserEditForm(request.POST, instance=normal_user)
+        if form.is_valid():
+            updated_user = form.save()
+            user = User.objects.get(username=normal_user.username)  
+            user.email = updated_user.email  
+            user.save()  
+
+            messages.success(request, "User account updated successfully.")
+            return redirect('dashboard')  
+    else:
+        form = NormalUserEditForm(instance=normal_user)
+    
+    return render(request, 'edituser.html', {'form': form, 'user': normal_user})
+
+
+@login_required
+def editbusiness(request,pk):
+    if not request.user.groups.filter(name='Admin').exists():
+        return redirect('login')
+    else:
+        business = get_object_or_404(Business, pk=pk)
+        if request.method == 'POST':
+            form = BusinessEditForm(request.POST, instance=business)
+            if form.is_valid():
+                form.save()
+                return redirect('dashboard')  # Change to your success URL
+        else:
+            form = BusinessEditForm(instance=business)
+        return render(request, 'editowner.html', {'form': form,'business':business})
     
 @login_required    
 def approvebus(request,pk):

@@ -305,3 +305,32 @@ nav ul li.no-hover a:hover {
     color:#c80000;
     filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
 }
+
+h1{
+    color: black;
+    font-size: 50px;
+}
+
+h1::after{
+        content: '';
+        display: block;
+        height: 4px; 
+        background: linear-gradient(90deg, #c80000, #c80000); 
+        border-radius: 5px;
+        margin: 5px auto 0; /* Reduced gap above the line */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        transition: background 0.3s ease; /* Smooth transition for the background */
+     
+}
+
+h2::after{
+    content: '';
+    display: block;
+    height: 4px; 
+    background: linear-gradient(90deg, #c80000, #c80000); 
+    border-radius: 5px;
+    margin: 5px auto 0; /* Reduced gap above the line */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease; /* Smooth transition for the background */
+ 
+}

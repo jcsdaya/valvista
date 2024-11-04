@@ -165,3 +165,13 @@ class BusPromoForm(forms.ModelForm):
                 'name': 'placephoto'
             }),
         }
+
+class NormalUserEditForm(forms.ModelForm):
+    class Meta:
+        model = NormalUser
+        fields = ['email', 'password']
+
+class BusinessEditForm(forms.ModelForm):
+    class Meta:
+        model = Business
+        fields = ['email', 'password']

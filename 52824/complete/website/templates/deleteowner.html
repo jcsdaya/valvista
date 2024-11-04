@@ -12,7 +12,7 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {% load static %}
     <title>Delete Business | ValVista</title>
-    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'delete.css' %}">
 </head>
 <header>
     <nav>
@@ -48,15 +48,17 @@
         <div class="right-box">
             <div class="header-text">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Valenzuela_Seal.svg/768px-Valenzuela_Seal.svg.png" alt="Header Image">
-        <h1> ValVista Delete Business Owner</h1>
-        <p> Are you sure you want to delete {{business}}?</p>
-
-        <form method="post" action="{%url 'deleteowner' business.id %} ">
-            {% csrf_token %}
-                <input type="submit" name="confirm">
-                <a style="color: #c80000;" href ="{%url 'dashboard'%}">Cancel</a>
-                
-        </form>
+                <h1> ValVista Delete Owner</h1>
+            </div>
+        
+                <form method="post" action="{%url 'deletevisitor' user.id %} ">
+                    {% csrf_token %}
+                    <p style="font-size: 20px;"> Are you sure you want to delete {{business.username}}?</p>
+                    <button type="submit">Delete</button>
+                        <a style="color: #c80000; font-size: 20px;" href ="{%url 'dashboard'%}">Cancel</a>
+                        
+                </form>
+              
+            </div>
         </div>
-    </div>
 

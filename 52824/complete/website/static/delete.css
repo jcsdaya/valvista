@@ -28,13 +28,13 @@ nav {
 }
 
 .logo {
-    margin-top: 1px;
-    height: 70px;
-    width: 160px;
-    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
-  }
-  
+  margin-top: 1px;
+  height: 70px;
+  width: 160px;
+  filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
+}
 
+  
 nav ul {
     display: flex;
     margin-top: 20px;
@@ -69,6 +69,8 @@ nav ul li.no-hover a:hover {
   background-color: transparent; /* Remove background color on hover */
   color: inherit; /* Inherit text color from parent */
 }
+
+
 
   
   .menu-icon{
@@ -107,22 +109,33 @@ nav ul li.no-hover a:hover {
   }
 /* Right box */
 .right-box {
-    margin: 40px 20px 20px 20px;
+    margin: 150px 50px 50px 700px;
     background-color: #fff;
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    width: 600px;
+}
+
+.header-text {
+    flex: 1 !important;
+}
+
+
+.header-text img,
+.header-text h1 {
+    display: inline-block; /* Display elements inline */
+    vertical-align: middle; /* Align elements vertically */
+    margin: 0; /* Remove default margin */
+}
+
+#email{
+    width: 100% !important;
+    height: 40px;
 }
 
 .header-text {
     flex: 1;
-}
-.right-box {
-    display: flex;
-    align-items: center; /* Vertically center the items */
 }
 
 .header-text img,
@@ -177,8 +190,7 @@ nav ul li.no-hover a:hover {
 
 .form-group input,
 .form-group select {
-    width: 100%;
-    padding: 10px 10px 10px 15px;
+    width: 150%;
     margin: 5px 0;
     border: 1px solid #ced4da;
     border-radius: 5px;
@@ -187,121 +199,98 @@ nav ul li.no-hover a:hover {
     font-size: 16px;
 }
 
-.form-group input:focus,
-.form-group select:focus {
-    border-color: #921919;
-    box-shadow: 0 0 8px rgba(23, 162, 184, 0.6);
-    outline: none;
-}
-
-/* Floating label effect */
-.floating-label {
-    position: relative;
-    margin-bottom: 20px;
-}
-
-.floating-label input {
-    padding-top: 20px;
-}
-
-.floating-label label {
-    position: absolute;
-    top: 0;;
-    left: 15px;
-    transform: translateY(-50%);
-    font-size: 12px;
-    color: #921919;
-    transition: all 0.3s ease;
-    pointer-events: none;
-    background-color: white;
-    padding: 0 5px;
-}
-
-.floating-label input:focus + label,
-.floating-label input:not(:placeholder-shown) + label {
-   
-    left: 15px;
-  
-  
-}
 
 
+/* name & comment */
 
-.floating-label input:focus,
-.floating-label input:not(:placeholder-shown) {
-    padding-top: 20px;
-}
+input[type="text"] {
+    width: 50%;
+    gap: 5px;
+    padding: 5px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
 
-/* Custom file input */
+  input[type="email"] {
+    width: 50%;
+    gap: 5px;
+    padding: 5px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
 
-
-.custom-file-label {
-    display: block;
+textarea {
     width: 100%;
     padding: 10px;
-    background-color: #e9ecef;
-    border: 1px solid #ced4da;
+    font-size: 1rem;
+    border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box;
+    min-height: 50px;
+}
+  
+  
+  /* stars */
+  .star-rating {
+    text-align: left;
+    margin: 20px 0;
+  }
+  
+  .star-rating .stars {
+    display: inline-block;
+  }
+  
+  .star {
+    font-size: 2rem;
+    color: gray;
     cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.custom-file-label:hover {
-    background-color: #dee2e6;
-}
-
-.custom-file-label:after {
-    display: block;
-    margin-left: 10px;
-    color: #6c757d;
-}
-
-/* Submit button */
-.subbut button {
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.subbut button:hover {
-
-    transform: scale(1.05);
-}
-
-#placecategory,#placecategory2,#placecategory3 {
-
-    width: 50%;
-    margin-top: -20px;
-    
-}
-
-
-#placetime,#placetimeclose,#placecost{
-
-    width: 100%;
-    
-}
-
-#placetime,#placetimeclose{
-
-    height:20%
-    
-}
-
-#placeusername, #placepass,#placeemail,#placeid{
-    width: 200%;
-}
-
-.btn{
+  }
+  
+  .star.selected {
+    color: gold;
+  }
+  
+  /* Button styling */
+  button {
+    margin-left: 150px;
     background-color: #c80000;
-    color:white
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  button:hover {
+    background-color: rgb(255, 255, 255); 
+    animation: buttonGrow 0.2s forwards; 
+    color: #c80000;
+    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
 }
-.btn:hover{
-    background-color: white;
-    color:#c80000;
-    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+
+a{
+    color: #c80000;
+}
+
+.errorlist{
+    font-weight: bold;  /* Makes the text bold */
+    color: #c80000;
+    font-size: 1.2em;   /* Increase font size */
+}
+
+h1::after{
+    content: '';
+    display: block;
+    height: 4px; 
+    background: linear-gradient(90deg, #c80000, #c80000); 
+    border-radius: 5px;
+    margin: 1px auto 0; /* Reduced gap above the line */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease; /* Smooth transition for the background */
+ 
 }

@@ -139,5 +139,27 @@ notification.classList.add('d-none');
 }
 window.onload = showNotification;
 </script> 
+<script>
+    document.getElementById('placephoto').addEventListener('change', function(event) {
+        const input = event.target;
+        const preview = document.getElementById('newPromoPreview');
+        
+        // Ensure there is a file chosen
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+    
+            reader.onload = function(e) {
+                // Set the src of the image preview to the chosen file
+                preview.src = e.target.result;
+                preview.style.display = 'block';  // Make the preview visible
+            };
+    
+            // Read the file
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.style.display = 'none';  // Hide the preview if no file chosen
+        }
+    });
+    </script>
 </body>
 </html>

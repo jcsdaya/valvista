@@ -306,3 +306,55 @@ nav ul li.no-hover a:hover {
     filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
 }
 
+
+h1{
+    color: black;
+    font-size: 60px;
+}
+
+h1::after{
+        content: '';
+        display: block;
+        height: 4px; 
+        background: linear-gradient(90deg, #c80000, #c80000); 
+        border-radius: 5px;
+        margin: 5px auto 0; /* Reduced gap above the line */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        transition: background 0.3s ease; /* Smooth transition for the background */
+
+     
+}
+
+.photo-item {
+    position: relative;
+    display: inline-block;
+}
+
+.photo-item img {
+    width: 100px;
+    height: 100px;
+}
+
+.delete-photo {
+    position: absolute;
+    top: 5px; /* Adjust as needed */
+    right: 5px; /* Adjust as needed */
+    z-index: 10; /* Ensures the button is above the image */
+    background: rgba(255, 0, 0, 0.7); /* Optional: semi-transparent background */
+    color: white; /* Change text color */
+    border: none; /* Remove default border */
+    border-radius: 50%; /* Make it round */
+    width: 25px; /* Width of the button */
+    height: 25px; /* Height of the button */
+    display: flex;
+    align-items: center; /* Center icon vertically */
+    justify-content: center; /* Center icon horizontally */
+    cursor: pointer; /* Show pointer cursor on hover */
+}
+
+.delete-photo:hover {
+    background: rgba(255, 0, 0, 1); /* Solid red on hover */
+}
+
+
+
