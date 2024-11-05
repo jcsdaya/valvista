@@ -178,7 +178,7 @@
                     <th class="button-container" style="width: 100px; height: 100px;">
                         <button type="button"  class="btn1" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
                         <a style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 10px;" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
-                        <a href="#" onclick="redirectToMap('{{ place.0.id }}', '{{ first_place.id }}')" style="color: #c80000;">> Directions</a>
+                        <a href="#" onclick="redirectToMapDynamic(this)" style="color: #c80000;">Directions</a>
                     </th>
                 </tr>
                 {% endif %}
@@ -204,7 +204,7 @@
                     <th class="button-container" style="width: 100px; height: 100px;">
                         <button type="button"  class="btn1" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
                         <a style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 50px;" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
-                        <a href="#" onclick="redirectToMap('{{ place.1.id }}', '{{ first_place.id }}')" style="color: #c80000;">> Directions</a>
+                        <a href="#" onclick="redirectToMapDynamic(this)" style="color: #c80000;">Directions</a>
                     </th>
                 </tr>
                 {% endif %}
@@ -230,7 +230,7 @@
                     <th class="button-container" style="width: 100px; height: 100px;">
                         <button type="button"  class="btn1" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
                         <a style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 50px;" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
-                        <a href="#" onclick="redirectToMap('{{ place.2.id }}', '{{ first_place.id }}')" style="color: #c80000;">> Directions</a>
+                        <a href="#" onclick="redirectToMapDynamic(this)" style="color: #c80000;">Directions</a>
                     </th>
                 </tr>
                 {% endif %}
@@ -256,7 +256,7 @@
                     <th class="button-container" style="width: 100px; height: 100px;">
                         <button type="button"  class="btn1" style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 20px;" data-type="{{ first_place.type }}" data-place-id="{{ first_place.id }}" data-category="{% firstof first_place.categories.first.name 'No Category' %}" onclick="redirectToItem('{{ first_place.id }}', '{{ first_place.type }}')">View</button>
                         <a style="height: 50px;width: 100px; border-radius: 10px; margin-bottom: 50px;" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editModal"onclick="setActiveRow(this)">Edit</a>
-                        <a href="#" onclick="redirectToMapDynamic()" style="color: #c80000;">> Directions</a>
+                        <a href="#" onclick="redirectToMapDynamic(this)" style="color: #c80000;">Directions</a>
                     </th>
                 </tr>
                 {% endif %}
@@ -284,14 +284,14 @@
     <p id="notification-message"></p>
 </div>
 <script>
-function redirectToMapDynamic() {
-    const activeContent = document.querySelector('.tablecontent.active');
-    if (activeContent) {
-        const firstPlaceId = activeContent.dataset.placeId;
-        const firstPlaceType = activeContent.dataset.type; // 'place' or 'business'
+function redirectToMapDynamic(linkElement) {
+    const tableRow = linkElement.closest('.tablecontent');
+    if (tableRow) {
+        const firstPlaceId = tableRow.dataset.placeId;
+        const firstPlaceType = tableRow.dataset.type; // 'place' or 'business'
 
         // Get the previous sibling row (if it exists)
-        const previousContent = activeContent.previousElementSibling;
+        const previousContent = tableRow.previousElementSibling;
         let previousPlaceId, previousPlaceType;
 
         if (previousContent) {

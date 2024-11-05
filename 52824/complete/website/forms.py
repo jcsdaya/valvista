@@ -146,12 +146,6 @@ class SignupForm(forms.ModelForm):
             raise ValidationError("Password must be at least 8 characters long and contain at least one number.")
         return password
     
-    def save(self, commit=True):
-        NormalUser = super().save(commit=False)
-        NormalUser.set_password(self.cleaned_data['password'])  # Hash the password
-        if commit:
-            NormalUser.save()
-        return NormalUser
 
 
 class RatingForm(forms.ModelForm):
