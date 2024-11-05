@@ -49,6 +49,7 @@ urlpatterns = [
   path('businessrating/<int:buss_id>', views.businessrating, name='businessrating'),
   path('bussdeets/<str:pk>/', views.bussdeets, name="bussdeets"),
   path('map/',views.map,name="map"),
+  path('pinmap/',views.pinmap,name="pinmap"),
   path('adpromo',views.adpromo,name="adpromo"),
   path('promo/<str:pk>/',views.promo, name="promo"),
   path('success',views.success,name="success"),

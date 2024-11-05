@@ -26,7 +26,7 @@ class BusinessForm(forms.ModelForm):
     photos = MultipleFileField()
     class Meta:
         model = Business
-        fields = ['username','email','password','refid','name','location','description','categories' ,'time', 'timeclose', 'cost', 'photos', 'thumbnail','map']
+        fields = ['username','email','password','refid','name','location','description','categories' ,'time', 'timeclose', 'cost', 'photos', 'thumbnail','map','status','lat','lng']
        
         widgets = {
             'username': forms.TextInput(attrs={
@@ -42,6 +42,18 @@ class BusinessForm(forms.ModelForm):
                 'name': 'placeemail',
                 'required': 'required',
                 'placeholder': 'Enter Email'
+            }),
+            'lat': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'placelat',
+                'name': 'placelat',
+                'placeholder': 'Enter latitude'
+            }),
+            'lng': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'placelng',
+                'name': 'placelng',
+                'placeholder': 'Enter longitude'
             }),
             'password': forms.PasswordInput(attrs={
                 'class': 'form-control',
@@ -105,6 +117,12 @@ class BusinessForm(forms.ModelForm):
                 'name': 'placemap',
                 'placeholder': 'Enter map URL (Google Maps)'
             }),
+            'status': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'placestatus',
+                'name': 'placestatus',
+                'placeholder': 'Enter status'
+            }),
        }
         
         
@@ -117,7 +135,7 @@ class BusinessUpdForm(forms.ModelForm):
     photos =  MultipleFileField()
     class Meta:
         model = Business
-        fields = ['name','location','description','categories' ,'time', 'timeclose', 'cost', 'photos', 'thumbnail','map','status']
+        fields = ['name','location','description','categories' ,'time', 'timeclose', 'cost', 'photos', 'thumbnail','map','status','lat','lng']
        
         widgets = {
             'name': forms.TextInput(attrs={
@@ -132,6 +150,18 @@ class BusinessUpdForm(forms.ModelForm):
                 'id': 'placelocation',
                 'name': 'placelocation',
                 'placeholder': 'Enter location'
+            }),
+            'lat': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'placelat',
+                'name': 'placelat',
+                'placeholder': 'Enter latitude'
+            }),
+            'lng': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'placelng',
+                'name': 'placelng',
+                'placeholder': 'Enter longitude'
             }),
             'description': forms.Textarea(attrs={
                 'class': 'form-control',

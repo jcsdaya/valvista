@@ -148,13 +148,20 @@ def logout_view(request):
     return redirect('home')    
 
 def register(request):
-      if request.method == 'POST':
-        form = SignupForm(request.POST or  None)
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
         if form.is_valid():
             form.save()
-            authenticate(username = form.cleaned_data['username'],password = form.cleaned_data['password'])
-        return redirect('login')
-      return render(request, 'register.html',{})
+            messages.success(request, "Registration successful! You can now log in.")
+            return redirect('login')
+        else:
+            # Print form errors for debugging in console
+            print(form.errors)
+
+    else:
+        form = SignupForm()  # Create a new form instance for GET requests
+
+    return render(request, 'register.html', {'form': form})
    
 @login_required
 def addplace(request):
@@ -681,13 +688,28 @@ def load_itinerary_state(request):
     if request.user.is_authenticated:
         itinerary_state = ItineraryState.objects.filter(user=request.user).first()
         if itinerary_state:
-            data = {'places': itinerary_state.places,'placeCount': itinerary_state.place_count, 'times': itinerary_state.times,'times2': itinerary_state.times2,'time': itinerary_state.time,'timeclose': itinerary_state.timeclose,'images':itinerary_state.images,'placeIds': itinerary_state.place_ids,'types': itinerary_state.types,'startTime': itinerary_state.start_time,'budget':itinerary_state.budget,'text':itinerary_state.text,'category':itinerary_state.category}
+            data = {'places': itinerary_state.places,'placeCount': itinerary_state.place_count, 'times': itinerary_state.times,'times2': itinerary_state.times2,'time': itinerary_state.time,'timeclose': itinerary_state.timeclose,'images':itinerary_state.images,'placeIds': itinerary_state.place_ids or [1, 5, 7, 8, 9],'types': itinerary_state.types,'startTime': itinerary_state.start_time,'budget':itinerary_state.budget,'text':itinerary_state.text,'category':itinerary_state.category}
             return JsonResponse(data)
-    return JsonResponse({'places': [],'place_count': [], 'times': [],'times2': [],'time': [],'timeclose': [], 'images': [],'placeIds': [],'types': [], 'startTime': '','budget': [],'text': [],'category': []})
+    return JsonResponse({'places': ['Valenzuela Peoples Park','Valenzuela Sports Park','Triumvirate Monument','Valenzuela City Museum','Museo Valenzuela Cultural Center'],'place_count': [5], 'times': [],'times2': [],'time': ['6:00am','6:00am','8:00am','8:00am','8:00am'],'timeclose': ['10:00pm','5:00pm','10:00pm','5:00pm','5:00pm'], 'images': ['http://127.0.0.1:8000/media/media/thumbnail_1.jpg','http://127.0.0.1:8000/media/media/thumbnail.jpg','http://127.0.0.1:8000/media/media/thumbnail_JSAOwCi.jpg','http://127.0.0.1:8000/media/media/download_RWwoYXd.jpg','http://127.0.0.1:8000/media/media/download_6.jpg'],'placeIds': [1, 5, 7, 8, 9],'types': ['place','place','place','place','place'], 'startTime': "08:00",'budget': [],'text': [],'category': ['Leisure','Leisure','Historical','Educational','Leisure']})
 
-
+@login_required
 def map(request):
-    return render(request, 'map.html', {})
+    if not request.user.groups.filter(name='NormalUsers').exists():
+        return redirect('login')
+    else:
+        places = Place.objects.filter(archived=False) 
+        businesses = Business.objects.filter(archived=False) 
+        return render(request, 'map.html', {'places':places,'businesses':businesses})
+
+
+@login_required
+def pinmap(request):
+    if not request.user.groups.filter(name='NormalUsers').exists():
+        return redirect('login')
+    else:
+        places = Place.objects.filter(archived=False) 
+        businesses = Business.objects.filter(archived=False) 
+        return render(request, 'map pin.html', {'places':places,'businesses':businesses})
 
 @login_required
 def adpromo(request):

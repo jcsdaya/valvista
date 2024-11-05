@@ -4,6 +4,7 @@ from .models import NormalUser,Rating
 from business.models import Business
 from django import forms
 from .models import Place,Category
+from django.core.exceptions import ValidationError
 
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
@@ -32,7 +33,7 @@ class PlaceForm(forms.ModelForm):
         model = Place
         fields = [
             'name', 'location', 'description', 'categories', 'time', 'timeclose', 'cost', 'photo',
-            'thumbnail', 'map','promos','announcement','status'
+            'thumbnail', 'map','promos','announcement','status','lat','lng'
         ]
         widgets = {
             'name': forms.TextInput(attrs={
@@ -47,6 +48,18 @@ class PlaceForm(forms.ModelForm):
                 'id': 'placelocation',
                 'name': 'placelocation',
                 'placeholder': 'Enter location'
+            }),
+            'lat': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'placelat',
+                'name': 'placelat',
+                'placeholder': 'Enter latitude'
+            }),
+            'lng': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'placelng',
+                'name': 'placelng',
+                'placeholder': 'Enter longitude'
             }),
             'description': forms.Textarea(attrs={
                 'class': 'form-control',
@@ -108,7 +121,37 @@ class PlaceForm(forms.ModelForm):
 class SignupForm(forms.ModelForm):
     class Meta:
         model = NormalUser
-        fields = ['username', 'email', 'password']
+        fields = ['email', 'username', 'password']  # Include other fields as necessary
+        widgets = {
+            'password': forms.PasswordInput(),  # Ensure password is not visible
+        }
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if NormalUser.objects.filter(email=email).exists():  # Adjust for your model
+            raise ValidationError("This email is already registered.")
+        if not (email.endswith('@gmail.com') or email.endswith('@yahoo.com')):
+            raise ValidationError("Email must be a valid Gmail or Yahoo address.")
+        return email
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if NormalUser.objects.filter(username=username).exists():  # Adjust for your model
+            raise ValidationError("This username is already taken.")
+        return username
+
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        if len(password) < 8 or not any(char.isdigit() for char in password):
+            raise ValidationError("Password must be at least 8 characters long and contain at least one number.")
+        return password
+    
+    def save(self, commit=True):
+        NormalUser = super().save(commit=False)
+        NormalUser.set_password(self.cleaned_data['password'])  # Hash the password
+        if commit:
+            NormalUser.save()
+        return NormalUser
 
 
 class RatingForm(forms.ModelForm):

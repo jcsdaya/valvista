@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="..\media\media\vlogos.png" type="image/png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <!-- Leaflet CSS -->
+        <!-- Leaflet Routing Machine CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    
+    <title>Valenzuela City Locator</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'itinerara.css' %}">
+    <link rel="stylesheet" href="{% static 'mapos.css' %}">
+    <link rel="stylesheet" href="{% static 'leaflet.css' %}">
+    
+    <title>Itinerary</title>
+</head>
+<nav>
+    <div class="logo">
+        <a href="{%url 'home' %}"><img class="logo"src ="..\media\media\valvista logo.png" alt="logo"></a>
+    </div>
+    
+
+    <ul class="nav-links">
+       
+        <li><a href="{%url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
+
+        {% if user.is_authenticated%}
+        {% if not user.is_Business and not business.approval%}
+        <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i> Favorites</a></li>
+        {%else%}
+        <li><a ></i></a></li>
+        {%endif%}
+        {%endif%}
+        {% if user.is_authenticated%}
+        {% if not user.is_Business and not business.approval%}
+        <li><a href="{%url 'itinerary' %}"><i class="fa-solid fa-clipboard-list"></i> Itinerary Creation</a></li>
+        {%else%}
+        <li><a ></i></a></li>
+        {%endif%}
+        {%endif%}
+        
+    </ul>
+    <ul class="nav-links ul-user">
+        {% if user.is_authenticated%}
+        {% if not user.is_Business and not business.approval%}
+        <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
+        <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
+        {%else%}
+        <li><a style="margin-left: 400px;" href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+        
+        {%endif%}
+        {%endif%}
+    </ul>
+    
+</nav>
+
+
+<body>
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+    <!-- Leaflet Routing Machine JS -->
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <!-- Leaflet Control Geocoder JS -->
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <script>
+        const INITIAL_LAT_LNG = [14.7006, 120.9541]; // Center of the NCR
+        const VALENZUELA_BOUNDS = [
+            [14.5630, 121.0361],  // Southwest corner
+            [14.8461, 120.8875]   // Northeast corner
+        ];
+        let routingControl;
+        let destinationMarker;
+        let pinMarkers = [];  // Array to hold pin markers
+        let currentLocationMarker; // Marker for the current location
+
+        // Define the icons
+        const pinnedIcon = L.icon({
+            iconUrl: '../media/media/placeholder.png',
+            iconSize: [30, 30], // Adjust as needed
+            iconAnchor: [15, 30], // Adjust as needed
+            popupAnchor: [0, -30] // Adjust as needed
+        });
+
+        const blueIcon = L.icon({
+            iconUrl: '../media/media/map-pin-solid.png', // Default Leaflet blue icon
+            iconSize: [30, 30],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+
+        //fix na to
+       function initializeMap() {
+    // Define bounds for Valenzuela City (adjust the coordinates as necessary)
+    const VALENZUELA_BOUNDS = L.latLngBounds(
+        [14.5630, 121.0361], // Southwest corner
+        [14.8461, 120.8875]  // Northeast corner
+    );
+
+    // Initialize the map within Valenzuela bounds
+    const map = L.map('map', {
+        center: [14.69240, 120.97024], // Center of Valenzuela
+        zoom: 14, // Adjust initial zoom level as necessary
+        maxBounds: VALENZUELA_BOUNDS, // Restrict map to Valenzuela City
+        maxBoundsViscosity: 1.0, // Makes it harder to drag outside bounds
+        worldCopyJump: false, // Prevent world tile wrapping outside bounds
+    });
+
+    // Set max/min zoom levels to control how far users can zoom
+    map.setMaxBounds(VALENZUELA_BOUNDS);
+    map.setMinZoom(14);
+    map.setMaxZoom(18); // Allow zooming in but restrict zooming out too much
+
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 18, // Set maximum zoom to match what is set above
+        minZoom: 14  // Set minimum zoom to match what is set above
+    }).addTo(map);
+
+    return map;
+}
+
+function getQueryParams() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+        startId: params.get('start'),
+        startType: params.get('startType'),
+        destinationId: params.get('destination'),
+        destinationType: params.get('destinationType')
+    };
+}
+
+// Fetch startId and destinationId from URL parameters
+const { startId, destinationId } = getQueryParams();
+
+console.log("Start ID:", startId);
+console.log("Destination ID:", destinationId);
+
+// Modified initializeMarker function to use startId as the initial marker
+function initializeMarker(map, locations) {
+    const queryParams = getQueryParams();
+    const { startId, startType } = queryParams;
+    
+    // Find the start location based on type
+    const startLocation = startType === 'business' 
+        ? locations.find(location => location.businessid === startId)
+        : locations.find(location => location.placeid === startId);
+
+    if (startLocation) {
+        const startLatLng = [startLocation.lat, startLocation.lng];
+        return L.marker(startLatLng, { icon: blueIcon }).addTo(map)
+            .bindPopup(`<b>${startLocation.name}</b>`);
+    } else {
+        console.warn('Start location not found');
+        return null;
+    }
+}
+
+
+        //fix na to
+        function handleGeolocation(position, marker, map) {
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+    const newLatLng = [lat, lng];
+
+    // Animate and update marker position smoothly
+    animateMarker(marker, newLatLng);
+
+    // Smoothly pan the map to the new location
+    map.flyTo(newLatLng, map.getZoom(), {
+        animate: true,
+        duration: 1.5 // Control the animation duration
+    });
+
+    // Update routing control if it exists
+    if (routingControl) {
+        const currentWaypoints = routingControl.getWaypoints();
+        const destination = currentWaypoints[1] ? currentWaypoints[1].latLng : newLatLng;
+
+        routingControl.setWaypoints([
+            newLatLng,
+            destination
+        ]);
+    }
+
+    console.log(`Your coordinates are: Lat: ${lat}, Long: ${lng}`);
+}
+
+function handleError(error) {
+    let errorMessage;
+
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            errorMessage = "User denied the request for Geolocation.";
+            break;
+        case error.POSITION_UNAVAILABLE:
+            errorMessage = "Location information is unavailable.";
+            break;
+        case error.TIMEOUT:
+            errorMessage = "The request to get user location timed out.";
+            break;
+        case error.UNKNOWN_ERROR:
+        default:
+            errorMessage = "An unknown error occurred.";
+            break;
+    }
+
+    console.error("Error occurred while retrieving location: ", errorMessage);
+    alert(errorMessage); // Provide user feedback via alert
+}
+
+
+        //fix na to
+        function setupRoutingControl(map, marker, locations) {
+    const queryParams = getQueryParams();
+    const { destinationId, destinationType } = queryParams;
+    
+    // Find the destination location based on type
+    const destinationLocation = destinationType === 'business'
+        ? locations.find(location => location.businessid === destinationId)
+        : locations.find(location => location.placeid === destinationId);
+
+    if (destinationLocation) {
+        const destinationLatLng = [destinationLocation.lat, destinationLocation.lng];
+
+        destinationMarker = L.marker(destinationLatLng, {
+            icon: pinnedIcon
+        }).addTo(map)
+        .bindPopup(`<b>${destinationLocation.name}</b>`);
+
+        routingControl = L.Routing.control({
+            waypoints: [
+                marker.getLatLng(),
+                destinationLatLng
+            ],
+            routeWhileDragging: true,
+            createMarker: function() { return null; } // Hide default markers
+        }).on('routesfound', function (e) {
+            e.routes[0].coordinates.forEach(function (coord, index) {
+                setTimeout(function () {
+                    animateMarker(marker, [coord.lat, coord.lng], 500);
+                }, 100 * index);
+            });
+        }).addTo(map);
+
+        console.log("Route set from start to destination.");
+    } else {
+        console.warn('Destination location not found');
+    }
+}
+
+
+
+        // fix na to
+        function setupLocationUpdateButton(map, marker) {
+    const updateButton = document.getElementById('update-location');
+    const locationInput = document.getElementById('location-input');
+    const geocoder = L.Control.Geocoder.nominatim();
+
+    updateButton.addEventListener('click', function () {
+        const location = locationInput.value.trim();
+
+        // Validate input
+        if (!location) {
+            alert("Please enter a location.");
+            return;
+        }
+
+        // Show loading spinner or message
+        updateButton.disabled = true;
+        updateButton.innerText = "Searching...";
+
+        geocoder.geocode(location, function (results) {
+            // Hide loading spinner or message
+            updateButton.disabled = false;
+            updateButton.innerText = "Update Location";
+
+            if (results.length > 0) {
+                const latLng = results[0].center;
+
+                // Check if the location is within Valenzuela City
+                const valenzuelaBounds = L.latLngBounds(
+                    L.latLng(14.3648, 120.8564), // SW corner
+                    L.latLng(14.9972, 121.2000)  // NE corner
+                );
+
+                if (valenzuelaBounds.contains(latLng)) {
+                    // Clear existing routing and markers if any
+                    if (routingControl) {
+                        map.removeControl(routingControl);
+                        routingControl = null;
+                    }
+                    if (destinationMarker) {
+                        map.removeLayer(destinationMarker);
+                        destinationMarker = null;
+                    }
+
+                    // Animate and update the marker
+                    animateMarker(marker, latLng);
+                    map.setView(latLng, map.getZoom());
+
+                    // Create a new route from current marker location to the selected location
+                    routingControl = L.Routing.control({
+                        waypoints: [
+                            marker.getLatLng(),
+                            latLng
+                        ],
+                        routeWhileDragging: true,
+                        createMarker: function() { return null; }, // Hide default markers
+                        fitSelectedRoutes: true // Adjust map view to fit the selected route
+                    }).addTo(map);
+
+                    // Add a destination marker
+                    destinationMarker = L.marker(latLng, { icon: pinnedIcon }).addTo(map);
+
+                    // Optionally store the last searched location
+                    localStorage.setItem('lastLocation', JSON.stringify(latLng));
+                } else {
+                    alert("Searched location is out of bounds. Please search within Valenzuela City.");
+                }
+            } else {
+                alert("No results found for the entered location.");
+            }
+        });
+    });
+
+    // Optional: Restore last location from history
+    const lastLocation = localStorage.getItem('lastLocation');
+    if (lastLocation) {
+        const latLng = JSON.parse(lastLocation);
+        animateMarker(marker, latLng);
+        map.setView(latLng, map.getZoom());
+    }
+}
+
+
+
+        //fix na to pa baba
+        function pinLocations(map, marker) {
+   const locations = [
+      {% if not place.archived %}
+      {% for place in places %}
+        {
+          placeid : '{{place.id}}',
+          name: '{{ place.name|escapejs }}',
+          lat: {{ place.lat }},
+          lng: {{ place.lng }},
+          imageUrl: '{{ place.thumbnail.url|default_if_none:"" }}'
+        }{% if not forloop.last or not business.archived %},{% endif %}
+    {% endfor %}
+    {% endif %}
+    
+    {% if not business.archived %}
+    {% for business in businesses %}
+    {
+        businessid: '{{ business.id }}',
+        name: '{{ business.name|escapejs }}',
+        lat: {{ business.lat }},
+        lng: {{ business.lng }},
+        imageUrl: '{{ business.thumbnail.url|default_if_none:"" }}'
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+    {% endif %}
+];
+    console.log(locations);
+    const pinnedLocationsList = document.getElementById('pinned-locations-list');
+    pinnedLocationsList.innerHTML = ''; // Clear existing list
+
+    locations.forEach(location => {
+        const pinMarker = L.marker([location.lat, location.lng], { icon: pinnedIcon })
+            .bindPopup(`
+                <b>${location.name}</b><br>
+                <img src="${location.imageUrl}" alt="${location.name}" style="width:100%; height:auto;">
+            `)
+            .addTo(map);
+
+        pinMarkers.push(pinMarker); // Add to pin markers array
+
+        // Add click event listener to the pin markers
+        pinMarker.on('click', function () {
+            const destinationLatLng = pinMarker.getLatLng();
+
+            if (routingControl) {
+                routingControl.setWaypoints([
+                    marker.getLatLng(),
+                    destinationLatLng
+                ]);
+            } else {
+                routingControl = L.Routing.control({
+                    waypoints: [
+                        marker.getLatLng(),
+                        destinationLatLng
+                    ],
+                    routeWhileDragging: true,
+                    createMarker: function() { return null; } // Hide the default markers
+                }).on('routesfound', function (e) {
+                    e.routes[0].coordinates.forEach(function (coord, index) {
+                        setTimeout(function () {
+                            animateMarker(marker, [coord.lat, coord.lng], 500); // Smooth transition of marker
+                        }, 100 * index);
+                    });
+                }).addTo(map);
+            }
+
+            if (destinationMarker) {
+                map.removeLayer(destinationMarker);
+            }
+
+            destinationMarker = L.marker(destinationLatLng, { 
+                icon: pinnedIcon
+            }).addTo(map);
+        });
+
+        // Add location name to the list
+        const listItem = document.createElement('li');
+        listItem.textContent = location.name;
+        listItem.style.cursor = 'pointer'; // Make it look clickable
+        listItem.addEventListener('click', function() {
+            pinMarker.fire('click'); // Simulate click on the pin marker
+        });
+        pinnedLocationsList.appendChild(listItem);
+    });
+}
+
+function setupPinnedLocationsToggle() {
+    const pinnedLocationsIcon = document.getElementById('pinned-locations-icon');
+    const pinnedLocationsContainer = document.getElementById('pinned-locations');
+
+    pinnedLocationsIcon.addEventListener('click', function() {
+        if (pinnedLocationsContainer.style.display === 'none') {
+            pinnedLocationsContainer.style.display = 'block';
+        } else {
+            pinnedLocationsContainer.style.display = 'none';
+        }
+    });
+}
+
+
+function main() {
+    const map = initializeMap();
+
+    const locations = [
+        {% if not place.archived %}
+        {% for place in places %}
+        {
+            placeid: '{{ place.id }}',
+            name: '{{ place.name|escapejs }}',
+            lat: {{ place.lat }},
+            lng: {{ place.lng }},
+            imageUrl: '{{ place.thumbnail.url|default_if_none:"" }};'
+        }{% if not forloop.last or not business.archived %},{% endif %}
+    {% endfor %}
+    {% endif %}
+    
+    {% if not business.archived %}
+    {% for business in businesses %}
+    {
+        businessid: '{{ business.id }}',
+        name: '{{ business.name|escapejs }}',
+        lat: {{ business.lat }},
+        lng: {{ business.lng }},
+        imageUrl: '{{ business.thumbnail.url|default_if_none:"" }}'
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+    {% endif %}
+];
+    // Initialize marker at the starting location
+    const marker = initializeMarker(map, locations);
+    
+    if (!marker) {
+        console.error("Start marker could not be initialized.");
+        return;
+    }
+
+    // Continuously track user's location
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(
+            (position) => handleGeolocation(position, marker, map),
+            handleError,
+            { enableHighAccuracy: true, maximumAge: 1000, timeout: 5000 }
+        );
+    } else {
+        console.error("Geolocation is not supported by this browser.");
+    }
+
+    // Setup routing control using destination location
+    setupRoutingControl(map, marker, locations);
+    
+    setupPinnedLocationsToggle();
+    document.getElementById('tutorial').style.display = 'block';
+
+    document.getElementById('tutorial-close').addEventListener('click', function () {
+        document.getElementById('tutorial').style.display = 'none';
+    });
+
+    setupGeofence(map);
+    setupMarkerCustomization(marker);
+}
+
+document.addEventListener('DOMContentLoaded', main);
+
+    </script>
+</body>
+
+</html>

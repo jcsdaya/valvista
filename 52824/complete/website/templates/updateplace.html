@@ -75,9 +75,13 @@
                                 <label for="user">Category</label>
                                 </div> 
                                 {{ form.categories }}
-                                
-                              
+                                <br>
+                                <div class="floating-label">
+                                    {{ form.lat }}
+                                    <label for="description">Latitude</label>
+                                </div>
                                     </div>
+
                                     <div class="col">
                                 <div class="floating-label">
                                     {{ form.time }}
@@ -87,6 +91,10 @@
                                     {{ form.timeclose }}
                                     <label for="timeclose">Enter Closing Time</label>
                                 </div>
+                                  <div style="margin-top:29px;" class="floating-label">
+                                        {{ form.lng }}
+                                        <label for="description">Longitude</label>
+                                    </div>
                             </div>
                                 <div class="col">
                                 <div class="floating-label">
@@ -97,7 +105,6 @@
                                     {{ form.status }}
                                     <label for="description">Status</label>
                                 </div>
-                            
                         </div>
                         </div>
                     </div>

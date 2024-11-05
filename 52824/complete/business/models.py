@@ -60,6 +60,8 @@ class Business(models.Model):
         approval = models.BooleanField(default= False,blank=True,null=True)
         map = models.CharField(max_length=2000,blank=True,null=True)
         status = models.CharField(max_length=100, blank=True,null=True,choices= STATUS_CHOICES)
+        lat = models.DecimalField(max_digits=30, decimal_places=20, blank=True, null=True)
+        lng = models.DecimalField(max_digits=30, decimal_places=20, blank=True, null=True)
         
 
         def __str__(self):

@@ -375,27 +375,32 @@ function handleError(error) {
 
         //fix na to pa baba
         function pinLocations(map, marker) {
-    const locations = [
-        { name: 'Dr. Pio Valenzuela Museum', lat: 14.70859, lng: 120.94507, imageUrl: 'https://valenzuela.gov.ph/ckuploads/images/The-City-Museo-ni-Dr.-Pio-Valenzuela.jpg' },
-        { name: 'Valenzuela peoples park', lat: 14.69240, lng: 120.97024, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Valenzuela_People%27s_Park%2C_Mar_2024.jpg/256px-Valenzuela_People%27s_Park%2C_Mar_2024.jpg' },
-        { name: 'San Diego de Alcala Church', lat: 14.70770 , lng: 120.94591, imageUrl: 'https://valenzuela.gov.ph/ckuploads/images/SnDiego_Polo_20110224_9501.jpg' },
-        { name: 'SM City Valenzuela', lat: 14.68549, lng: 120.97730, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/SM_City_Valenzuela%2C_Mar_2024.jpg/1024px-SM_City_Valenzuela%2C_Mar_2024.jpg' },
-        { name: 'Tagalag Fishing Village Valenzuela', lat: 14.71800, lng: 120.94188, imageUrl: 'https://mirror.pia.gov.ph/uploads/2023/03/6ac28a48a588d512c783267872234484-800-1200.jpeg' },
-        { name: 'Valenzuela Family Park', lat: 14.68895, lng: 120.97959, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0c/Valenzuela_Family_Park_Karuhatan_01.jpg' },
-        { name: 'Valenzuela City Astrodome', lat: 14.70937, lng: 120.95759, imageUrl: 'https://valenzuela.gov.ph/ckuploads/files/PBALegends_EAC_20121202_0993.JPG' },
-        { name: 'Polo Mini Park', lat: 14.70785, lng: 120.94620, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Polo_Arkong_Bato_Valenzuela_29.jpg/800px-Polo_Arkong_Bato_Valenzuela_29.jpg?20230525040508' },
-        { name: 'Valenzuela City Sports Park', lat: 14.73282, lng: 120.92847, imageUrl: 'https://journal.com.ph/wp-content/uploads/2021/07/Valenzuela-City-Sports-Park-1-632x335.jpg' },
-        { name: 'Fatima Avenue', lat: 14.68062, lng: 120.97921, imageUrl: 'https://valenzuela.gov.ph/ckuploads/gallery/G_20220624_FatimaAveInaug_01.jpg' },
-        { name: 'Arkong bato Park', lat: 14.69562, lng: 120.95320, imageUrl: 'https://valenzuela.gov.ph/ckuploads/images/ArkongBato2023s.jpg' },
-        { name: 'Museo Valenzuela', lat: 14.68232, lng: 120.98045, imageUrl: 'https://valenzuela.gov.ph/ckuploads/images/MuseoValenzuela_20110205_22971.JPG' },
-        { name: 'National Shrine of Our Lady of Fatima', lat: 14.68256, lng: 120.98068, imageUrl: 'https://valenzuela.gov.ph/ckuploads/images/FatimaShrine_20110224_29680.JPG' },
-        { name: 'WES Arena', lat: 14.74186, lng: 120.98920, imageUrl: 'https://edgedavao.net/wp-content/uploads/2021/10/1012arena.jpg' },
-        { name: 'Tancinco Heritage House', lat: 14.7015, lng: 120.9546, imageUrl: 'https://valenzuela.gov.ph/ckuploads/images/The-City-Museo-ni-Dr.-Pio-Valenzuela.jpg' },
-        { name: 'Egbert Memorial Canon', lat: 14.69364, lng: 120.96879, imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi_iv5A8Uus96JrMiVdUGHwa2CumN6vgXNiT-SyRufTW8TP7Hi1CkYlecDYloU8WQUI2Pg5QOTp1PIEYSiOgAeGeof09FzFWsnEDxv9K3dELo6aDo1kb1TBUM8kvyViz4d_ubXC5PjbdUih/s1600/2018-05-29_10.20.04.jpg' },
-        { name: 'Triumvirate Monument', lat: 14.69176, lng: 120.96955, imageUrl: 'https://pbs.twimg.com/media/E4pGWWRVoAQEHpG.jpg' },
-        { name: 'Valenzuela farm and Fishpond', lat: 14.75317, lng: 120.99470, imageUrl: 'https://valenzuela.gov.ph/ckuploads/gallery/B_ICFP_DVBignay_20170907_Panorama.jpg' },
-    ];
-
+   const locations = [
+      {% if not place.archived %}
+      {% for place in places %}
+        {
+          placeid : '{{place.id}}',
+          name: '{{ place.name|escapejs }}',
+          lat: {{ place.lat }},
+          lng: {{ place.lng }},
+          imageUrl: '{{ place.thumbnail.url|default_if_none:"" }}'
+        }{% if not forloop.last or not business.archived %},{% endif %}
+    {% endfor %}
+    {% endif %}
+    
+    {% if not business.archived %}
+    {% for business in businesses %}
+    {
+        businessid: '{{ business.id }}',
+        name: '{{ business.name|escapejs }}',
+        lat: {{ business.lat }},
+        lng: {{ business.lng }},
+        imageUrl: '{{ business.thumbnail.url|default_if_none:"" }}'
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+    {% endif %}
+];
+    console.log(locations);
     const pinnedLocationsList = document.getElementById('pinned-locations-list');
     pinnedLocationsList.innerHTML = ''; // Clear existing list
 

@@ -67,6 +67,8 @@ class Place(models.Model):
         promos = models.ImageField(upload_to="media",blank=True,null=True)
         announcement = models.TextField(max_length=5000, blank=True,null=True)
         status = models.CharField(max_length=100, blank=True,null=True,choices= STATUS_CHOICES)
+        lat = models.DecimalField(max_digits=30, decimal_places=20, blank=True, null=True)
+        lng = models.DecimalField(max_digits=30, decimal_places=20, blank=True, null=True)
         
         
         def __str__ (self):
