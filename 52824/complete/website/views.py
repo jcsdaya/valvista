@@ -32,7 +32,7 @@ def home(request):
     if request.user.groups.filter(name='NormalUsers').exists():
         now = timezone.now()
         Notification.objects.filter(created_at__lt=now - timedelta(days=7)).delete()
-        notifications = request.user.notifications.all()
+        notifications = request.user.notifications.all().order_by('-created_at')
     else:
         notifications = [] 
 
@@ -211,7 +211,6 @@ def userhome(request):
         context = get_home_context(request.user)
         return render(request, 'userhome.html',context)
 
-@login_required
 def businesshome(request):
     if not request.user.groups.filter(name='Business').exists():
         return redirect('login')
@@ -220,22 +219,45 @@ def businesshome(request):
     try:
         business = Business.objects.get(username=request.user.username)
     except Business.DoesNotExist:
-        # Handle the case where the Business instance does not exist
         return HttpResponseForbidden("No associated business found.")
     
     business = get_object_or_404(Business.objects.annotate(
         avg_rating=Avg('ratings__score'), rating_count=Count('ratings')), username=request.user.username)
-    ratings = business.ratings.all() 
+    ratings = business.ratings.all()
+    
     if request.method == 'POST':
         form = BusPromoForm(request.POST, request.FILES, instance=business)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Announcement/Promo Posted Successfully") 
+            # Save the business promo or announcement without committing immediately
+            business = form.save(commit=False)
+            business.save()
+
+            # Check if 'announcement' or 'promo' fields have content
+            announcement = form.cleaned_data.get('announcement')
+            promo = form.cleaned_data.get('promos')
+            
+            # Only create notifications if at least one of the fields has content
+            if announcement or promo:
+                normal_users_group = Group.objects.get(name='NormalUsers')
+                users = User.objects.filter(groups=normal_users_group)
+                
+                for user in users:
+                    Notification.objects.create(
+                        user=user,
+                        message=f"A new promo for {business.name} has been posted!",
+                        placeid=business.id,
+                        origin="business"
+                    )
+                
+                messages.success(request, "Announcement/Promo Posted Successfully and Notifications Sent.")
+            else:
+                messages.info(request, "Promo updated without sending notifications.")
+            
             return redirect('businesshome')
     else:
         form = BusPromoForm(instance=business)
 
-    context = {'form': form,'business':business,'ratings':ratings}
+    context = {'form': form, 'business': business, 'ratings': ratings}
     return render(request, 'businesshome.html', context)
 
 
@@ -764,7 +786,8 @@ def promo(request, pk):
                     Notification.objects.create(
                         user=user,
                         message=f"A new promo for {place.name} has been posted!",
-                        placeid=place.id
+                        placeid=place.id,
+                        origin = "place"
                     )
                 
                 messages.success(request, "Promo added successfully.")

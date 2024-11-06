@@ -54,7 +54,7 @@
             <ul class="nav-links ul-user">
             {% if user.is_authenticated%}
             <li>
-                <a href="javascript:void(0);" id="notification-icon" style="color: white;">
+                <a href="javascript:void(0);" id="notification-icon">
                     <i class="fa-solid fa-bell"></i>
                     {% if notifications.count > 0 %}
                         <span class="notification-badge">{{ notifications.count }}</span>
@@ -64,6 +64,7 @@
                     <ul class="notification-dropdown">
                         {% for notification in notifications %}
     <li class="notification-card">
+        {% if notification.origin == "place"%}
         <a href="{% url 'viewplace' notification.placeid %}" 
            class="notification-link" 
            data-notification-id="{{ notification.id }}">
@@ -72,7 +73,17 @@
                 <small>{{ notification.created_at }}</small>
             </div>
         </a>
+        {%else%}
+        <a href="{% url 'viewbusiness' notification.placeid %}" 
+           class="notification-link" 
+           data-notification-id="{{ notification.id }}">
+            <div class="notification-card-content">
+                <p><i class="fa-solid fa-bell"></i> {{ notification.message }}</p>
+                <small>{{ notification.created_at }}</small>
+            </div>
+        </a>
     </li>
+    {% endif %}
 {% endfor %}
                     </ul>
                 </div>
