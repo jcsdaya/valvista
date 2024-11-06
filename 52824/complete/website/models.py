@@ -50,6 +50,7 @@ class Place(models.Model):
         ]
         STATUS_CHOICES = [
         ('Open','Open'),
+        ('Soon to Open','Soon to Open'),
         ('Closed','Closed'),
         ('Temporarily Closed','Temporarily Closed'),
         ('For Renovation','For Renovation'),     
@@ -173,7 +174,7 @@ class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
     message = models.CharField(max_length=255)
     placeid = models.CharField(max_length=255,null=True)
-    businessid = models.CharField(max_length=255,null=True)
+    businessid = models.CharField(max_length=255,null=True,blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     origin = models.CharField(max_length=50, default="place")
     

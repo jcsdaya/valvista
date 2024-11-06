@@ -90,6 +90,7 @@
         </div>
             <br>
             <div class="selection-wrapper">
+                <p>Date of Itineary: <span style="font-weight:600 ;" id="current-date"></span></p> 
                 <label for="place-count"><strong>Select number of places:</strong></label>
                 <select id="place-count" onchange="updateItinerary()">
                     <option value="2">2 Places</option>
@@ -1219,6 +1220,16 @@ document.querySelectorAll('.budget-input').forEach(input => {
 function redirectToMap(startId, startType, destinationId, destinationType) {
     window.location.href = `/pinmap/?start=${startId}&startType=${startType}&destination=${destinationId}&destinationType=${destinationType}`;
 }
+
+  // Get the current date
+  const today = new Date();
+
+// Format the date (e.g., "November 5, 2024")
+const options = { year: 'numeric', month: 'long', day: 'numeric' };
+const formattedDate = today.toLocaleDateString('en-US', options);
+
+// Display the date in the HTML element
+document.getElementById('current-date').textContent = formattedDate;
 
     </script>
 </body>

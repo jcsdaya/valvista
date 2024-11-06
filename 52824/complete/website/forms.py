@@ -153,8 +153,8 @@ class RatingForm(forms.ModelForm):
         model = Rating
         fields = ['name', 'score', 'comment']
     
-    name = forms.CharField(max_length=100)
-    score = forms.IntegerField(widget=forms.HiddenInput()) 
+    name = forms.CharField(max_length=100,required=True)
+    score = forms.IntegerField(widget=forms.HiddenInput(),required=True) 
     comment = forms.CharField( widget=forms.Textarea(attrs={'rows': 8}), required=False)
 
 class PromoForm(forms.ModelForm):

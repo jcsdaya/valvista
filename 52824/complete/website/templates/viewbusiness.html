@@ -54,7 +54,7 @@
     <div class="text">
         <div class="main"><img style= "height: 200px;width: 300px;object-fit: cover;" src="{{business.thumbnail.url}}" alt="Pio Valenzuela"></div>
         <h3 class="h3">{{business.name}}</h3>
-        <p><strong>Location: </strong> {{business.location}}</p>
+        <p><strong>Location: </strong> {{business.location}} ({{business.status}})</p>
         <p><strong>Category:</strong>  
             {% for category in business.categories.all %}
                 {{ category.name }}{% if not forloop.last %}, {% endif %}
@@ -80,10 +80,11 @@
     <div class="content-box">
         <div class="content active">
             <h2>Description</h2>
+            <strong>Operating Hours:</strong> {{ business.time }} to {{ business.timeclose }}
+            <br><br>
             <p>
                 {{ business.description }}
-                <br><br>
-                <strong>Operating Hours:</strong> {{ business.time }} to {{ business.timeclose }}
+ 
             </p>
         </div>
 

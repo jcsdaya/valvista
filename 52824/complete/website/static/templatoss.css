@@ -156,6 +156,16 @@ nav ul li.no-hover a:hover {
     background-color: #c80000;
     color:white
 }
+
+.btn-success{
+    background-color: #198754 !important;
+    color:white
+}
+
+.btn-success:hover{
+    background-color: white !important;
+    color:#198754 !important;
+}
 .btn:hover{
     background-color: white;
     color:#c80000

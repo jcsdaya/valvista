@@ -54,7 +54,7 @@
     <div class="text">
         <div class="main"><img style= "height: 200px;width: 300px;object-fit: cover;" src="{{place.thumbnail.url}}" alt="Pio Valenzuela"></div>
         <h3 class="h3">{{place.name}}</h3>
-        <p><strong>Location:</strong> {{place.location}}</p>
+        <p><strong>Location:</strong> {{place.location}} ({{place.status}})</p>
        
         <p><strong>Category:</strong>  
             {% for category in place.categories.all %}
@@ -67,6 +67,7 @@
                 (No ratings yet)
             {% endif %} 
         </p>
+
     </div>
     
     <div class="container">
@@ -81,10 +82,10 @@
         <div class="content-box">
             <div class="content active">
                 <h2>Description</h2>
+                <strong>Operating Hours:</strong> {{ place.time }} to {{ place.timeclose }} 
+                <br><br>
                 <p>
                     {{ place.description }}
-                    <br><br>
-                    <strong>Operating Hours:</strong> {{ place.time }} to {{ place.timeclose }}
                 </p>
             </div>
     

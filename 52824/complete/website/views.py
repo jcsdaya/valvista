@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import SignupForm,PlaceForm,PromoForm,BusPromoForm,RatingForm
 from business.forms import BusinessForm,BusinessUpdForm,BusinessRating
-from .models import Place,NormalUser,Visitor,Favorite,ItineraryState,PlaceMedia,Notification
+from .models import Place,NormalUser,Visitor,Favorite,ItineraryState,PlaceMedia,Notification,Rating
 from business.models import Business,Media
 from django.contrib.auth.models import Group, User
 from django.http import HttpResponseForbidden
@@ -41,21 +41,37 @@ def home(request):
     return render(request, 'home.html', context)
 
 
-def ratingform(request,place_id):
-    place = get_object_or_404(Place, id=place_id) 
+from django.contrib.auth.models import Group
+from .models import Notification
+
+def ratingform(request, place_id):
+    place = get_object_or_404(Place, id=place_id)
     if request.method == 'POST':
         form = RatingForm(request.POST)
         if form.is_valid():
             rating = form.save(commit=False)
             rating.user = request.user  # Set the user who is rating
-            rating.place = place 
+            rating.place = place
             rating.save()
+            
+            # Create notifications for all users in the 'Admin' group
+            admin_group = Group.objects.get(name='Admin')
+            admins = User.objects.filter(groups=admin_group)
+
+            for admin in admins:
+                Notification.objects.create(
+                    user=admin,
+                    message=f"A new rating has been submitted for {place.name} by {rating.name}.",
+                    placeid=place.id
+                )
+
             messages.success(request, 'Your rating has been submitted successfully!')
             return redirect('ratingform', place_id=place_id)
     else:
         form = RatingForm()
-    
-    return render(request, 'rating.html', {'form': form,'place': place})
+
+    return render(request, 'rating.html', {'form': form, 'place': place})
+
 
 def businessrating(request,buss_id):
     business = get_object_or_404(Business, id=buss_id) 
@@ -172,10 +188,14 @@ def register(request):
 
     return render(request, 'register.html', {'form': form})
    
+from django.contrib.auth.models import Group, User
+from .models import Notification  # Ensure you have imported your Notification model
+
 @login_required
 def addplace(request):
     if not request.user.groups.filter(name='Admin').exists():
         return redirect('login')
+    
     form = PlaceForm()
     if request.POST:
         form = PlaceForm(request.POST, request.FILES)
@@ -184,15 +204,33 @@ def addplace(request):
             place.save()
             print("Form cleaned data:", form.cleaned_data)
             form.instance.categories.set(form.cleaned_data['categories'])
-            photo= request.FILES.getlist('photo')
-            for photo in photo:
+
+            # Handle photo uploads
+            photos = request.FILES.getlist('photo')
+            for photo in photos:
                 photo_instance = PlaceMedia(file=photo)
                 photo_instance.save()
                 place.photo.add(photo_instance)
-                place.save()
-                messages.success(request, "Place Added successfully.")
-        return redirect('placelist')
-    return render(request, 'addplace.html',{'form':form})
+            place.save()
+
+            # Create notifications for each normal user
+            try:
+                normal_users_group = Group.objects.get(name='NormalUsers')
+                normal_users = User.objects.filter(groups=normal_users_group)
+                for user in normal_users:
+                    Notification.objects.create(
+                        user=user,
+                        message=f"A new place '{place.name}' has been added!",
+                        placeid=place.id,
+                        origin="place"  # Set the origin as "place" for identification
+                    )
+                messages.success(request, "Place added successfully and users notified.")
+            except Group.DoesNotExist:
+                messages.warning(request, "NormalUsers group does not exist. No notifications sent.")
+
+            return redirect('placelist')
+
+    return render(request, 'addplace.html', {'form': form})
 
 @login_required
 def adminhome(request):
@@ -244,7 +282,7 @@ def businesshome(request):
                 for user in users:
                     Notification.objects.create(
                         user=user,
-                        message=f"A new promo for {business.name} has been posted!",
+                        message=f"A new announcement for {business.name} has been posted!",
                         placeid=business.id,
                         origin="business"
                     )
@@ -310,6 +348,13 @@ def dashboard(request):
     if not request.user.groups.filter(name='Admin').exists():
         return redirect('login')
     else:
+
+        if request.user.groups.filter(name='Admin').exists():
+            now = timezone.now()
+            Notification.objects.filter(created_at__lt=now - timedelta(days=7)).delete()
+            notifications = request.user.notifications.all().order_by('-created_at')
+        else:
+            notifications = [] 
         previous_visits = Visitor.objects.filter(ip_address=request.META.get('REMOTE_ADDR', None), user_agent=request.META.get('HTTP_USER_AGENT', None))
         if previous_visits.exists():
                 # User is accessing from the same device and IP, don't create a new Visitor object
@@ -334,6 +379,7 @@ def dashboard(request):
             'total_visitors': total_visitors,
             'all_businesses': all_businesses,
             'all_users': all_users,
+            'notifications':notifications,
         }
         return render(request, 'dashboard.html', context)
 
@@ -345,6 +391,7 @@ def updatebusiness(request, pk):
         return redirect('login')
     else:
         business = get_object_or_404(Business, pk=pk)
+        original_status = business.status 
 
         if request.POST:  # Use request.method == 'POST' for clarity
             form = BusinessUpdForm(request.POST, request.FILES, instance=business)
@@ -352,6 +399,19 @@ def updatebusiness(request, pk):
                 business = form.save(commit=False)
                 form.instance.categories.set(form.cleaned_data['categories'])
                 business.save()
+
+                new_status = form.cleaned_data.get('status')
+                if new_status in ["Closed", "Temporarily Closed", "For Renovation"] and new_status != original_status:
+                    normal_users_group = Group.objects.get(name='NormalUsers')
+                    users = User.objects.filter(groups=normal_users_group)
+                
+                    for user in users:
+                        Notification.objects.create(
+                            user=user,
+                            message=f"{business.name} is now {new_status}. Please check for updates!",
+                            placeid=business.id,
+                            origin = "business"
+                        )
 
                 if 'photos' in request.FILES:
                     if business.photos.exists():
@@ -427,6 +487,7 @@ def updatePlace(request,pk):
          return redirect('login')
     else:
         place = get_object_or_404(Place, pk=pk)
+        original_status = place.status 
         
 
         if request.POST:
@@ -435,6 +496,19 @@ def updatePlace(request,pk):
                 place = form.save(commit=False)
                 form.instance.categories.set(form.cleaned_data['categories'])
                 place.save()
+                
+                new_status = form.cleaned_data.get('status')
+                if new_status in ["Closed", "Temporarily Closed", "For Renovation"] and new_status != original_status:
+                    normal_users_group = Group.objects.get(name='NormalUsers')
+                    users = User.objects.filter(groups=normal_users_group)
+                
+                    for user in users:
+                        Notification.objects.create(
+                            user=user,
+                            message=f"{place.name} is now {new_status}. Please check for updates!",
+                            placeid=place.id,
+                            origin = "place"
+                        )
 
                 if 'photo' in request.FILES:
                 # Remove old photos if needed
@@ -729,7 +803,7 @@ def map(request):
         return redirect('login')
     else:
         places = Place.objects.filter(archived=False) 
-        businesses = Business.objects.filter(archived=False) 
+        businesses = Business.objects.filter(archived=False,approval =True) 
         return render(request, 'map.html', {'places':places,'businesses':businesses})
 
 
@@ -739,7 +813,7 @@ def pinmap(request):
         return redirect('login')
     else:
         places = Place.objects.filter(archived=False) 
-        businesses = Business.objects.filter(archived=False) 
+        businesses = Business.objects.filter(archived=False,approval =True) 
         return render(request, 'map pin.html', {'places':places,'businesses':businesses})
 
 @login_required
@@ -785,7 +859,7 @@ def promo(request, pk):
                 for user in users:
                     Notification.objects.create(
                         user=user,
-                        message=f"A new promo for {place.name} has been posted!",
+                        message=f"A new Announcement for {place.name} has been posted!",
                         placeid=place.id,
                         origin = "place"
                     )

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="..\media\media\vlogos.png" type="image/png">
+    <link rel="shortcut icon" href="\media\media\vlogos.png" type="image/png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -13,14 +13,14 @@
     {% load static %}
     {% load custom_filters %}
     <title>Business Details | ValVista</title>
-    <link rel="stylesheet" href="{% static 'RegUpdForm.css' %}">
+    <link rel="stylesheet" href="{% static 'bussdeets.css' %}">
 </head>
     {% if user.is_authenticated %}
     {% if user|has_group:'Admin' %}
     <header>
         <nav>
             <div class="logo">
-                <a href="{%url 'dashboard' %}"><img class="logo"src ="..\media\media\valvista logo.png" alt="logo"></a>
+                <a href="{%url 'dashboard' %}"><img class="logo"src ="\media\media\valvista logo.png" alt="logo"></a>
             </div>
     
             <ul class="nav-links">
@@ -33,11 +33,15 @@
                 <li><a href="{%url 'businessadmin' %}"><i class="fa-solid fa-list"></i></i> Business List</a></li>
                 <li><a href="{%url 'approvallist' %}"><i class="fa-solid fa-check-to-slot"></i> Approval List</a></li>
                 <li><a href="{%url 'archives' %}"><i class="fa-solid fa-box-archive"></i> Archive</a></li>
+                
+            </ul>
+            <ul class="nav-links ul-user">
                 {% if user.is_authenticated%}
+                <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
                 <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
-                <li><a><i></i>{{request.user}}</a></li>
                 {%else%}
                 <li><a href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+                
                 {%endif%}
                 
             </ul>
@@ -89,7 +93,38 @@
                     <label for="user">Category</label>
                     </div> 
                     {{ form.categories }}
+                    <br>
+                    <div class="floating-label">
+                        {{ form.lat }}
+                        <label for="description">Latitude</label>
+                    </div>
+                        </div>
+    
+                        <div class="col">
+                    <div class="floating-label">
+                        {{ form.time }}
+                        <label for="timeopen">Enter Opening Time</label>
+                    </div>
+                    <div class="floating-label">
+                        {{ form.timeclose }}
+                        <label for="timeclose">Enter Closing Time</label>
+                    </div>
+                      <div style="margin-top:29px;" class="floating-label">
+                            {{ form.lng }}
+                            <label for="description">Longitude</label>
+                        </div>
+                </div>
+                    <div class="col">
+                    <div class="floating-label">
+                        {{ form.cost }}
+                        <label for="description">Cost</label>
+                    </div>
+                    <div class="floating-label">
+                        {{ form.status }}
+                        <label for="description">Status</label>
+                    </div>
                     
+                
                   
                         </div>
                         <div class="col">
@@ -118,20 +153,6 @@
     
                         {{ form.map }}
                         <label for="description">Map</label>
-                    </div>
-                    <div class="custom-file">
-                        <label class="custom-file-label" for="thumbnail">Choose Thumbnail Photo<br> {{ form.thumbnail }}</label><br><br>
-                        <div class="form-group">
-                            <label for="photo">Current Photos:</label>
-                            {% for photos in business.photos.all %}
-                                <img src="{{ photos.file.url }}" alt="Photo" style="width: 100px; height: 100px;">
-                            {% empty %}
-                                <p>No photos available.</p>
-                            {% endfor %}
-                        </div>
-                        <div class="form-group">
-
-                        </div>
                     </div>
                             <div class="subbut" style="text-align: center;">
                                 <a  href="{% url 'approvallist'%}"class="btn btn-danger">Back</a>

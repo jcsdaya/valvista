@@ -33,12 +33,57 @@
         </ul>
         <ul class="nav-links ul-user">
             {% if user.is_authenticated%}
+            <li>
+                <a href="javascript:void(0);" id="notification-icon">
+                    <i class="fa-solid fa-bell"></i>
+                    {% if notifications.count > 0 %}
+                        <span class="notification-badge">{{ notifications.count }}</span>
+                    {% endif %}
+                </a>
+                <div id="notification-container" class="notification-container" style="display: none;">
+                    <ul class="notification-dropdown">
+                        {% for notification in notifications %}
+    <li class="notification-card">
+        {% if notification.origin == "place" %}
+            <a href="{% url 'updatePlace' notification.placeid %}" 
+               class="notification-link" 
+               data-notification-id="{{ notification.id }}">
+                <div class="notification-card-content">
+                    <p><i class="fa-solid fa-bell"></i> {{ notification.message }}</p>
+                    <small>{{ notification.created_at }}</small>
+                </div>
+            </a>
+        {% elif notification.origin == "business" %}
+            <a href="{% url 'updatebusiness' notification.placeid %}" 
+               class="notification-link" 
+               data-notification-id="{{ notification.id }}">
+                <div class="notification-card-content">
+                    <p><i class="fa-solid fa-bell"></i> {{ notification.message }}</p>
+                    <small>{{ notification.created_at }}</small>
+                </div>
+            </a>
+        {% elif notification.origin == "register_business" %}
+            <a href="{% url 'register_business' %}" 
+               class="notification-link" 
+               data-notification-id="{{ notification.id }}">
+                <div class="notification-card-content">
+                    <p><i class="fa-solid fa-bell"></i> {{ notification.message }}</p>
+                    <small>{{ notification.created_at }}</small>
+                </div>
+            </a>
+        {% endif %}
+    </li>
+{% endfor %}
+{% endif %}
+                    </ul>
+                </div>
+            </li>
+            
             <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
             <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
-            {%else%}
-            <li><a style="margin-left: 400px;" href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+
+
             
-            {%endif%}
             
         </ul>
     </nav>
@@ -175,6 +220,33 @@
         }, 5000); // Adjust duration as needed
     }
     window.onload = showNotification;
+
+    document.getElementById("notification-icon").addEventListener("click", function() {
+        var notificationContainer = document.getElementById("notification-container");
+        // Toggle visibility with fade-in and fade-out effect
+        if (notificationContainer.style.display === "none" || notificationContainer.style.display === "") {
+            notificationContainer.style.display = "block";
+            setTimeout(function() {
+                notificationContainer.style.opacity = "1";
+                notificationContainer.style.transform = "translateY(0)";
+            }, 10); // Slight delay for smooth transition
+        } else {
+            notificationContainer.style.opacity = "0";
+            notificationContainer.style.transform = "translateY(-10px)";
+            setTimeout(function() {
+                notificationContainer.style.display = "none";
+            }, 300); // Delay before hiding to complete fade-out
+        }
+    });
+
+    document.querySelectorAll('.notification-link').forEach(function(link) {
+    link.addEventListener('click', function(event) {
+        // Prevent the default anchor behavior (immediate redirection)
+        event.preventDefault();
+        // Redirect to the place's page
+        window.location.href = this.href;
+    });
+});
 </script>
 
 </body>

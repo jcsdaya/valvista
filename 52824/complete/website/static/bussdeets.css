@@ -28,13 +28,14 @@ nav {
 }
 
 .logo {
-  margin-top: 1px;
-  height: 70px;
-  width: 160px;
-  filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
-}
-
+    margin-top: 1px;
+    height: 70px;
+    width: 160px;
+    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
+  }
   
+  
+
 nav ul {
     display: flex;
     margin-top: 20px;
@@ -44,9 +45,8 @@ nav ul {
 }
 
 .ul-user{
-    margin-top: 25px !important;
-  margin-left: 400px;
-}
+    margin-left: 400px;
+  }
 
 nav ul li {
     list-style-type: none;
@@ -113,13 +113,18 @@ nav ul li.no-hover a:hover {
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
 .header-text {
     flex: 1;
 }
-
+.right-box {
+    display: flex;
+    align-items: center; /* Vertically center the items */
+}
 
 .header-text img,
 .header-text h1 {
@@ -151,6 +156,7 @@ nav ul li.no-hover a:hover {
 }
 
 .header-text h2 {
+    color: #343a40;
     font-size: 28px;
     margin-bottom: 10px;
 }
@@ -219,6 +225,23 @@ nav ul li.no-hover a:hover {
   
   
 }
+
+.signup{
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #c80000;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .signup:hover {
+    background-color: #ffffff;
+    color: #c80000;
+  }
+  
 
 
 
@@ -290,182 +313,3 @@ nav ul li.no-hover a:hover {
 #placeusername, #placepass,#placeemail,#placeid{
     width: 200%;
 }
-
-.btn{
-    background-color: #c80000;
-    color:white
-}
-.btn:hover{
-    background-color: white;
-    color:#c80000;
-    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
-}
-
-input{
-    margin-right: 5px;
-    background-color: #c80000;
-    color:white;
-    border: white;
-    width:80px;
-    border-radius: 10px;
-}
-
-input:hover{
-    background-color: white;
-    color:#c80000;
-    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
-}
-
-#place-select {
-    width: 40vh; /* Match the previous width */
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 1.2rem;
-    margin-top: 1rem;
-}
-
-.alert {
-    height: 70px;
-    position: fixed;
-    top: 120px;
-    right: 20px;
-    background-color: #c80000;
-    color: white;
-    padding: 15px;
-    border-radius: 7px;
-    z-index: 2000; /* Make sure it's on top */
-    transition: opacity 0.5s ease;
-    opacity: 0; /* Start as invisible */
-    animation: slideIn 0.4s ease forwards; /* Apply the slide-in animation */
-}
-
-@keyframes slideIn {
-  0% {
-      transform: translateX(100%); /* Start off-screen to the right */
-      opacity: 0; /* Start as invisible */
-  }
-  100% {
-      transform: translateX(0); /* End at its original position */
-      opacity: 1; /* End fully visible */
-  }
-}
-
-h1{
-    color: black;
-    font-size: 70px;
-}
-
-h1::after{
-        content: '';
-        display: block;
-        height: 4px; 
-        background: linear-gradient(90deg, #c80000, #c80000); 
-        border-radius: 5px;
-        margin: 5px auto 0; /* Reduced gap above the line */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        transition: background 0.3s ease; /* Smooth transition for the background */
-     
-}
-
-h2::after{
-    content: '';
-    display: block;
-    height: 4px; 
-    background: linear-gradient(90deg, #c80000, #c80000); 
-    border-radius: 5px;
-    margin: 5px auto 0; /* Reduced gap above the line */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    transition: background 0.3s ease; /* Smooth transition for the background */
- 
-}
-
-.notification-container {
-    position: fixed;
-    top: 100px;
-    right:0px;
-    background-color: #dddddd;
-    color: black;
-    padding: 15px;
-    border-radius: 5px;
-    max-height: 200px;
-    overflow-y: auto;
-    width: 300px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    z-index: 5000;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  
-  .notification-dropdown {
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    margin: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  
-  .notification-card {
-    background-color: white;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, background-color 0.2s ease;
-  }
-  
-  .notification-card:hover {
-    transform: scale(1.05);
-  }
-  
-  .notification-card-content {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .notification-card-content p {
-    margin: 0;
-    color: black;
-    padding-bottom: 8px;
-  }
-  
-  .notification-card-content small {
-    color: #c80000;
-  }
-  
-  #notification-icon {
-    position: relative;
-    display: inline-block;
-    width: 40px;  /* Adjust size as needed */
-    height: 40px;
-    border-radius: 50%;
-    background-color: white;
-    text-align: center;
-    line-height: 40px;  /* Center the icon vertically */
-  }
-  
-  #notification-icon i {
-    color: #c80000;
-    font-size: 20px; /* Adjust size as needed */
-  }
-  
-  .notification-badge {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: white;
-    color: #c80000;
-    border-radius: 50%;
-    width: 20px;  /* Adjust size as needed */
-    height: 20px;
-    font-size: 12px;  /* Adjust font size as needed */
-    text-align: center;
-    line-height: 20px;  /* Center the number vertically */
-    font-weight: bold;
-    border: 2px solid #c80000; /* Red border around the white badge */
-  }
-
-
-  

@@ -37,6 +37,7 @@ class Business(models.Model):
         ]
         STATUS_CHOICES = [
         ('Open','Open'),
+        ('Soon to Open','Soon to Open'),
         ('Closed','Closed'),
         ('Temporarily Closed','Temporarily Closed'),
         ('For Renovation','For Renovation'),     
@@ -57,7 +58,7 @@ class Business(models.Model):
         promo = models.ImageField(upload_to="media", blank=True,null=True)
         announcement = models.CharField(max_length=5000, blank=True,null=True)
         archived = models.BooleanField(default=False)
-        approval = models.BooleanField(default= False,blank=True,null=True)
+        approval = models.BooleanField(default= False,null=True)
         map = models.CharField(max_length=2000,blank=True,null=True)
         status = models.CharField(max_length=100, blank=True,null=True,choices= STATUS_CHOICES)
         lat = models.DecimalField(max_digits=30, decimal_places=20, blank=True, null=True)

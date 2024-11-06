@@ -1,5 +1,6 @@
 from django import forms
 from .models import Business, Category, Media,Rating
+from django.core.exceptions import ValidationError
 
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
@@ -124,6 +125,25 @@ class BusinessForm(forms.ModelForm):
                 'placeholder': 'Enter status'
             }),
        }
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if Business.objects.filter(email=email).exists():  # Adjust for your model
+            raise ValidationError("This email is already registered.")
+        if not (email.endswith('@gmail.com') or email.endswith('@yahoo.com')):
+            raise ValidationError("Email must be a valid Gmail or Yahoo address.")
+        return email
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if Business.objects.filter(username=username).exists():  # Adjust for your model
+            raise ValidationError("This username is already taken.")
+        return username
+
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        if len(password) < 8 or not any(char.isdigit() for char in password):
+            raise ValidationError("Password must be at least 8 characters long and contain at least one number.")
+        return password
         
         
 class BusinessUpdForm(forms.ModelForm):

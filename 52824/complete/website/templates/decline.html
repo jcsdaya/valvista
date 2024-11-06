@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="..\media\media\vlogos.png" type="image/png">
+    <link rel="shortcut icon" href="\media\media\vlogos.png" type="image/png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -12,7 +12,7 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {% load static %}
     <title>Decline Business | ValVista</title>
-    <link rel="stylesheet" href="{% static 'RegUpdForm.css' %}">
+    <link rel="stylesheet" href="{% static 'delete.css' %}">
 </head>
 <body>
     <header>
@@ -32,27 +32,32 @@
                 <li><a href="{%url 'businessadmin' %}"><i class="fa-solid fa-list"></i></i> Business List</a></li>
                 <li><a href="{%url 'approvallist' %}"><i class="fa-solid fa-check-to-slot"></i> Approval List</a></li>
                 <li><a href="{%url 'archives' %}"><i class="fa-solid fa-box-archive"></i> Archive</a></li>
+                
+            </ul>
+            <ul class="nav-links ul-user">
                 {% if user.is_authenticated%}
-                <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
                 <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
+                <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
                 {%else%}
-                <li><a href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+                <li><a style="margin-left: 400px;" href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+                
                 {%endif%}
                 
             </ul>
         </nav>
       </header>
-            <br><br><br><br><br><br><br>
+            <br><br><br><br>
             <div class="right-box">
                 <div class="header-text">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Valenzuela_Seal.svg/768px-Valenzuela_Seal.svg.png" alt="Header Image">
-            <h1> ValVista Decline Business</h1>
-            <p> Are you sure you want to Decline {{business}}</p>
-    
+            <h1> ValVista Reject Business </h1>
+                    </div>
+                    <p> Are you sure you want to Decline {{business}}</p>
             <form method="post" action="{% url 'declinebusiness' business.id %}">
+                
                 {% csrf_token %}
-                    <input type="submit" name="confirm">
-                    <a style="color: red;" href ="{%url 'approvallist'%}">Cancel</a>
+                    <button type="submit">Yes</button>
+                <a style="font-size: 20px;" href="{%url 'approvallist'%}"> Cancel</a>
                     
             </form>
             </div>
