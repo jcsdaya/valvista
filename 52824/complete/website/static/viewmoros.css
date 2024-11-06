@@ -183,7 +183,9 @@ body{
 .container__right {
 	display: grid;
 	gap: 2rem;
-	overflow-y: auto; /* Enable vertical scrolling */
+	overflow-y:auto; /* Enable vertical scrolling */
+    height: 250px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
   
   .card {

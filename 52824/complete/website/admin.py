@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Admin
 from .models import Place
-from .models import NormalUser,Itinerary, Rating
+from .models import NormalUser,Itinerary, Rating,Notification
 
 
 
@@ -10,6 +10,7 @@ admin.site.register(NormalUser)
 admin.site.register(Place)
 admin.site.register(Itinerary)
 admin.site.register(Rating)
+admin.site.register(Notification)
 
 
 

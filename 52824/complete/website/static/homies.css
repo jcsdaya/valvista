@@ -1071,3 +1071,58 @@ footer {
 .item.active img {
   transform: scale(1.1); /* Scale image slightly when active for zoom effect */
 }
+
+.notification-container {
+  position: fixed;
+  top: 100px;
+  right:0px;
+  background-color: #dddddd;
+  color: black;
+  padding: 15px;
+  border-radius: 5px;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 400px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 5000;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.notification-dropdown {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.notification-card {
+  background-color: white;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.notification-card:hover {
+  transform: scale(1.05);
+}
+
+.notification-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-card-content p {
+  margin: 0;
+  color: black;
+  padding-bottom: 8px;
+}
+
+.notification-card-content small {
+  color: #c80000;
+}

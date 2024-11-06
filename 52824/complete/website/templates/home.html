@@ -53,6 +53,30 @@
         {%endif%}
             <ul class="nav-links ul-user">
             {% if user.is_authenticated%}
+            <li>
+                <a href="javascript:void(0);" id="notification-icon" style="color: white;">
+                    <i class="fa-solid fa-bell"></i>
+                    {% if notifications.count > 0 %}
+                        <span class="notification-badge">{{ notifications.count }}</span>
+                    {% endif %}
+                </a>
+                <div id="notification-container" class="notification-container" style="display: none;">
+                    <ul class="notification-dropdown">
+                        {% for notification in notifications %}
+    <li class="notification-card">
+        <a href="{% url 'viewplace' notification.placeid %}" 
+           class="notification-link" 
+           data-notification-id="{{ notification.id }}">
+            <div class="notification-card-content">
+                <p><i class="fa-solid fa-bell"></i> {{ notification.message }}</p>
+                <small>{{ notification.created_at }}</small>
+            </div>
+        </a>
+    </li>
+{% endfor %}
+                    </ul>
+                </div>
+            </li>
             <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
             <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
             {%else%}
@@ -703,6 +727,33 @@ setInterval(showNextItem, 5000);
     // Check on scroll and on page load
     $(window).on('scroll', checkAnimation);
     $(window).on('load', checkAnimation);
+
+    document.getElementById("notification-icon").addEventListener("click", function() {
+        var notificationContainer = document.getElementById("notification-container");
+        // Toggle visibility with fade-in and fade-out effect
+        if (notificationContainer.style.display === "none" || notificationContainer.style.display === "") {
+            notificationContainer.style.display = "block";
+            setTimeout(function() {
+                notificationContainer.style.opacity = "1";
+                notificationContainer.style.transform = "translateY(0)";
+            }, 10); // Slight delay for smooth transition
+        } else {
+            notificationContainer.style.opacity = "0";
+            notificationContainer.style.transform = "translateY(-10px)";
+            setTimeout(function() {
+                notificationContainer.style.display = "none";
+            }, 300); // Delay before hiding to complete fade-out
+        }
+    });
+
+    document.querySelectorAll('.notification-link').forEach(function(link) {
+    link.addEventListener('click', function(event) {
+        // Prevent the default anchor behavior (immediate redirection)
+        event.preventDefault();
+        // Redirect to the place's page
+        window.location.href = this.href;
+    });
+});
     
   </script>
 

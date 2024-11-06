@@ -7,6 +7,7 @@ from business.models import Business
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 import os
+from django.utils import timezone
 
 class Admin(models.Model):
         username = models.CharField (max_length=50,unique=True)
@@ -95,7 +96,7 @@ class Category(models.Model):
 
         
 class NormalUser(models.Model):
-       username = models.CharField (max_length=50,unique=True)
+       username = models.CharField (max_length=50,unique=True,null=True)
        favorites = models.TextField(blank=True,null=True)
        email = models.EmailField (max_length=50, unique=True)
        password = models.CharField (max_length=50)
@@ -166,6 +167,16 @@ class FavoriteItinerary(models.Model):
 
     def __str__(self):
         return f"Favorite Itinerary for {self.user.username}"
+    
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    message = models.CharField(max_length=255)
+    placeid = models.CharField(max_length=255,null=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    
+    def __str__(self):
+        return f"Notification for {self.user} - {self.message}"
 
 
 

@@ -4,9 +4,9 @@ from django.shortcuts import redirect, render,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import SignupForm,PlaceForm,PromoForm,BusPromoForm,RatingForm
 from business.forms import BusinessForm,BusinessUpdForm,BusinessRating
-from .models import Place,NormalUser,Visitor,Favorite,ItineraryState,PlaceMedia
+from .models import Place,NormalUser,Visitor,Favorite,ItineraryState,PlaceMedia,Notification
 from business.models import Business,Media
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from django.http import HttpResponseForbidden
 from .utils import get_home_context
 from django.urls import reverse
@@ -19,6 +19,8 @@ from django.contrib.auth.views import PasswordResetView
 from django.utils.translation import gettext_lazy as _
 from .forms import NormalUserEditForm, BusinessEditForm
 from django.views.decorators.http import require_POST
+from datetime import timedelta
+from django.utils import timezone
 
 
 
@@ -27,9 +29,16 @@ def home(request):
     excluded_groups = ['Business', 'Admin']
     if any(request.user.groups.filter(name=group).exists() for group in excluded_groups):
         return redirect('login')
+    if request.user.groups.filter(name='NormalUsers').exists():
+        now = timezone.now()
+        Notification.objects.filter(created_at__lt=now - timedelta(days=7)).delete()
+        notifications = request.user.notifications.all()
     else:
-        context = get_home_context(request.user)
-        return render(request, 'home.html', context)
+        notifications = [] 
+
+    context = get_home_context(request.user) 
+    context['notifications'] = notifications
+    return render(request, 'home.html', context)
 
 
 def ratingform(request,place_id):
@@ -727,28 +736,48 @@ def success(request):
 
 
 @login_required
-def promo(request,pk):
+def promo(request, pk):
     if not request.user.groups.filter(name='Admin').exists():
         return redirect('login')
-    else:
-        all_admin = Place.objects.all()
-        place = get_object_or_404(Place.objects.annotate(
-        avg_rating=Avg('ratings__score'), rating_count=Count('ratings')), pk=pk)
-        ratings = place.ratings.all() 
-        
-        if request.POST:
-            form = PromoForm(request.POST,request.FILES,instance=place)
-            if form.is_valid():
-                place = form.save(commit=False)
-                place.save()
-                messages.success(request, "Promo added successfully.")
-                return redirect('adpromo')
-        else:
-            form = PromoForm(instance=place)
-
-        context = {'form': form, 'place': place,'all_admin': all_admin,'ratings':ratings} 
-        return render(request, 'promo.html', context)
     
+    all_admin = Place.objects.all()
+    place = get_object_or_404(Place.objects.annotate(
+        avg_rating=Avg('ratings__score'), rating_count=Count('ratings')), pk=pk)
+    
+    if request.method == "POST":
+        form = PromoForm(request.POST, request.FILES, instance=place)
+        if form.is_valid():
+            # Save the place regardless of whether promo or announcement is blank
+            place = form.save(commit=False)
+            place.save()
+            
+            # Check if 'announcement' or 'promo' fields have content
+            announcement = form.cleaned_data.get('announcement')
+            promo = form.cleaned_data.get('promos')
+            
+            # Only create notifications if at least one of the fields has content
+            if announcement or promo:
+                normal_users_group = Group.objects.get(name='NormalUsers')
+                users = User.objects.filter(groups=normal_users_group)
+                
+                for user in users:
+                    Notification.objects.create(
+                        user=user,
+                        message=f"A new promo for {place.name} has been posted!",
+                        placeid=place.id
+                    )
+                
+                messages.success(request, "Promo added successfully.")
+            else:
+                messages.info(request, "Promo updated without sending notifications.")
+                
+            return redirect('adpromo')
+    else:
+        form = PromoForm(instance=place)
+    
+    context = {'form': form, 'place': place, 'all_admin': all_admin}
+    return render(request, 'promo.html', context)
+
 
 class CustomPasswordResetView(PasswordResetView):
     email_template_name = 'pass_reset_email.html'
