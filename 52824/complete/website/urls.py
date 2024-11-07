@@ -8,6 +8,7 @@ from django.contrib.auth import views as auth_views
 from .views import CustomPasswordResetView
 
 urlpatterns = [
+  path('landing/',views.landing,name="landing"),
   path('home/',views.home,name="home"),
   path('login/',views.loginuser,name="login"),
   path('logout/', logout_view, name='logout'),

@@ -31,7 +31,6 @@ def logout_business(request):
      return redirect('home')
      
 
-@login_required
 def register_business(request):
     form = BusinessForm()
     if request.POST:

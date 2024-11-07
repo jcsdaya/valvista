@@ -144,7 +144,7 @@
         <th><p class="time1-input"><input class="inputtime" type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
         <th>
             <div class="input-container">
-                <span class="currency-symbol">₱</span>
+                <span class="currency-symbol hidden">₱</span>
                 <input type="number" class="budget-input" min="0" step="0.50">
             </div>
         </th>
@@ -169,7 +169,7 @@
                     <th><p class="time1-input"> <input class="inputtime" type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
                     <th>
                         <div class="input-container">
-                            <span class="currency-symbol">₱</span>
+                            <span class="currency-symbol hidden">₱</span>
                             <input type="number" class="budget-input" min="0" step="0.50">
                         </div>
                     </th>
@@ -195,7 +195,7 @@
                     <th><p class="time1-input"> <input class="inputtime" type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
                     <th>
                         <div class="input-container">
-                            <span class="currency-symbol">₱</span>
+                            <span class="currency-symbol hidden">₱</span>
                             <input type="number" class="budget-input" min="0" step="0.50">
                         </div>
                     </th>
@@ -221,7 +221,7 @@
                     <th><p class="time1-input"> <input class="inputtime" type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
                     <th>
                         <div class="input-container">
-                            <span class="currency-symbol">₱</span>
+                            <span class="currency-symbol hidden">₱</span>
                             <input type="number" class="budget-input"  min="0" step="0.50">
                         </div>
                     </th>
@@ -247,7 +247,7 @@
                     <th><p class="time1-input"> <input class="inputtime" type="text" id="time1Input{{ first_place.id }}" placeholder=></p></th>
                     <th style="width: 100px;">
                         <div class="input-container">
-                            <span class="currency-symbol">₱</span>
+                            <span class="currency-symbol hidden">₱</span>
                             <input type="number" class="budget-input"  min="0" step="0.50">
                         </div>
                     </th>
@@ -1230,6 +1230,23 @@ const formattedDate = today.toLocaleDateString('en-US', options);
 
 // Display the date in the HTML element
 document.getElementById('current-date').textContent = formattedDate;
+
+
+document.addEventListener('DOMContentLoaded', function() {
+                const budgetInput = document.querySelector('.budget-input');
+                const currencySymbol = document.querySelector('.currency-symbol');
+
+                budgetInput.addEventListener('input', function() {
+                    if (budgetInput.value.trim() !== '') {
+                        currencySymbol.classList.remove('hidden');
+                        currencySymbol.classList.add('visible');
+                    } else {
+                        currencySymbol.classList.remove('visible');
+                        currencySymbol.classList.add('hidden');
+                    }
+                });
+            });
+
 
     </script>
 </body>

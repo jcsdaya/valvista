@@ -24,6 +24,8 @@ from django.utils import timezone
 
 
 
+def landing(request):
+        return render(request, 'land.html', {})
  
 def home(request):
     excluded_groups = ['Business', 'Admin']

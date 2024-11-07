@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="..\media\media\vlogos.png" type="image/png">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ValVista</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS CSS for Animations -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+
+
+
+    <!--hero section-->
+    <section class="hero" id="home" data-aos="fade-in">
+        <!-- Left side with hero image -->
+        <div class="container-left">
+            <!-- VALVISTA Logo with color customization -->
+            <h1 class="display-1">
+                <span class="text-val">VAL</span><span class="text-vista">VISTA</span>
+            </h1>
+    
+            <!-- Bottom-aligned content (description and button) -->
+            <div class="hero-bottom">
+                <!-- Description -->
+                <p class="lead text-white">Discover leisure, historical, educational places and create your own itinerary.</p>
+
+
+
+                <!-- Get Started Button ETO YUNG ILILINK LANG SA HOME-->
+                <a href="{%url 'home'%}" class="btn btn-primary btn-lg mt-4" id="get-started">Get Started</a>
+
+
+
+
+            </div>
+        </div>
+    
+        <!-- Overlapping Image VIDEO -->
+        <div class="container-right" style="position: relative;">
+            <video id="heroVideo" loop class="hero-video" data-aos="fade-left">
+                <source src="/media/media/welcome.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        
+            <!-- Volume Controls -->
+            <div id="volumeControl" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); padding: 5px; border-radius: 5px; background-color: rgba(0, 0, 0, 0.5);">
+                <!-- Volume Down Button -->
+                <button id="volumeDown" class="volume-button" style="background: transparent; border: none; cursor: pointer; padding: 0 10px;">
+                    <i class="fas fa-volume-down" style="color: #c80000; font-size: 20px;"></i>
+                </button>
+                
+                <!-- Volume Slider (Horizontal) -->
+                <input type="range" id="volumeSlider" value="100" max="100" step="1" class="volume-slider" style="width: 100px;">
+                
+                <!-- Volume Up Button -->
+                <button id="volumeUp" class="volume-button" style="background: transparent; border: none; cursor: pointer; padding: 0 10px;">
+                    <i class="fas fa-volume-up" style="color: #c80000; font-size: 20px;"></i>
+                </button>
+        
+                <!-- Volume Percentage -->
+                <span id="volumePercentage" class="volume-percentage" style="color: #fff; font-size: 14px;">100%</span>
+            </div>
+        
+            <!-- Play Button -->
+            <button id="playButton" style="position: absolute; bottom: 20px; left: 67%; transform: translateX(50%); padding: 10px 20px; font-size: 20px; background-color: rgba(185, 185, 185, 0.7); border: none; border-radius: 50%; cursor: pointer; display: none; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);">
+                <i class="fas fa-play" style="color: #c80000;"></i>
+            </button>
+        
+            <!-- Pause Button -->
+            <button id="pauseButton" style="position: absolute; bottom: 20px; left: 67%; transform: translateX(50%); padding: 10px 20px; font-size: 20px; background-color: rgba(185, 185, 185, 0.7); border: none; border-radius: 50%; cursor: pointer; display: none; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);">
+                <i class="fas fa-pause" style="color: #c80000;"></i>
+            </button>
+        </div>
+
+    
+        
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('heroVideo');
+            const playButton = document.getElementById('playButton');
+            const pauseButton = document.getElementById('pauseButton');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const volumeDown = document.getElementById('volumeDown');
+            const volumeUp = document.getElementById('volumeUp');
+            const volumePercentage = document.getElementById('volumePercentage');
+        
+            // Try to autoplay the video
+            video.muted = false;
+            video.play().catch(error => {
+                console.log("Autoplay with sound is not allowed by the browser.", error);
+                playButton.style.display = 'block'; // Show play button if autoplay fails
+            });
+        
+            // Play video when the play button is clicked
+            playButton.addEventListener('click', function() {
+                video.play();
+                playButton.style.display = 'none'; // Hide play button once video plays
+                pauseButton.style.display = 'block'; // Show pause button
+            });
+        
+            // Pause video when the pause button is clicked
+            pauseButton.addEventListener('click', function() {
+                video.pause();
+                pauseButton.style.display = 'none'; // Hide pause button once video is paused
+                playButton.style.display = 'block'; // Show play button
+            });
+        
+            // Volume control slider
+            volumeSlider.addEventListener('input', function() {
+                video.volume = volumeSlider.value / 100; // Set volume based on slider value
+                volumePercentage.textContent = `${Math.round(video.volume * 100)}%`; // Update volume percentage
+            });
+        
+            // Volume up button
+            volumeUp.addEventListener('click', function() {
+                if (video.volume < 1) { // Max volume is 1
+                    video.volume += 0.1;
+                    volumeSlider.value = video.volume * 100; // Update slider
+                    volumePercentage.textContent = `${Math.round(video.volume * 100)}%`; // Update percentage
+                }
+            });
+        
+            // Volume down button
+            volumeDown.addEventListener('click', function() {
+                if (video.volume > 0) { // Min volume is 0
+                    video.volume -= 0.1;
+                    volumeSlider.value = video.volume * 100; // Update slider
+                    volumePercentage.textContent = `${Math.round(video.volume * 100)}%`; // Update percentage
+                }
+            });
+        });
+        </script>
+        </div>
+    </section>
+    
+    
+
+
+
+    <!-- Navbar (for scrollspy) -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #c80000;">
+        <div class="container">
+            <a class="navbar-brand" href="{%url 'home'%}">
+                <img src="/media/media/logo.png" alt="ValVista Logo" style="height: 70px; filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.841));">
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#carousel">Featured Locations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#user">For Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#business-owners">Business Owners</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+<!-- About Section -->
+<section class="about py-5" id="about" data-aos="fade-up">
+    <div class="container text-center">
+        <h2 class="text-center mb-4 text-danger font-weight-bold" style="color: #c80000;">What is ValVista?</h2>
+        <p class="lead mb-4" style="color: #555;">
+            ValVista is an itinerary planner for visitors to Valenzuela City, offering personalized travel plans based on interests, time, and budget. It features local insights, interactive maps, and recommendations for attractions, restaurants, and activities, allowing visitors to discover local events and read reviews from previous travelers. Overall, ValVista enriches the trip planning process and enhances the travel experience in Valenzuela City.
+        </p>
+    </div>
+</section>
+
+
+    <!-- 3D Carousel Section -->
+    <section class="carousel-section py-5" id="carousel" data-aos="fade-up">
+        <div class="container text-center">
+            <h2>Featured Locations</h2>
+            <p class="lead mb-4">Explore some of the most popular destinations in Valenzuela City:</p>
+            <div class="icon-cards">
+                <div class="icon-cards__content">
+                    <div class="icon-cards__item">
+                        <img src="/media/media/tag.jpeg" alt="Park">
+                    </div>
+                    <div class="icon-cards__item">
+                        <img src="/media/media/pio.jpg" alt="Museum">
+                    </div>
+                    <div class="icon-cards__item">
+                        <img src="/media/media/fish.jpg" alt="Restaurant">
+                    </div>
+                    <div class="icon-cards__item">
+                        <img src="/media/media/vlogos.png" alt="logo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- User Section -->
+<section class="user-info py-5" id="user" style="background-color: #f8f9fa;">
+    <div class="container text-center">
+        <h2 class="display-4 mb-4 font-weight-bold" style="color: #c80000;">For Users</h2>
+        <p class="lead mb-5" style="font-size: 1.2rem; color: #555;">Explore Valenzuela City like never before! Find the best spots, create your perfect itinerary, and enjoy your trip with ease.</p>
+
+        <!-- User Features Cards -->
+        <div class="row justify-content-center">
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-0 rounded-lg h-100" style="transition: transform 0.3s ease;">
+                    <div class="card-body text-center p-4" style="background-color: #ffffff;">
+                        <i class="fas fa-map-marker-alt fa-4x mb-3" style="color: #c80000;"></i>
+                        <h4 class="card-title" style="font-size: 1.25rem; color: #333;">View All Places</h4>
+                        <p class="card-text" style="color: #777;">Discover leisure, historical, educational, and dining spots throughout Valenzuela City.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-0 rounded-lg h-100" style="transition: transform 0.3s ease;">
+                    <div class="card-body text-center p-4" style="background-color: #ffffff;">
+                        <i class="fas fa-calendar-check fa-4x mb-3" style="color: #c80000;"></i>
+                        <h4 class="card-title" style="font-size: 1.25rem; color: #333;">Create Your Itinerary</h4>
+                        <p class="card-text" style="color: #777;">Plan your trip based on your preferences and interests with just a few clicks.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-0 rounded-lg h-100" style="transition: transform 0.3s ease;">
+                    <div class="card-body text-center p-4" style="background-color: #ffffff;">
+                        <i class="fas fa-map fa-4x mb-3" style="color: #c80000;"></i>
+                        <h4 class="card-title" style="font-size: 1.25rem; color: #333;">View the Map</h4>
+                        <p class="card-text" style="color: #777;">Easily navigate through the city's attractions using the interactive map.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Types of Places Section -->
+        <div class="row text-center mt-5">
+            <div class="col-12">
+                <h3 class="display-5 mb-4 font-weight-bold" style="color: #333;">Explore the Best Places</h3>
+            </div>
+        </div>
+
+        <!-- Categories List -->
+        <div class="row justify-content-center">
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-0 rounded-lg" style="background-color: #ffffff; transition: transform 0.3s ease;">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-tree fa-3x mb-3" style="color: #c80000;"></i>
+                        <h5 class="card-title" style="font-size: 1.1rem; color: #333;">Leisure Spots</h5>
+                        <p class="card-text" style="color: #777;">Relax in parks, shopping malls, and other recreational areas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-0 rounded-lg" style="background-color: #ffffff; transition: transform 0.3s ease;">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-university fa-3x mb-3" style="color: #c80000;"></i>
+                        <h5 class="card-title" style="font-size: 1.1rem; color: #333;">Historical Sites</h5>
+                        <p class="card-text" style="color: #777;">Explore museums and heritage sites that showcase Valenzuela's history.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-0 rounded-lg" style="background-color: #ffffff; transition: transform 0.3s ease;">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-book fa-3x mb-3" style="color: #c80000;"></i>
+                        <h5 class="card-title" style="font-size: 1.1rem; color: #333;">Educational Places</h5>
+                        <p class="card-text" style="color: #777;">Visit libraries, learning centers, and educational hubs around the city.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-0 rounded-lg" style="background-color: #ffffff; transition: transform 0.3s ease;">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-utensils fa-3x mb-3" style="color: #c80000;"></i>
+                        <h5 class="card-title" style="font-size: 1.1rem; color: #333;">Dining</h5>
+                        <p class="card-text" style="color: #777;">Enjoy the best food at local restaurants, cafes, and street food spots.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action Text -->
+        <div class="text-center mt-5">
+            <p class="lead" style="color: #555;">
+                Ready to start your adventure in Valenzuela City? Use ValVista to explore, plan, and enjoy your trip like a local!
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Business Owners Section -->
+<section class="business-owners py-5" id="business-owners" data-aos="fade-up" style="background-color: #f4f7fb; border-top: 5px solid #c80000;">
+    <div class="container text-center">
+        <h2 class="display-4 text-danger font-weight-bold mb-4" style="color: #c80000;">Business Owners: Promote Your Location</h2>
+        <p class="lead mb-5" style="color: #333;">Are you a business owner in Valenzuela City? Showcase your business on ValVista and attract more visitors to your place!</p>
+        
+        <div class="row">
+            <!-- Card 1: Showcase Business -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-lg border-0 mb-4" style="border-radius: 15px; overflow: hidden;" data-aos="flip-left">
+                    <div class="card-body" style="background-color: #ffffff;">
+                        <h4 class="card-title text-center" style="color: #c80000; font-weight: bold; margin-bottom: 15px;">Showcase Your Business</h4>
+                        <p class="card-text" style="color: #555;">List your business with detailed information, photos, and location on the map. Make it easy for potential visitors to find you.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 2: Provide Details -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-lg border-0 mb-4" style="border-radius: 15px; overflow: hidden;" data-aos="flip-up">
+                    <div class="card-body" style="background-color: #ffffff;">
+                        <h4 class="card-title text-center" style="color: #c80000; font-weight: bold; margin-bottom: 15px;">Provide Important Details</h4>
+                        <p class="card-text" style="color: #555;">Give users essential information like business hours, contact details, services, and website links, ensuring your business stands out.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 3: Reach Wider Audience -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-lg border-0 mb-4" style="border-radius: 15px; overflow: hidden;" data-aos="flip-right">
+                    <div class="card-body" style="background-color: #ffffff;">
+                        <h4 class="card-title text-center" style="color: #c80000; font-weight: bold; margin-bottom: 15px;">Reach a Wider Audience</h4>
+                        <p class="card-text" style="color: #555;">By listing your business, you’ll be able to attract more visitors who are eager to explore Valenzuela City. It's a great way to grow your customer base.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Information Section -->
+        <div class="text-center mt-5">
+            <h3 class="text-dark" style="color: #333;">Why List Your Business on ValVista?</h3>
+            <p class="lead mb-4" style="color: #333;">Our platform is designed to help your business get noticed by Visitors or locals. Here's why it's a great opportunity for you:</p>
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0 mb-3" style="border-radius: 15px; background-color: #ffffff;" data-aos="zoom-in">
+                        <div class="card-body text-center">
+                            <h5 class="card-title" style="color: #c80000; margin-bottom: 15px;">Expand Your Reach</h5>
+                            <p class="card-text" style="color: #555;">Access a diverse audience who are actively looking for new places to visit in Valenzuela City.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0 mb-3" style="border-radius: 15px; background-color: #ffffff;" data-aos="zoom-in">
+                        <div class="card-body text-center">
+                            <h5 class="card-title" style="color: #c80000; margin-bottom: 15px;">Easy to Use</h5>
+                            <p class="card-text" style="color: #555;">Our platform is simple and user-friendly, making it easy for you to manage your listing and reach potential customers.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0 mb-3" style="border-radius: 15px; background-color: #ffffff;" data-aos="zoom-in">
+                        <div class="card-body text-center">
+                            <h5 class="card-title" style="color: #c80000; margin-bottom: 15px;">Attract More Visitors</h5>
+                            <p class="card-text" style="color: #555;">Listing your business ensures that visitors can find all the details they need to choose your place when exploring Valenzuela City.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+   <!-- Contact Section -->
+<section class="contact py-5" id="contact" style="background-color: #f8f9fa;" data-aos="fade-up">
+    <div class="container text-center">
+        <h2 class="display-4 mb-4" style="color: #c80000;">Get In Touch</h2>
+        <p class="lead mb-5">We'd love to hear from you! Feel free to reach out to us for any inquiries or support.</p>
+        
+        <div class="row">
+            <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-duration="800">
+                <div class="card border-0 shadow-lg rounded-lg">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-mobile-alt fa-3x mb-3" style="color: #c80000;"></i>
+                        <h5 class="card-title" style="color: #333;">Phone</h5>
+                        <p class="card-text" style="font-size: 1.1rem;">Call us at (+63) 123-456-7890 for urgent inquiries or support.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-duration="1000">
+                <div class="card border-0 shadow-lg rounded-lg">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-phone fa-3x mb-3" style="color: #c80000;"></i>
+                        <h5 class="card-title" style="color: #333;">Landline</h5>
+                        <p class="card-text" style="font-size: 1.1rem;">For general inquiries, you can reach us at (02) 345-6789.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-duration="1200">
+                <div class="card border-0 shadow-lg rounded-lg">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-envelope fa-3x mb-3" style="color: #c80000;"></i>
+                        <h5 class="card-title" style="color: #333;">Email</h5>
+                        <p class="card-text" style="font-size: 1.1rem;">Send us an email at <a href="mailto:info@valvista.com" style="color: #c80000;">info@valvista.com</a> for any questions or concerns.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <p class="lead" style="font-size: 1.2rem;">Feel free to drop us a message and we’ll get back to you as soon as possible!</p>
+        </div>
+    </div>
+</section>
+
+    <!-- Bootstrap, AOS, and jQuery JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <script>
+        AOS.init({
+            duration: 1200, 
+            once: true 
+        });
+
+        // Initialize ScrollSpy
+        $('body').scrollspy({ target: '.navbar', offset: 50 });
+
+        // Smooth scroll to sections
+        document.querySelectorAll('a.nav-link').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1); 
+                const targetElement = document.getElementById(targetId);
+                window.scrollTo({
+                    top: targetElement.offsetTop - 50,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -551,33 +551,38 @@ input{
     filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
 }
 
-.animate-character {
-    text-transform: uppercase;
-    background-image: linear-gradient(
-        -225deg,
-        #000000 50%,
-        #000000 100%
-    );
-    background-size: 60% auto;
-    background-clip: text;
-    color: transparent;
-    font-size: 50px;
-    margin-top: 20px; /* Added gap at the top */
-    margin-bottom: 10px; /* Reduced gap at the bottom */
-    transition: text-shadow 0.3s ease, transform 0.3s ease; /* Smooth transition for text shadow and transform */
-}
+@media print {
+    .animate-character {
+        text-transform: uppercase;
+        background-size: 60% auto;
+        background-clip: text;
+        color: transparent;
+        font-size: 50px;
+        margin-top: 20px; /* Added gap at the top */
+        margin-bottom: 10px; /* Reduced gap at the bottom */
+        transition: text-shadow 0.3s ease, transform 0.3s ease; /* Smooth transition for text shadow and transform */
+        color: #c80000;
+        background: none; 
+    }
+    
+    }
+    .animate-character::after {
+        content: '';
+        display: block;
+        height: 4px; 
+        background: #c80000;
+        border-radius: 5px;
+        margin: 5px auto 0; /* Reduced gap above the line */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        transition: background 0.3s ease; /* Smooth transition for the background */
+    }
 
-
-.animate-character::after {
-    content: '';
-    display: block;
-    height: 4px; 
-    background: #c80000;
-    border-radius: 5px;
-    margin: 5px auto 0; /* Reduced gap above the line */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    transition: background 0.3s ease; /* Smooth transition for the background */
-}
+    .hidden {
+        display: none;
+    }
+    .visible {
+        display: inline;
+    }
 
 
 
