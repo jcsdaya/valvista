@@ -1,0 +1,405 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Global Colors */
+:root {
+    --primary-color: #c80000;
+    --secondary-color: #13265c;
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    position: relative;
+    height: 100vh; /* Full height */
+}
+
+/* Left side with hero image */
+.container-left {
+    background: url('/media/media/land.jpg') no-repeat center center/cover; /* Hero image background */
+    flex: 1; /* Hero section takes up 50% of the width */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 30px; /* Padding for content */
+    position: relative; /* Position for the SVG */
+}
+
+/* Right side with video */
+.container-right {
+    flex: 1; /* Takes up the other 50% of the width */
+    height: 100vh; /* Full height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Position for the SVG */
+    overflow: hidden; /* Ensures wave stays inside the container */
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    position: relative;
+    height: 100vh; /* Full height */
+}
+
+/* Left side with hero image */
+.container-left {
+    background: url('/media/media/land.jpg') no-repeat center center/cover; /* Hero image background */
+    flex: 1; /* Hero section takes up 50% of the width */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 30px; /* Padding for content */
+    position: relative; /* Position for the curve */
+}
+
+/* Right side with video */
+.container-right {
+    flex: 1; /* Takes up the other 50% of the width */
+    height: 100vh; /* Full height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Position for the curve */
+    overflow: hidden; /* Ensures the curve stays inside the container */
+}
+
+/* Video styling */
+.hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the video covers the area */
+}
+
+/* VALVISTA Logo Styling */
+.hero h1 {
+    font-size: 4rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: red;
+}
+
+.text-val {
+    color: #0A2472;
+    font-size: 4rem;
+    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.841));
+}
+
+.text-vista {
+    color: #c80000;
+    font-size: 4rem;
+    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.841));
+}
+
+/* Styling for the description */
+.hero .lead {
+    font-size: 1.25rem;
+    font-weight: 400;
+    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.841));
+}
+
+/* Styling for the Get Started button */
+.hero .btn-primary {
+    background-color: #c80000;
+    border-color: #c80000;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 20px;
+    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.841));
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero .btn-primary:hover {
+    background-color: red;
+    transform: scale(1.05);
+}
+
+/* Responsiveness for smaller screens */
+@media screen and (max-width: 768px) {
+    .hero {
+        flex-direction: column; /* Stack text and video vertically */
+    }
+
+    .container-left, .container-right {
+        max-width: 100%; /* Full width on smaller screens */
+    }
+
+    .hero-video {
+        max-height: 300px; /* Limit video height on mobile */
+        width: auto; /* Maintain aspect ratio */
+    }
+
+    .svg-container {
+        width: 100%; /* Full width on smaller screens */
+    }
+}
+
+
+
+/* Custom volume slider */
+.volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    border-radius: 5px;
+    background: #e0e0e0;
+    outline: none;
+    transition: background 0.3s ease;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #c80000;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #c80000;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.volume-slider:hover {
+    background: #c80000; /* Change color on hover */
+}
+
+.volume-slider:focus {
+    background: #c80000; /* Focus color */
+}
+
+/* Volume button icons */
+.volume-button i {
+    transition: transform 0.3s ease;
+}
+
+.volume-button:hover i {
+    transform: scale(1.0); /* Slight enlargement on hover */
+}
+
+/* Volume percentage display */
+.volume-percentage {
+    margin-left: 10px;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+}
+
+
+
+
+
+
+
+
+
+
+/* Carousel Section */
+.icon-cards {
+    position: relative;
+    width: 60vw;
+    height: 40vw;
+    max-width: 380px;
+    max-height: 250px;
+    margin: 0 auto;
+    color: white;
+    perspective: 1000px;
+    transform-origin: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-cards__content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-origin: center;
+    transform-style: preserve-3d;
+    transform: translateZ(-30vw) rotateY(0);
+    animation: carousel 10s infinite cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+.icon-cards__item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 60vw;
+    height: 40vw;
+    max-width: 380px;
+    max-height: 250px;
+    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.924));
+    border-radius: 6px;
+    overflow: hidden;
+    transform-origin: center;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.icon-cards__item:nth-child(1) {
+    transform: rotateY(0) translateZ(35vw);
+}
+
+.icon-cards__item:nth-child(2) {
+    transform: rotateY(120deg) translateZ(35vw);
+}
+
+.icon-cards__item:nth-child(3) {
+    transform: rotateY(240deg) translateZ(35vw);
+}
+
+.icon-cards__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Keyframes for carousel animation */
+@keyframes carousel {
+    0%, 17.5% {
+        transform: translateZ(-35vw) rotateY(0);
+    }
+    27.5%, 45% {
+        transform: translateZ(-35vw) rotateY(-120deg);
+    }
+    55%, 72.5% {
+        transform: translateZ(-35vw) rotateY(-240deg);
+    }
+    82.5%, 100% {
+        transform: translateZ(-35vw) rotateY(-360deg);
+    }
+}
+
+.carousel {
+    animation: carousel 30s infinite;  /* Set a 30 second duration for slower rotation */
+}
+
+
+/* User Section */
+.user-info {
+    padding: 60px 0;
+}
+
+.user-info h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.user-info .lead {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.user-info .row {
+    margin-top: 40px;
+}
+
+.user-info .col-md-4 {
+    margin-bottom: 30px;
+}
+
+.user-info .fa {
+    color: var(--primary-color);
+}
+
+
+/* Responsive Design */
+@media (max-width: 767px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+    }
+
+    .user-info .row {
+        text-align: center;
+    }
+
+    .carousel-item img {
+        max-width: 100%;
+    }
+}
+
+/* About Section Styling */
+.about {
+    background: linear-gradient(to right, #f4f7fb, #e0e5ec); /* Gradient background */
+    padding: 50px 0;
+    color: #333;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Adding a subtle shadow to the text */
+.about h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #c80000;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    position: relative;
+    z-index: 2;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Adding text shadow for depth */
+}
+
+/* Styling for the paragraphs */
+.about p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    max-width: 800px;
+    margin: 0 auto 20px;
+    color: #555;
+    font-weight: 400;
+    position: relative;
+    z-index: 2;
+}
+
+/* Animating the section */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.about p,
+.about h2 {
+    animation: fadeInUp 1s ease-out;
+}
+
+/* Adding an overlay with light gradient for depth */
+.about::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.6); /* Light white overlay */
+    z-index: 1;
+}

@@ -1,0 +1,592 @@
+
+*{
+    font-family: Franklin Gothic;
+  }
+
+  body::before{
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: -1;
+    background: url("https://static.vecteezy.com/system/resources/previews/014/729/973/non_2x/abstract-white-3d-background-with-red-and-white-lines-paper-cut-style-textured-usable-for-decorative-web-layout-poster-banner-corporate-brochure-and-seminar-template-design-vector.jpg");
+
+}
+
+.notification {
+    height: 70px;
+    position: fixed;
+    top: 120px;
+    right: 20px;
+    background-color: #c80000;
+    color: white;
+    padding: 15px;
+    border-radius: 7px;
+    z-index: 1000; /* Make sure it's on top */
+    transition: opacity 0.5s ease;
+    opacity: 0; /* Start as invisible */
+    animation: slideIn 0.4s ease forwards; /* Apply the slide-in animation */
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(100%); /* Start off-screen to the right */
+        opacity: 0; /* Start as invisible */
+    }
+    100% {
+        transform: translateX(0); /* End at its original position */
+        opacity: 1; /* End fully visible */
+    }
+}
+
+.notification.d-none {
+    display: none;
+}
+
+.notification.visible {
+    display: block;
+    opacity: 1;
+}
+
+/* Keyframes for the zoom and wiggle animation */
+@keyframes zoomWiggle {
+    0% {
+        transform: scale(1); /* Start at normal size */
+    }
+    25% {
+        transform: scale(1.1); /* Zoom in slightly */
+    }
+    50% {
+        transform: scale(0.9); /* Zoom out slightly */
+    }
+    75% {
+        transform: scale(1.05); /* Slight zoom in */
+    }
+    100% {
+        transform: scale(1); /* Return to normal size */
+    }
+}
+
+nav {
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    background: #c80000;
+    position: fixed;
+    width: 100%;
+    height: 80px;
+    top: 0;
+    left: 0;
+    z-index: 1100;
+   
+}
+
+.logo {
+    margin-top: 1px;
+    height: 70px;
+    width: 160px;
+    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
+  }
+  
+  
+  
+
+nav ul {
+    display: flex;
+    margin-top: 20px;
+    margin-right: 30px;
+    gap: 20px;
+    z-index: 1; /* Ensure the menuList is behind the search bar */
+}
+
+nav ul li {
+    list-style-type: none;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 20px;
+    transition: color 0.3s ease;
+    display: inline-block;
+}
+
+nav ul li a:hover {
+    background-color: white; 
+    border-radius: 5px;
+    color: black;
+}
+
+nav ul li.no-hover a:hover {
+  background-color: transparent; /* Remove background color on hover */
+  color: inherit; /* Inherit text color from parent */
+}
+.ul-user{
+    margin-left: 750px;
+  }
+
+  .menu-icon{
+      display: none;
+  }
+  
+  .menu-icon i{
+      color: #fff;
+      font-size: 30px;
+  }
+  
+  @media (max-width:600px) {
+      nav ul{
+          position: absolute;
+          top: 125px;
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          text-align: center;
+          background: #d80404;
+          gap: 0;
+          overflow: hidden;
+      }
+  
+  
+      nav ul li{
+          padding: 20px;
+          padding-top: 0;
+      }
+      .menu-icon{
+          display: block;
+      }
+      #menuList{
+          transition: all 0.5s;
+      }
+  
+    }h1 {
+	 	  
+        color:#333;
+        font-weight:700;
+        margin-top:50px;	 
+        text-align:center;
+        text-transform:uppercase;
+        letter-spacing:4px;
+        line-height:23px;
+    }
+    
+    /* --- Start progress bar --- */
+    
+    .process-wrapper {
+        position: fixed; /* Fixes the position of the progress bar */
+        left: 0; /* Aligns it to the left side of the screen */
+        top: 59%; /* Centers it vertically on the screen */
+        transform: translateY(-50%); /* Adjusts for perfect centering */
+        width: 100px; /* Adjust as needed to fit your design */
+        height: 800px;
+        background-color: #f8f9fa; /* Optional: adds a background color */
+        padding: 20px;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, .1); /* Optional: adds a shadow effect */
+        border-radius: 10px;
+        z-index: 9999; /* Ensures it stays on top of other elements */
+    }
+    
+    #progress-bar-container {
+        position: relative;
+        width: 100%; /* Full width of the container */
+        height: auto; /* Auto height to fit content */
+        margin: 0; /* No margin needed */
+    }
+    
+    #progress-bar-container ul {
+        padding: 0;
+        margin: 0;
+        z-index: 9999;
+        position: relative;
+        width: 100%; /* Full width of the container */
+        list-style: none;
+    }
+    
+    #progress-bar-container li {
+        list-style: none;
+        text-align: left;
+        color: #aaa;
+        text-transform: uppercase;
+        font-size: 14px;
+        cursor: pointer;
+        font-weight: 700;
+        transition: all ease 0.2s;
+        height: auto;
+        position: relative;
+        padding: 45px 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    #progress-bar-container li:before {
+        content: " ";
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: solid 2px #aaa;
+        margin-right: 10px; /* Space between bullet and text */
+        transition: all ease 0.3s;
+    }
+    
+    #progress-bar-container li.active:before, #progress-bar-container li:hover:before {
+        border: solid 2px #fff;
+        background-color: #d80404;
+    }
+    
+    #progress-bar-container li.active, #progress-bar-container li:hover {
+        color: #444;
+    }
+    
+    #progress-bar-container #line {
+        width: 4px; /* Narrow vertical line */
+        height: 100%; /* Full height of the container */
+        background: #eee;
+        position: absolute;
+        left: 10px; /* Aligns with the bullet points */
+        top: 0;
+        z-index: 1;
+        border-radius: 50px;
+        transition: all ease 0.9s;
+    }
+    
+    #progress-bar-container #line-progress {
+        width: 100%; /* Full width to match the vertical line */
+        height: 0; /* Initially 0 height */
+        background-color: red;
+        position: absolute;
+        z-index: 2;
+        left: 0;
+        top: 0;
+        border-radius: 50px;
+        transition: height 0.3s ease-in-out; /* Smooth transition effect */
+    }
+    
+    #progress-content-section {
+        margin-left: 130px; /* Adjusts the content section to leave space for the fixed progress bar */
+        padding: 20px;
+    }
+
+    
+    #progress-content-section .section-content.active {
+        display: block;
+        margin-bottom: 100px;
+    }
+    
+
+    #progress-content-section .section-content img {
+      max-width: 100%;
+      height: auto; /* This property ensures that the image maintains its aspect ratio */
+    }
+    
+    .selection-wrapper{
+        display: inline;
+        margin-top: 1000px;
+        margin-bottom: 30px;
+        margin-right: 400px;
+    }
+
+
+    .card-body{
+        min-height: 100px;
+        max-height: 200px;
+    }
+
+    .modal-content{
+        display: flex;
+        padding: 0 5px;
+        width: 1000px;
+        justify-content:center;
+    }
+
+    .modal-dialog{
+        display: flex;
+        justify-content:center;
+        align-items: center ;
+    }
+
+  
+    #line-progress {
+        height: 5px; /* Adjust height as needed */
+        background-color: red; /* Default color of progress bar */
+        width: 0; /* Initially, the width will be 0 */
+        transition: width 0.3s ease-in-out; /* Smooth transition effect */
+    }
+
+    .container{
+        width: 1800px;
+        background-color: white;
+        padding: 20px;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, .1);
+        border-radius: 20px;
+        margin-bottom: 0px;
+    }
+
+#myTextArea1,#myTextArea2,#myTextArea3,#myTextArea4,#myTextArea{
+    padding: 20;
+    border-radius: 10px;
+}
+
+.inline-input {
+    display: inline-block;
+    margin-right: 10px; /* Space between the input fields */
+}
+
+.inline-input input {
+    margin-left: 5px; /* Space between the label and input */
+}
+.place-name {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%; /* Fill the height of the th */
+    width: 10%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+table {
+    width: 100%; 
+    border-collapse: collapse;
+}
+
+th {
+    padding: 0; 
+}
+
+.place-name img {
+    display: block;
+    width: 150px; /* Adjust the size of the image */
+    height: 100px;
+    margin-bottom: 10px; /* Add some space between the image and the name */
+    border-radius: 10px;
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+}
+
+.place-name .place-name-text {
+    font-size: 14px; /* Adjust the font size as needed */
+    margin-top: 5px;
+}
+
+.button-container .btn {
+    margin: 0;
+    padding: 10px 0; /* Optional: Adjust padding as per your design */
+    width: 100px; /* Keep the width consistent */
+}
+
+tbody tr {
+    height: 30px; /* Your desired height */
+}
+
+.btn{
+    background-color: #c80000;
+    color:white
+}
+.btn:hover{
+    background-color: white;
+    color:#c80000
+}
+
+.btn1{
+    background-color: darkblue;
+    color:white
+}
+
+.btn1:hover{
+    background-color: white;
+    color:darkblue
+}
+
+input{
+    border-radius: 5px;
+    border:white;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
+}
+
+#place-count{
+    width: 100px;
+    height: 25px;
+    border-radius: 5px;
+    border:white;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
+}
+
+#start-time{
+    width: 100px;
+    height: 25px;
+    border-radius: 5px;
+    border:white;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
+}
+
+.input-container {
+    position: relative;
+    width: 160px; /* Adjust based on your input width */
+}
+
+.currency-symbol {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px; /* Adjust size */
+    color: black; /* Change to any color you want */
+}
+
+.budget-input {
+    width: 70%; /* Full width within the container */
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    margin-left: 25px;
+    font-size: 20px;
+}
+
+.inputtime{
+    width: 150px;
+    font-size: 20px;
+}
+
+.notes-input{
+    border:white;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    position: relative; /* Position relative for spinner */
+}
+
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #c80000; /* Notification color */
+    margin-top: 10px;
+}
+
+.spinner {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #c80000; /* Notification color */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+.loading-text {
+    font-size: 16px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+.notification {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #c80000; 
+    color: white;
+    border-radius: 5px;
+    z-index: 5000;
+}
+
+.vallogo{
+    height: 75px;
+    width: 75px;
+}
+/* Footer styles */
+.puter {
+    background-color: #c80000;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.footer-title {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.footer-subtitle {
+    font-size: 16px;
+    margin: 5px 0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.highlight-text {
+    color: #1e3a8a;
+    font-size: inherit;
+}
+
+.highlight-text-red {
+    color: #c80000;
+    font-size: inherit;
+}
+.header {
+    background-color: #c80000;
+    text-align: center; 
+    padding: 20px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+}
+
+.logoss {
+    max-width: 200px; 
+    height: auto; 
+    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
+}
+
+@media print {
+    .animate-character {
+        text-transform: uppercase;
+        background-size: 60% auto;
+        background-clip: text;
+        color: transparent;
+        font-size: 50px;
+        margin-top: 20px; /* Added gap at the top */
+        margin-bottom: 10px; /* Reduced gap at the bottom */
+        transition: text-shadow 0.3s ease, transform 0.3s ease; /* Smooth transition for text shadow and transform */
+        color: #c80000;
+        background: none; 
+    }
+    
+    }
+    .animate-character::after {
+        content: '';
+        display: block;
+        height: 4px; 
+        background: #c80000;
+        border-radius: 5px;
+        margin: 5px auto 0; /* Reduced gap above the line */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        transition: background 0.3s ease; /* Smooth transition for the background */
+    }
+
+    .hidden {
+        display: none;
+    }
+    .visible {
+        display: inline;
+    }
+
+
+
+
+
+
+

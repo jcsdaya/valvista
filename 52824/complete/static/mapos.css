@@ -1,0 +1,353 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#map {
+    height: 100vh; 
+    width: 100vw;  
+    position: relative; 
+    z-index: 0; 
+    overflow: hidden; 
+    background-color: #f0f0f0; 
+    transition: filter 0.3s ease, background-color 0.3s ease;
+}
+
+#map:hover {
+    filter: brightness(0.98);
+    background-color: #e6e6e6; /* Slightly darker background on hover */
+}
+
+#map::before {
+    content: 'Loading map...'; 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+    color: #666;
+    z-index: 1;
+    pointer-events: none; 
+    opacity: 0; 
+    transition: opacity 0.5s ease-in-out; 
+}
+
+.map-loading #map::before {
+    opacity: 1; 
+}
+
+@media (max-width: 768px) {
+    #map {
+        height: calc(100vh - 60px); 
+        width: 100vw;
+    }
+}
+
+#controls {
+    position: absolute;
+    bottom: 20px; 
+    right: 20px;  
+    background: rgba(255, 255, 255, 0.98);
+    padding: 20px 25px; 
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); 
+    z-index: 1000; 
+    width: 100%;
+    max-width: 450px; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333; 
+    display: flex;
+    flex-direction: column; 
+    gap: 12px; 
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    border: 1px solid transparent; /* Add border for better focus outline */
+}
+
+@media (max-width: 600px) {
+    #controls {
+        bottom: 10px;
+        right: 10px;
+        padding: 15px 20px;
+        max-width: 90%; 
+    }
+}
+
+#controls:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35); 
+    transform: translateY(-2px); 
+    background-color: rgba(255, 255, 255, 0.9); /* Light background on hover */
+}
+
+#controls:focus-within {
+    outline: 2px solid #c80000; 
+    border-color: #c80000; /* Change border color on focus */
+    transition: border-color 0.3s ease; /* Smooth transition for focus effect */
+}
+
+/* Add a subtle pulse effect for controls when focused */
+#controls:focus-within {
+    animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 rgba(200, 0, 0, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 0 rgba(200, 0, 0, 0.75);
+    }
+    100% {
+        box-shadow: 0 0 0 rgba(200, 0, 0, 0.5);
+    }
+}
+
+
+
+/*===============================================================================================================================================*/
+#search-bar {
+    display: flex; 
+    align-items: center; 
+    background: #f8f9fa; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    padding: 8px 12px;
+}
+
+#search-bar input[type="text"] {
+    border: none;
+    outline: none;
+    flex: 1; 
+    padding: 8px;
+    border-radius: 4px; 
+    font-size: 16px;
+    color: black;
+    background: #fff; 
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#search-bar button {
+    background-color: #c80000; 
+    border: none;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 8px; 
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#search-bar button:hover {
+    background-color: #710c07; 
+    transform: translateY(-2px); 
+}
+
+#search-bar button:active {
+    background-color: #c80000; 
+    transform: translateY(0); 
+}
+
+/*===============================================================================================================================================*/
+#update-location,
+#clear-route {
+    background-color: #c80000; 
+    border: none;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#update-location:hover,
+#clear-route:hover {
+    background-color: #710c07; 
+    transform: translateY(-2px); 
+}
+
+#update-location:active,
+#clear-route:active {
+    background-color: #c80000; 
+    transform: translateY(0); 
+}
+
+#pinned-locations {
+    position: absolute;
+    top: 150px; 
+    left: 10px;
+    background: rgba(255, 255, 255, 0.95); 
+    padding: 15px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+    z-index: 1000; 
+    width: 250px; 
+    max-height: 50vh; 
+    overflow-y: auto; 
+    transition: transform 0.3s ease; 
+}
+
+#pinned-locations h3 {
+    margin-top: 0;
+    color: #c80000; 
+    font-size: 24px; 
+    text-align: center;
+    background-color: #ffffff; 
+    padding: 10px; 
+    border-radius: 40px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.868); 
+    margin-bottom: 20px; 
+    opacity: 0; 
+    transform: translateY(-20px);
+    animation: fadeInSlideDown 0.6s forwards; 
+}
+
+@keyframes fadeInSlideDown {
+    0% {
+        opacity: 0; 
+        transform: translateY(-20px); 
+    }
+    100% {
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+#pinned-locations-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#pinned-locations-list li {
+    background-color: #c80000; 
+    color: #fff;
+    border-radius: 6px;
+    padding: 12px; 
+    margin-bottom: 10px; 
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; 
+    text-align: center;
+    opacity: 0;
+    transform: translateY(10px); 
+    animation: fadeInUp 0.6s forwards; 
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    100% {
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+#pinned-locations-list li:nth-child(1) { animation-delay: 0.2s; }
+#pinned-locations-list li:nth-child(2) { animation-delay: 0.4s; }
+#pinned-locations-list li:nth-child(3) { animation-delay: 0.6s; }
+#pinned-locations-list li:nth-child(4) { animation-delay: 0.8s; }
+#pinned-locations-list li:nth-child(5) { animation-delay: 0.9s; }
+
+#pinned-locations-list li:hover {
+    background-color: #710c07; 
+    transform: translateY(-4px); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+}
+
+#pinned-locations-list li:active {
+    transform: translateY(0); 
+    box-shadow: none; 
+}
+
+/*==============================================================================================================================================================*/
+#tutorial {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    padding: 30px 40px;
+    border-radius: 18px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    display: none; 
+    z-index: 2000;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+}
+
+#tutorial.show {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+@media (max-width: 600px) {
+    #tutorial {
+        width: 90%;
+        padding: 20px 25px;
+        font-size: 0.95rem;
+    }
+}
+
+#tutorial .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+#tutorial .close-btn:hover {
+    color: #000;
+}
+
+#pinned-locations-icon {
+    position: absolute;
+    bottom: 20px;
+    left: 10px;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+#pinned-locations-icon img {
+    width: 150px;
+    height: 150px;
+    animation: bounce 2s infinite;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+    }
+    40% {
+        transform: translateY(-30px);
+        filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.7));
+    }
+    60% {
+        transform: translateY(-15px);
+        filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.7));
+    }
+}
+
+.leaflet-top leaflet-right {
+    margin-top: 50px;
+}
+
+

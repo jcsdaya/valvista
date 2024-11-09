@@ -1,0 +1,356 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family:'Franklin Gothic';
+}
+
+/* General styles */
+body {
+    background-image: url(https://pbs.twimg.com/media/CQrXAOgUsAAR5HA?format=jpg&name=4096x4096);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    margin: 0; /* Ensure no margin around body */
+    position: relative;
+    overflow-y: auto;
+}
+
+body::before {
+    content: ''; /* Add content to the pseudo-element */
+    position: absolute; /* Make sure it's positioned relative to the body */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5); /* Adjust the color and opacity */
+    z-index: 1; /* Ensure it's on top */
+}
+
+/* Header styles */
+nav {
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    background: #c80000;
+    position: fixed;
+    width: 100%;
+    height: 80px;
+    top: 0;
+    left: 0;
+    z-index: 1100;
+   
+}
+
+.logo {
+    margin-top: 1px;
+    height: 70px;
+    width: 160px;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.8));
+  }
+  
+
+nav ul {
+    display: flex;
+    margin-top: 20px;
+    margin-right: 30px;
+    gap: 20px;
+    z-index: 1; /* Ensure the menuList is behind the search bar */
+}
+
+.ul-user{
+  margin-left: 800px;
+}
+
+nav ul li {
+    list-style-type: none;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 20px;
+    transition: color 0.3s ease;
+    display: inline-block;
+}
+
+nav ul li a:hover {
+    background-color: white; 
+    border-radius: 5px;
+    color: black;
+}
+
+nav ul li.no-hover a:hover {
+  background-color: transparent; /* Remove background color on hover */
+  color: inherit; /* Inherit text color from parent */
+}
+
+  
+  .menu-icon{
+      display: none;
+  }
+  
+  .menu-icon i{
+      color: #fff;
+      font-size: 30px;
+  }
+  
+  @media (max-width:600px) {
+      nav ul{
+          position: absolute;
+          top: 125px;
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          text-align: center;
+          background: #d80404;
+          gap: 0;
+          overflow: hidden;
+      }
+  
+  
+      nav ul li{
+          padding: 20px;
+          padding-top: 0;
+      }
+      .menu-icon{
+          display: block;
+      }
+      #menuList{
+          transition: all 0.5s;
+      }
+  }
+/* Right box */
+.right-box {
+    margin: 40px 20px 20px 20px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.header-text {
+    flex: 1;
+}
+.right-box {
+    display: flex;
+    align-items: center; /* Vertically center the items */
+}
+
+.header-text img,
+.header-text h1 {
+    display: inline-block; /* Display elements inline */
+    vertical-align: middle; /* Align elements vertically */
+    margin: 0; /* Remove default margin */
+}
+
+.image-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; /* Add this line */nav ul li a:hover {
+        background-color: white; 
+        border-radius: 5px;
+        color: black;
+      }
+      nav ul li.no-hover a:hover {
+        background-color: transparent; /* Remove background color on hover */
+        color: inherit; /* Inherit text color from parent */
+      }
+}
+
+.image-container img {
+    max-width: 100%;
+    height: 50%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-text h2 {
+    color: #343a40;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.header-text p {
+    color: #6c757d;
+}
+
+.header-text img {
+    width: 100px; /* Adjust size as needed */
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px 10px 10px 15px;
+    margin: 5px 0;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    background-color: #fff;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-size: 16px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #921919;
+    box-shadow: 0 0 8px rgba(23, 162, 184, 0.6);
+    outline: none;
+}
+
+/* Floating label effect */
+.floating-label {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.floating-label input {
+    padding-top: 20px;
+}
+
+.floating-label label {
+    position: absolute;
+    top: 0;;
+    left: 15px;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #921919;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    background-color: white;
+    padding: 0 5px;
+}
+
+.floating-label input:focus + label,
+.floating-label input:not(:placeholder-shown) + label {
+   
+    left: 15px;
+  
+  
+}
+
+
+
+.floating-label input:focus,
+.floating-label input:not(:placeholder-shown) {
+    padding-top: 20px;
+}
+
+/* Custom file input */
+
+
+.custom-file-label {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.custom-file-label:hover {
+    background-color: #dee2e6;
+}
+
+.custom-file-label:after {
+    display: block;
+    margin-left: 10px;
+    color: #6c757d;
+}
+
+/* Submit button */
+.subbut button {
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.subbut button:hover {
+
+    transform: scale(1.05);
+}
+
+#placecategory,#placecategory2,#placecategory3 {
+
+    width: 50%;
+    margin-top: -20px;
+    
+}
+
+
+#placetime,#placetimeclose,#placecost{
+
+    width: 100%;
+    
+}
+
+#placetime,#placetimeclose{
+
+    height:20%
+    
+}
+
+#placeusername, #placepass,#placeemail,#placeid{
+    width: 200%;
+}
+
+.btn{
+    background-color: #c80000;
+    color:white
+}
+.btn:hover{
+    background-color: white;
+    color:#c80000;
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+}
+
+h1{
+    color: black;
+    font-size: 50px;
+}
+
+h1::after{
+        content: '';
+        display: block;
+        height: 4px; 
+        background: linear-gradient(90deg, #c80000, #c80000); 
+        border-radius: 5px;
+        margin: 5px auto 0; /* Reduced gap above the line */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        transition: background 0.3s ease; /* Smooth transition for the background */
+     
+}
+
+h2::after{
+    content: '';
+    display: block;
+    height: 4px; 
+    background: linear-gradient(90deg, #c80000, #c80000); 
+    border-radius: 5px;
+    margin: 5px auto 0; /* Reduced gap above the line */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease; /* Smooth transition for the background */
+ 
+}

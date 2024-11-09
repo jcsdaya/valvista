@@ -1,0 +1,395 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Franklin Gothic;
+}
+body {
+    height: auto; 
+    width: 100%; 
+    background-color: white;
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow-x: hidden; 
+}
+
+/*--------------------------------------------------------------------title*/
+.animate-character {
+    text-transform: uppercase;
+    background-image: linear-gradient(
+        -225deg,
+        #c80000 50%,
+        #c80000 100%
+    );
+    background-size: 60% auto;
+    background-clip: text;
+    color: transparent;
+    font-size: 70px;
+    margin-top: 20px; /* Added gap at the top */
+    margin-bottom: 10px; /* Reduced gap at the bottom */
+    transition: text-shadow 0.3s ease, transform 0.3s ease; /* Smooth transition for text shadow and transform */
+}
+
+
+.animate-character::after {
+    content: '';
+    display: block;
+    height: 4px; 
+    background: linear-gradient(90deg, #c80000, #ffffff); 
+    border-radius: 5px;
+    margin: 5px auto 0; /* Reduced gap above the line */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease; /* Smooth transition for the background */
+}
+
+/* Adjust the boxes margin */
+.boxes {
+    margin-top: 10px; /* Smaller gap between title and boxes */
+}
+
+.right-box {
+    margin: 10px 10px 10px 10px;
+    background-color: rgba(252, 252, 252, 1);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1);
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* Text clip animation */
+@keyframes textclip {
+    0% {
+        background-position: 200% center;
+    }
+    100% {
+        background-position: 0% center;
+    }
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0; /* Start invisible */
+        transform: translateY(-20px); /* Slide in from above */
+    }
+    100% {
+        opacity: 1; /* End fully visible */
+        transform: translateY(0); /* End at original position */
+    }
+}
+
+/*---------------------------------------------------------------------------------------------------------------*/
+
+nav {
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    background: #c80000;
+    position: fixed;
+    width: 100%;
+    height: 80px;
+    top: 0;
+    left: 0;
+    z-index: 1100;
+  }
+
+
+ul {
+    list-style-type: none; 
+}
+
+.logo {
+    margin-top: 1px;
+    height: 70px;
+    width: 160px;
+    filter: drop-shadow(0 0 7px rgba(0, 0, 0, 0.5));
+  }
+  
+  nav ul {
+    display: flex;
+    margin-top: 20px;
+    margin-right: 30px;
+    gap: 20px;
+    z-index: 1;
+  }
+
+.ul-user {
+    margin-left: 750px; 
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 20px;
+    transition: color 0.3s ease;
+    display: inline-block;
+  }
+  
+
+  nav ul li a:hover {
+    background-color: white;
+    border-radius: 5px;
+    color: black;
+  }
+
+nav ul li.no-hover a:hover {
+    background-color: transparent; 
+    color: inherit;
+}
+
+.menu-icon {
+    display: none; 
+}
+
+.menu-icon i {
+    color: #fff;
+    font-size: 30px;
+}
+
+/* Mobile Styles */
+@media (max-width: 600px) {
+    nav ul {
+        position: absolute;
+        top: 125px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        text-align: center;
+        background: #d80404;
+        gap: 0;
+        overflow: hidden;
+    }
+
+    nav ul li {
+        padding: 20px;
+        padding-top: 0;
+    }
+    
+    .menu-icon {
+        display: block; 
+    }
+
+    #menuList {
+        transition: all 0.5s;
+    }
+}
+
+/* Card styles */
+body::before {
+    content: "";
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: url('https://static.vecteezy.com/system/resources/previews/014/729/973/non_2x/abstract-white-3d-background-with-red-and-white-lines-paper-cut-style-textured-usable-for-decorative-web-layout-poster-banner-corporate-brochure-and-seminar-template-design-vector.jpg') repeat; 
+    opacity: 0.1; 
+    pointer-events: none; 
+    z-index: -1; 
+}
+
+/* Smooth scroll effect */
+html {
+    scroll-behavior: smooth; 
+}
+
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0; 
+    margin: 0 auto;
+    max-width: 100vw; 
+    padding: 0 10px; 
+}
+
+.card {
+    flex: 1 1 calc(33.333% - 20px); 
+    margin: 10px;
+    padding: 1rem;
+    background: rgba(221, 221, 221, 0.9); 
+    border-radius: 15px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 400px;
+    max-height: 400px;
+    overflow: hidden;
+    backdrop-filter: blur(10px); 
+}
+
+/* Hover effect for card */
+.card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); 
+}
+
+.card img {
+    width: 100%;
+    height: 150px; 
+    object-fit: cover; 
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.card__title {
+    font-size: clamp(16px, 1.5vw, 24px);
+    margin-bottom: 10px;
+    color: #333333;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; 
+}
+
+.card__description {
+    font-size: clamp(12px, 1.2vw, 16px);
+    color: #333333;
+    margin-bottom: 10px;
+    line-height: 1.3;
+    max-height: 4em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+}
+
+.card__button {
+    background-color: #d80404;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s;
+    display: block;
+    margin-top: auto;
+    width: calc(100% - 40px); 
+    margin: 0 auto;
+}
+
+/* Button hover effect */
+.card__button:hover {
+    background-color: #fff;
+    color: #d80404;
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    transform: translateY(-2px); 
+}
+
+/* Unfavorite button */
+.unfavorite-button {
+    background-color: #ffffff;
+    color: #d80404;
+    border: 1px solid #d80404;
+    padding: 6px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 10px auto;
+    display: block;
+}
+
+/* Unfavorite button hover effect */
+.unfavorite-button:hover {
+    background-color: #d80404;
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+.dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+}
+
+.dialog-content {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    max-width: 90%;
+    border: 2px solid #d80404;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dialog-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #d80404;
+    margin-bottom: 15px;
+}
+
+.dialog-message {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.dialog-button {
+    background-color: #d80404;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.dialog-button:hover {
+    background-color: #b80000;
+    transform: translateY(-2px);
+}
+
+.dialog-content:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 768px) {
+    .unfavorite-button {
+        width: 100%;
+    }
+
+    .dialog-content {
+        width: 90%;
+        max-width: 400px;
+    }
+
+    .dialog-title {
+        font-size: 20px;
+    }
+
+    .dialog-message {
+        font-size: 14px;
+    }
+}
+
