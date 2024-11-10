@@ -3,7 +3,6 @@
   padding: 0;
   box-sizing: border-box;
   font-family:"Exo", sans-serif;
-  font-weight: bold;
 }
 
 .row {
@@ -82,8 +81,7 @@
   box-sizing: border-box;
   overflow: hidden;
   transition: transform 0.3s;
-  font-family:"Exo", sans-serif;
-  font-weight: bold;
+
 }
 
 .col-md-4:hover {
@@ -98,6 +96,8 @@
   text-overflow: ellipsis; /* Show ellipsis for overflowed text */
   line-height: 1.3;
   max-height: 3em; /* Limit the height of the heading */
+  font-family:"Exo", sans-serif;
+  font-weight: bold;
 }
 
 .col-md-4 p {
@@ -179,6 +179,8 @@
   color: white; 
   font-size: clamp(2rem, 5vw, 4rem); 
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); 
+  font-family:"Exo", sans-serif;
+  font-weight: bold;
 }
 
 .bottom-title {
@@ -186,6 +188,8 @@
   font-size: 7rem; 
   text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7); 
   margin-top: 10px; 
+  font-family:"Exo", sans-serif;
+  font-weight: bold;
 }
 @keyframes slideIn {
   from {
@@ -975,6 +979,7 @@ footer {
 
 .footer-column p {
   line-height: 1.2; /* Further reduced line height */
+  font-weight:normal !important;
 }
 
 .contact-details p {
