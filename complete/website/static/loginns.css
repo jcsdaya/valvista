@@ -1,7 +1,7 @@
 body {
     background-image: url('https://upload.wikimedia.org/wikipedia/en/f/f1/Valenzuela_People%27s_Park_%28MacArthur_Highway%2C_Valenzuela%3B_10-03-2021%29.jpg');
     background-size: cover; /* Cover the entire background */
-    font-family: sans-serif;
+    font-family:"Exo", sans-serif;
     margin: auto; /* Added to remove default margin */
     overflow-y: auto;
 }

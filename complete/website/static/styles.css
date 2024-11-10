@@ -3,6 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family:"Exo", sans-serif;
 }
 
 /* Global Colors */
@@ -16,6 +17,18 @@
     display: flex;
     position: relative;
     height: 100vh; /* Full height */
+}
+
+/* Left side with hero image */
+.container-left {
+    background: url('/media/media/land.jpg') no-repeat center center/cover; /* Hero image background */
+    flex: 1; /* Hero section takes up 50% of the width */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 30px; /* Padding for content */
+    position: relative; /* Position for the SVG */
 }
 
 /* Right side with video */
