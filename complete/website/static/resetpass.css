@@ -131,6 +131,7 @@ nav ul li a:hover {
     display: inline-block; /* Display elements inline */
     vertical-align: middle; /* Align elements vertically */
     margin: 0; /* Remove default margin */
+    font-weight: bold;
 }
 
 .image-container {

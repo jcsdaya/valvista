@@ -24,7 +24,6 @@ nav {
     top: 0;
     left: 0;
     z-index: 1100;
-    font-weight: bold;
    
 }
 
@@ -132,6 +131,7 @@ nav ul li.no-hover a:hover {
     display: inline-block; /* Display elements inline */
     vertical-align: middle; /* Align elements vertically */
     margin: 0; /* Remove default margin */
+    font-weight: bold;
 }
 
 .image-container {
