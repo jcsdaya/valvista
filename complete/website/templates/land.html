@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="..\media\media\vlogos.png" type="image/png">
+    <link rel="shortcut icon" href='{% static "media/vlogos.png" %}' type="image/png">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ValVista</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- AOS CSS for Animations -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
-    {% load static %}
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="50">
-
+    {% load static %}
+    <style>
+        .container-left {
+            background: url('{% static "media/land.jpg" %}') no-repeat center center/cover;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0 30px;
+            position: relative;
+        }
+    </style>
 
 
     <!--hero section-->
@@ -48,7 +60,7 @@
         <!-- Overlapping Image VIDEO -->
         <div class="container-right" style="position: relative;">
             <video id="heroVideo" loop class="hero-video" data-aos="fade-left">
-                <source src="/media/media/welcome.mp4" type="video/mp4">
+                <source src='{% static "media/welcome.mp4" %}' type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         
@@ -151,7 +163,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #c80000;">
         <div class="container">
             <a class="navbar-brand" href="{%url 'home'%}">
-                <img src="/media/media/logo.png" alt="ValVista Logo" style="height: 70px; filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.841));">
+                <img src='{% static "media/logo.png" %}'alt="ValVista Logo" style="height: 70px; filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.841));">
             </a>
             
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -198,16 +210,16 @@
             <div class="icon-cards">
                 <div class="icon-cards__content">
                     <div class="icon-cards__item">
-                        <img src="/media/media/tag.jpeg" alt="Park">
+                        <img src='{% static "media/tag.jpeg" %}' alt="Park">
                     </div>
                     <div class="icon-cards__item">
-                        <img src="/media/media/pio.jpg" alt="Museum">
+                        <img src='{% static "media/pio.jpg" %}' alt="Museum">
                     </div>
                     <div class="icon-cards__item">
-                        <img src="/media/media/fish.jpg" alt="Restaurant">
+                        <img src='{% static "media/fish.jpg" %}' alt="Restaurant">
                     </div>
                     <div class="icon-cards__item">
-                        <img src="/media/media/vlogos.png" alt="logo">
+                        <img src='{% static "media/vlogos.png" %}' alt="logo">
                     </div>
                 </div>
             </div>

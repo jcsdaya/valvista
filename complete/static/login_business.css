@@ -1,7 +1,7 @@
 body {
     background-image: url('https://www.valenzuela.gov.ph/ckuploads/images/cityhall_facade.jpg');
     background-size: cover; /* Cover the entire background */
-    font-family: sans-serif;
+    font-family:"Exo", sans-serif;
     margin: auto; /* Added to remove default margin */
     overflow-y: auto;
 }

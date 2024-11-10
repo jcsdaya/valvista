@@ -4,7 +4,7 @@ body {
     background-repeat: no-repeat; /* Prevent the image from repeating */
     background-attachment: fixed; /* Keep the background fixed on scroll */
     background-position: center; /* Center the background image */
-    font-family:'Franklin Gothic';
+    font-family:"Exo", sans-serif;
     margin: 0; /* Remove default margin */
     overflow-y: auto;
 
