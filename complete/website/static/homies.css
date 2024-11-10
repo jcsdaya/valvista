@@ -226,6 +226,7 @@ nav {
   top: 0;
   left: 0;
   z-index: 1100;
+  font-weight: bold;
 }
 
 .logo {
@@ -833,6 +834,8 @@ h1 {
     font-family: var(--font-title);
     color: var(--white);
     line-height: 1.1;
+    font-family:"Exo", sans-serif;
+    font-weight: bold;
   }
   
   p {

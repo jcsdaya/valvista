@@ -29,6 +29,7 @@ body {
     margin-top: 20px; /* Added gap at the top */
     margin-bottom: 10px; /* Reduced gap at the bottom */
     transition: text-shadow 0.3s ease, transform 0.3s ease; /* Smooth transition for text shadow and transform */
+    font-weight: bold;
 }
 
 
@@ -246,6 +247,7 @@ html {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis; 
+    font-weight: bold;
 }
 
 .card__description {
