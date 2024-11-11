@@ -309,6 +309,7 @@ nav ul li.no-hover a:hover {
 h1{
     color: black;
     font-size: 50px;
+    font-weight: bold;
 }
 
 h1::after{
@@ -321,6 +322,9 @@ h1::after{
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         transition: background 0.3s ease; /* Smooth transition for the background */
      
+}
+h2{
+    font-weight: bold;
 }
 
 h2::after{
