@@ -283,6 +283,10 @@ a{
     font-size: 1.2em;   /* Increase font size */
 }
 
+h1{
+    font-weight: bold;
+}
+
 h1::after{
     content: '';
     display: block;

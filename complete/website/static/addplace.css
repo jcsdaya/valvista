@@ -126,6 +126,9 @@ nav ul li.no-hover a:hover {
     display: flex;
     align-items: center; /* Vertically center the items */
 }
+h1{
+    font-weight: bold;
+}
 
 .header-text img,
 .header-text h1 {

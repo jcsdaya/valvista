@@ -310,6 +310,7 @@ nav ul li.no-hover a:hover {
 h1{
     color: black;
     font-size: 60px;
+    font-weight: bold;
 }
 
 h1::after{

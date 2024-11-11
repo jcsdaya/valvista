@@ -65,7 +65,8 @@ def ratingform(request, place_id):
                 Notification.objects.create(
                     user=admin,
                     message=f"A new rating has been submitted for {place.name} by {rating.name}.",
-                    placeid=place.id
+                    placeid=place.id,
+                    origin="rating"
                 )
 
             messages.success(request, 'Your rating has been submitted successfully!')
@@ -180,7 +181,6 @@ def register(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "Registration successful! You can now log in.")
             return redirect('login')
         else:
             # Print form errors for debugging in console
@@ -842,6 +842,7 @@ def promo(request, pk):
     all_admin = Place.objects.all()
     place = get_object_or_404(Place.objects.annotate(
         avg_rating=Avg('ratings__score'), rating_count=Count('ratings')), pk=pk)
+    ratings = place.ratings.all()
     
     if request.method == "POST":
         form = PromoForm(request.POST, request.FILES, instance=place)
@@ -875,7 +876,7 @@ def promo(request, pk):
     else:
         form = PromoForm(instance=place)
     
-    context = {'form': form, 'place': place, 'all_admin': all_admin}
+    context = {'form': form, 'place': place, 'all_admin': all_admin,"ratings":ratings}
     return render(request, 'promo.html', context)
 
 

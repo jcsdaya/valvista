@@ -130,6 +130,10 @@ nav ul li.no-hover a:hover {
     margin: 0; /* Remove default margin */
 }
 
+h1{
+    font-weight: bold;
+}
+
 .image-container {
     flex: 1;
     display: flex;
