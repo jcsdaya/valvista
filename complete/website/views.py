@@ -170,47 +170,57 @@ def favorite_list(request):
         
 
 def loginuser(request):
-    error_message=""
-    if request.method =="POST":
+    error_message = ""
+    if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
         remember_me = request.POST.get('remember_me')
         user = authenticate(request, username=username, password=password)
-        hashed_password = make_password(password)
-        print(f"Username: {username}, Password: {hashed_password}")
-        print("User object type:", type(user))
-        print( remember_me)
+
         if user is not None:
+            if user.groups.filter(name='NormalUsers').exists():
+                try:
+                    normaluser = NormalUser.objects.get(username=username)
+                    if not normaluser.verified:
+                        error_message = "Email address is not verified, please check your email inbox."
+                        return render(request, 'login.html', {'error_message': error_message})
+                except NormalUser.DoesNotExist:
+                    error_message = "User does not exist."
+                    return render(request, 'login.html', {'error_message': error_message})
+            
+            # Check if the user is a Business user and approved
+            elif user.groups.filter(name='Business').exists():
+                try:
+                    business_user = Business.objects.get(username=username)
+                    if not business_user.approval:
+                        error_message = "Please wait as your account is on pending request."
+                        return render(request, 'login.html', {'error_message': error_message})
+                except Business.DoesNotExist:
+                    error_message = "Business account does not exist."
+                    return render(request, 'login.html', {'error_message': error_message})
+            
             login(request, user)
             print(f"Authenticated User: {user}")
 
             if remember_me:
-                request.session.set_expiry(1209600)  # 2 weeks in seconds
+                request.session.set_expiry(1209600) 
             else:
-                request.session.set_expiry(0)  # Session expires on browser close
+                request.session.set_expiry(0)  
 
             if user.groups.filter(name='NormalUsers').exists():
-                normaluser = NormalUser.objects.get(username=username)
-                if normaluser.verified == True:
-                    messages.success(request, "Login Success.")
-                    return redirect('home')
-                else:
-                    error_message = "Email address is not verified, please check your email inbox"
-                    return render(request,'login.html',{'error_message':error_message})
+                messages.success(request, "Login Success.")
+                return redirect('home')
             elif user.groups.filter(name='Business').exists():
-                business_user = Business.objects.get(username=username)
-                if business_user.approval == True: 
-                    messages.success(request, "Login Success.")
-                    return redirect('businesshome')
-                else:
-                    error_message = "Please wait as your account is on pending request"
-                    return render(request,'login.html',{'error_message':error_message})
+                messages.success(request, "Login Success.")
+                return redirect('businesshome')
             else:
                 messages.success(request, "Login Success.")
                 return redirect('dashboard')
         else:
             error_message = "Invalid username or password."
-    return render(request,'login.html',{'error_message':error_message})
+
+    return render(request, 'login.html', {'error_message': error_message})
+
 
 def logout_view(request):
     logout(request)
