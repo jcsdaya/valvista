@@ -57,7 +57,7 @@ class Place(models.Model):
         ]
         name = models.CharField (max_length=100)
         location = models.CharField (max_length=100)
-        description = models.CharField (max_length=1000)
+        description = models.CharField (max_length=20000)
         categories = models.ManyToManyField('Category', related_name='places')
         time = models.CharField (max_length=20)
         timeclose = models.CharField (max_length=20)
@@ -97,6 +97,7 @@ class Category(models.Model):
 
         
 class NormalUser(models.Model):
+       verified = models.BooleanField(default=False)
        username = models.CharField (max_length=50,unique=True,null=True)
        favorites = models.TextField(blank=True,null=True)
        email = models.EmailField (max_length=50, unique=True)

@@ -140,7 +140,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 26214400  # 25MB, adjust as needed
 FILE_UPLOAD_MAX_MEMORY_SIZE = 26214400  # 25MB, adjust as needed
 
 
-
+EMAIL_FROM_USER  = os.getenv('EMAIL_HOST_USER')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

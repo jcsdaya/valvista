@@ -8,7 +8,7 @@ from .models import Place,NormalUser,Visitor,Favorite,ItineraryState,PlaceMedia,
 from business.models import Business,Media
 from django.contrib.auth.models import Group, User
 from django.http import HttpResponseForbidden
-from .utils import get_home_context
+from .utils import get_home_context, generate_token
 from django.urls import reverse
 from django.http import JsonResponse
 import json
@@ -22,7 +22,43 @@ from django.views.decorators.http import require_POST
 from datetime import timedelta
 from django.utils import timezone
 from django.templatetags.static import static
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+from django.utils.encoding import force_bytes,force_str,DjangoUnicodeDecodeError
+from django.core.mail import EmailMessage
+from django.conf import settings
+ 
 
+def send_email(user,request):
+    current_site=get_current_site(request)
+    email_subject = "Activate your ValVista Account"
+    email_body= render_to_string('verification.html', {
+        'user':user,
+        'domain': current_site,
+        'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': generate_token.make_token(user)
+
+    })
+
+    email = EmailMessage(subject = email_subject,body=email_body,from_email=settings.EMAIL_FROM_USER,to=[user.email])
+
+    email.send()
+
+def activate(request,uidb64,token):
+    try:
+        uid=force_str(urlsafe_base64_decode(uidb64))
+        user=NormalUser.objects.get(pk=uid)
+    except Exception as e:
+        user=None
+    if user and generate_token.check_token(user,token):
+        user.verified = True
+        user.save()
+
+        messages.success(request, 'Verification complete, you can now login.')
+        return redirect(reverse('login'))
+    
+    return render(request,'verificationfailed.html',{'user':user})
 
 
 def landing(request):
@@ -154,8 +190,13 @@ def loginuser(request):
                 request.session.set_expiry(0)  # Session expires on browser close
 
             if user.groups.filter(name='NormalUsers').exists():
-                messages.success(request, "Login Success.")
-                return redirect('home')
+                normaluser = NormalUser.objects.get(username=username)
+                if normaluser.verified == True:
+                    messages.success(request, "Login Success.")
+                    return redirect('home')
+                else:
+                    error_message = "Email address is not verified, please check your email inbox"
+                    return render(request,'login.html',{'error_message':error_message})
             elif user.groups.filter(name='Business').exists():
                 business_user = Business.objects.get(username=username)
                 if business_user.approval == True: 
@@ -180,19 +221,18 @@ def register(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.verified = False  
+            user.save()  
+            send_email(user,request)
+            messages.info(request, 'Registration successful. Please verify your email address to activate your account.')
             return redirect('login')
         else:
-            # Print form errors for debugging in console
             print(form.errors)
-
     else:
         form = SignupForm()  # Create a new form instance for GET requests
 
     return render(request, 'register.html', {'form': form})
-   
-from django.contrib.auth.models import Group, User
-from .models import Notification  # Ensure you have imported your Notification model
 
 @login_required
 def addplace(request):

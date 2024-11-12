@@ -130,8 +130,8 @@ class SignupForm(forms.ModelForm):
         email = self.cleaned_data.get('email')
         if NormalUser.objects.filter(email=email).exists():  # Adjust for your model
             raise ValidationError("This email is already registered.")
-        if not (email.endswith('@gmail.com') or email.endswith('@yahoo.com')):
-            raise ValidationError("Email must be a valid Gmail or Yahoo address.")
+        if not (email.endswith('@gmail.com')):
+            raise ValidationError("Email must be a valid Gmail address.")
         return email
 
     def clean_username(self):
