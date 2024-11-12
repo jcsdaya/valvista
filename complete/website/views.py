@@ -28,6 +28,8 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes,force_str,DjangoUnicodeDecodeError
 from django.core.mail import EmailMessage
 from django.conf import settings
+from django.core.mail import send_mail
+
  
 
 def send_email(user,request):
@@ -632,6 +634,13 @@ def declinebusiness(request,pk):
             user = User.objects.get(username=business.username)
             business.delete()
             user.delete()
+            send_mail(
+                subject='Business Denied Notification',
+                message=f"Mabuhay {business.username},\n\nUnfortunately, Your business '{business.name}' has been not approved. You can contact us again if you need help or it was a mistake. \n\nBest regards,\nThe ValVista Team",
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[business.email],
+                fail_silently=False,
+            )    
             messages.success(request, "Business Denied successfully.")
             return redirect('approvallist')
         context={'business':business}
@@ -646,6 +655,15 @@ def approvebusiness(request,pk):
         if request.POST:
             business.approval = True
             business.save()
+
+            send_mail(
+                subject='Business Approval Notification',
+                message=f"Mabuhay {business.username},\n\nCongratulations! Your business '{business.name}' has been approved. You can now access your business dashboard and start managing your profile.\n\nBest regards,\nThe ValVista Team",
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[business.email],
+                fail_silently=False,
+            )
+
             messages.success(request, "Business Approved successfully.")
             return redirect('approvallist')
         context={'business':business}
