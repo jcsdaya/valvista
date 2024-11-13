@@ -3,7 +3,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family:"Exo", sans-serif;
 }
 
 /* Global Colors */
@@ -129,22 +128,34 @@
 /* Responsiveness for smaller screens */
 @media screen and (max-width: 768px) {
     .hero {
-        flex-direction: column; /* Stack text and video vertically */
+        flex-direction: column; /* Stack items vertically */
+        align-items: center; /* Center align items */
     }
 
     .container-left, .container-right {
         max-width: 100%; /* Full width on smaller screens */
+        margin-top: 50px;
+        padding: 10px; /* Add padding for spacing */
+        box-sizing: border-box; /* Ensure padding doesn't affect width */
     }
 
     .hero-video {
-        max-height: 300px; /* Limit video height on mobile */
-        width: auto; /* Maintain aspect ratio */
+        max-height: 300px; /* Limit video height */
+        width: 100%; /* Full width for video */
+        margin-top: 40px; /* Add margin to prevent overlap */
     }
 
     .svg-container {
-        width: 100%; /* Full width on smaller screens */
+        width: 100%; /* Full width */
+        margin-top: 30px; /* Add margin for spacing */
+    }
+
+    /* Additional spacing between elements */
+    .hero > * + * {
+        margin-top: 30px;
     }
 }
+
 
 
 
