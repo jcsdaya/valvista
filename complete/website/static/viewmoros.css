@@ -12,10 +12,6 @@ body{
     font-family:"Exo", sans-serif;
 }
 
-h2{
-    font-weight: bold;
-}
-
 
 
 .img-container {
@@ -113,7 +109,7 @@ h2{
 }
 
 .full-img img {
-	width: 65%;
+	width: 90%;
 }
 
 .full-img span {
@@ -243,6 +239,7 @@ h2{
     top: 0;
     left: 0;
     z-index: 1100;
+   
 }
 
 .logo {

@@ -180,6 +180,7 @@
                 </thead>
                 <tbody>
                     {% for user in all_users %}
+                    {%if user.verified%}
                     <tr>
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
@@ -188,6 +189,7 @@
                             <a style="color: darkblue;" href="{% url 'deletevisitor' user.id %}">Delete</a>
                         </td>
                     </tr>
+                    {% endif %}
                     {% endfor %}
                 </tbody>
             </table>

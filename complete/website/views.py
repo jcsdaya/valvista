@@ -783,7 +783,6 @@ def deletevisitor(request,pk):
         context={'normaluser':normaluser}
         return render(request,'deletevisitor.html',context)
     
-from django.contrib.auth.models import User
 
 @login_required
 def edituser(request, pk):
@@ -805,7 +804,7 @@ def edituser(request, pk):
     else:
         form = NormalUserEditForm(instance=normal_user)
     
-    return render(request, 'edituser.html', {'form': form, 'user': normal_user})
+    return render(request, 'edituser.html', {'form': form, 'normal_user': normal_user})
 
 
 @login_required
