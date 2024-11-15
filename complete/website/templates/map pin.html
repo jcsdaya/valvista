@@ -23,42 +23,43 @@
 </head>
 <nav>
     <div class="logo">
-        <a href="{%url 'home' %}"><img class="logo"src ="{% static 'media/valvista_logo.png' %}"alt="logo"></a>
+        <a style="margin-right: 50px;" href="{% url 'home' %}">
+            <img class="logo" src="{% static 'media/valvista_logo.png' %}" alt="logo">
+        </a>
     </div>
-    
 
-    <ul class="nav-links">
-       
-        <li><a href="{%url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
+    <!-- Burger icon for mobile -->
+    <div class="burger" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
+    </div>
 
-        {% if user.is_authenticated%}
-        {% if not user.is_Business and not business.approval%}
-        <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i> Favorites</a></li>
-        {%else%}
-        <li><a ></i></a></li>
-        {%endif%}
-        {%endif%}
-        {% if user.is_authenticated%}
-        {% if not user.is_Business and not business.approval%}
-        <li><a href="{%url 'itinerary' %}"><i class="fa-solid fa-clipboard-list"></i> Itinerary Creation</a></li>
-        {%else%}
-        <li><a ></i></a></li>
-        {%endif%}
-        {%endif%}
-        
-    </ul>
-    <ul class="nav-links ul-user">
-        {% if user.is_authenticated%}
-        {% if not user.is_Business and not business.approval%}
-        <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
-        <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
-        {%else%}
-        <li><a style="margin-left: 400px;" href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
-        
-        {%endif%}
-        {%endif%}
-    </ul>
-    
+    <!-- Container for nav links and user-related elements -->
+    <div class="nav-links-container">
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
+
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'favorite_list' %}"><i class="fa-solid fa-heart"></i> Favorites</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}"><i class="fa-solid fa-heart"></i> Favorites</a></li>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'itinerary' %}"><i class="fa-solid fa-clipboard-list"></i> Itinerary Creation</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}"><i class="fa-solid fa-clipboard-list"></i> Itinerary Creation</a></li>
+            {% endif %}
+        </ul>
+
+        <ul class="nav-links ul-user">
+            {% if user.is_authenticated %}
+            <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong>{{ request.user }}!</strong></a></li>
+            <li><a href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
+            {% else %}
+            <li><a style="margin-left: 20px;" href="{% url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+            {% endif %}
+        </ul>
+    </div>
 </nav>
 
 
@@ -73,6 +74,34 @@
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
     <script>
+         // Toggle the navigation menu visibility on burger icon click
+    function toggleMenu() {
+        const navLinksContainer = document.querySelector('.nav-links-container');
+        navLinksContainer.classList.toggle('active'); // This will trigger the slide animation
+    }
+
+    // Ensure burger visibility based on window size on page load
+    window.addEventListener("load", function () {
+        checkScreenSize();  // Check screen size when the page loads
+    });
+
+    // Adjust the visibility of the burger menu based on screen size
+    function checkScreenSize() {
+        const burger = document.querySelector('.burger');
+        if (window.innerWidth <= 1024) { // Burger should be visible for screens <= 1024px
+            burger.style.display = 'block';
+        } else {
+            burger.style.display = 'none';
+        }
+    }
+
+    
+
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", function () {
+        checkScreenSize(); // Re-check screen size on window resize
+    });
+        
         const INITIAL_LAT_LNG = [14.7006, 120.9541]; // Center of the NCR
         const VALENZUELA_BOUNDS = [
             [14.5630, 121.0361],  // Southwest corner
@@ -221,13 +250,37 @@ function handleError(error) {
     alert(errorMessage); // Provide user feedback via alert
 }
 
+function createCloseButton(control) {
+    const closeButton = L.DomUtil.create('button', 'close-button');
+    closeButton.innerHTML = 'X'; // Style this button as needed
+    let isControlVisible = true;
+    const controlContainer = control.getContainer(); // Get the control container
 
-        //fix na to
-        function setupRoutingControl(map, marker, locations) {
+    // Style the button to stay on the map regardless of the container's visibility
+    closeButton.style.position = 'absolute';
+    closeButton.style.top = '130px';
+    closeButton.style.right = '10px';
+    closeButton.style.zIndex = '1000';
+
+    closeButton.onclick = function() {
+        if (isControlVisible) {
+            controlContainer.style.display = 'none'; // Hide the routing control container
+            closeButton.innerHTML = 'Open Route'; // Change button text to 'Open Route'
+        } else {
+            controlContainer.style.display = ''; // Show the routing control container
+            closeButton.innerHTML = 'Close Route'; // Change button text to 'Close Route'
+        }
+        isControlVisible = !isControlVisible; // Toggle the visibility state
+    };
+
+    return closeButton;
+}
+
+
+function setupRoutingControl(map, marker, locations) {
     const queryParams = getQueryParams();
     const { destinationId, destinationType } = queryParams;
-    
-    // Find the destination location based on type
+
     const destinationLocation = destinationType === 'business'
         ? locations.find(location => location.businessid === destinationId)
         : locations.find(location => location.placeid === destinationId);
@@ -235,12 +288,12 @@ function handleError(error) {
     if (destinationLocation) {
         const destinationLatLng = [destinationLocation.lat, destinationLocation.lng];
 
-        destinationMarker = L.marker(destinationLatLng, {
+        const destinationMarker = L.marker(destinationLatLng, {
             icon: pinnedIcon
         }).addTo(map)
         .bindPopup(`<b>${destinationLocation.name}</b>`);
 
-        routingControl = L.Routing.control({
+        const routingControl = L.Routing.control({
             waypoints: [
                 marker.getLatLng(),
                 destinationLatLng
@@ -255,12 +308,13 @@ function handleError(error) {
             });
         }).addTo(map);
 
-        console.log("Route set from start to destination.");
+        // Create and add close button
+        const closeButton = createCloseButton(routingControl);
+        map.getContainer().appendChild(closeButton);// Append the close button to the routing control
     } else {
         console.warn('Destination location not found');
     }
 }
-
 
 
         // fix na to
@@ -507,7 +561,9 @@ function main() {
 
     setupGeofence(map);
     setupMarkerCustomization(marker);
+    
 }
+
 
 document.addEventListener('DOMContentLoaded', main);
 

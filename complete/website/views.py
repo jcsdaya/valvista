@@ -553,7 +553,7 @@ def updatePlace(request,pk):
                 place.save()
                 
                 new_status = form.cleaned_data.get('status')
-                if new_status in ["Closed", "Temporarily Closed", "For Renovation"] and new_status != original_status:
+                if new_status in ["Open","Soon to Open","Closed", "Temporarily Closed", "For Renovation"] and new_status != original_status:
                     normal_users_group = Group.objects.get(name='NormalUsers')
                     users = User.objects.filter(groups=normal_users_group)
                 

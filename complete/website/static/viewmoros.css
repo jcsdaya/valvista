@@ -156,16 +156,16 @@ h3{
 
 .arrow {
     position: absolute;
-    top: 50%;
     font-size: 2rem;
     color: white;
     cursor: pointer;
     padding: 10px;
     user-select: none;
+    top: 50% !important;
 }
 
 .left-arrow {
-    left: 100px;
+    left: -1700px;
 }
 
 .right-arrow {
@@ -443,6 +443,10 @@ nav {
       justify-content: center;
       
     }
+
+    .arrow{
+        display: none;
+    }
   }
   
   
@@ -494,6 +498,9 @@ nav {
         margin-right: 0;
         height: auto;
     }
+    .arrow{
+        display: none;
+    }
   }
   .nav-links-container.active .search-bar button#filterbut {
     padding: 7px 7px; /* Adjust padding specifically for filter button */
@@ -502,6 +509,8 @@ nav {
     border-radius: 8px;
     border: 2px solid #c80000; /* Match button styling with input */
     cursor: pointer;
+
+    
   }
   
   
@@ -519,6 +528,9 @@ nav {
   
     .burger {
       margin-right: 10px;  /* Spacing adjustment for smaller screens */
+    }
+    .arrow{
+        display: none;
     }
   }
   
@@ -573,10 +585,10 @@ nav {
         width: 100%;
         max-width: 400px; /* Limit max-width for smaller container */
         padding: 20px;
-        margin: 0 auto; /* Center the container horizontally */
         align-items: center;
         overflow-x: hidden; /* Prevent horizontal scrolling */
         overflow-y: auto; /* Allow vertical scrolling if needed */
+        top: 50px !important;
     }
 
     .container {

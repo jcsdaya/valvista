@@ -461,11 +461,8 @@ nav ul li.no-hover a:hover {
 }
 
 .notification-badge {
-  background-color: red;
-  color: white;
+  color: #c80000;
   padding: 5px;
-  border-radius: 50%;
-  font-size: 12px;
 }
 
 @media (min-width: 1440px) {
@@ -1584,14 +1581,10 @@ footer {
   position: absolute;
   top: 0;
   right: 0;
-  background-color: white;
-  color: #c80000;
-  border-radius: 50%;
   width: 20px;  /* Adjust size as needed */
   height: 20px;
   font-size: 12px;  /* Adjust font size as needed */
   text-align: center;
   line-height: 20px;  /* Center the number vertically */
   font-weight: bold;
-  border: 2px solid #c80000; /* Red border around the white badge */
 }

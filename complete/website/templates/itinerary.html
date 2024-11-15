@@ -17,61 +17,95 @@
 </head>
 
 <body>
-<div id="itinerary-content">
-    <div class="custom-background">
-    <div class="overlay"></div>
-    <nav>
-        <div class="logo">
-            <a href="{%url 'home' %}"><img class="logo"src ='{% static "media/valvista_logo.png" %}' alt="logo"></a>
+
+    <div id="itinerary-content">
+        <div class="custom-background">
+            <div class="overlay"></div>
+            <nav>
+                <div class="logo">
+                    <a style="margin-right: 50px;" href="{% url 'home' %}">
+                        <img class="logo" src='{% static "media/valvista_logo.png" %}' alt="logo">
+                    </a>
+                </div>
+            
+                <!-- Burger icon for mobile -->
+                <div class="burger" onclick="toggleMenu()">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            
+                <!-- Container for nav links and user-related elements -->
+                <div class="nav-links-container">
+                    <ul class="nav-links">
+                        <li><a href="{% url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
+            
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'favorite_list' %}"><i class="fa-solid fa-heart"></i> Favorites</a></li>
+                        {% else %}
+                            <li><a href="{% url 'login' %}"><i class="fa-solid fa-heart"></i> Favorites</a></li>
+                        {% endif %}
+            
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'itinerary' %}"><i class="fa-solid fa-clipboard-list"></i> Itinerary Creation</a></li>
+                        {% else %}
+                            <li><a href="{% url 'login' %}"><i class="fa-solid fa-clipboard-list"></i> Itinerary Creation</a></li>
+                        {% endif %}
+                    </ul>
+            
+                    <ul class="nav-links ul-user">
+                        {% if user.is_authenticated %}
+                        <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong>{{ request.user }}!</strong></a></li>
+                        <li><a href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
+                        {% else %}
+                        <li><a style="margin-left: 20px;" href="{% url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
         </div>
-        
-
-        <ul class="nav-links">
-           
-            <li><a href="{%url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
-  
-            {% if user.is_authenticated%}
-            {% if not user.is_Business and not business.approval%}
-            <li><a href="{%url 'favorite_list' %}"><i class="fa-solid fa-heart"></i> Favorites</a></li>
-            {%else%}
-            <li><a ></i></a></li>
-            {%endif%}
-            {%endif%}
-			{% if user.is_authenticated%}
-            {% if not user.is_Business and not business.approval%}
-            <li><a href="{%url 'itinerary' %}"><i class="fa-solid fa-clipboard-list"></i> Itinerary Creation</a></li>
-			{%else%}
-            <li><a ></i></a></li>
-            {%endif%}
-            {%endif%}
-            
-        </ul>
-        <ul class="nav-links ul-user">
-            {% if user.is_authenticated%}
-            {% if not user.is_Business and not business.approval%}
-            <li class="no-hover"><a style="color: white;"><i class="fa-solid fa-user"></i> Welcome, <strong> {{request.user}}!</strong></a></li>
-            <li><a href="{%url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
-            {%else%}
-            <li><a style="margin-left: 400px;" href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
-            
-            {%endif%}
-            {%endif%}
-        </ul>
-        
-    </nav>
-
+    </div>
+    
     <script>
-        let menuList = document.getElementById("menuList");
-        menuList.style.maxHeight = "0px";
 
-        function toggleMenu() {
-            if (menuList.style.maxHeight == "0px") {
-                menuList.style.maxHeight = "300px";
-            } else {
-                menuList.style.maxHeight = "0px";
-            }
+
+    function toggleMenu() {
+        const navLinksContainer = document.querySelector('.nav-links-container');
+        navLinksContainer.classList.toggle('active'); // This will trigger the slide animation
+    }
+
+    // Ensure burger visibility based on window size on page load
+    window.addEventListener("load", function () {
+        checkScreenSize();  // Check screen size when the page loads
+    });
+
+    // Adjust the visibility of the burger menu based on screen size
+    function checkScreenSize() {
+        const burger = document.querySelector('.burger');
+        if (window.innerWidth <= 1024) { // Burger should be visible for screens <= 1024px
+            burger.style.display = 'block';
+        } else {
+            burger.style.display = 'none';
         }
+    }
+
+    
+
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", function () {
+        checkScreenSize(); // Re-check screen size on window resize
+    });
+
+    // Toggle notification dropdown visibility
+    function toggleNotifications() {
+        const notificationContainer = document.getElementById('notification-container');
+        notificationContainer.style.display = (notificationContainer.style.display === "none" || notificationContainer.style.display === "") ? "block" : "none";
+    }
+
     </script>
+
+
+
+
+
     <script src="https://kit.fontawesome.com/f8e1a90484.js" crossorigin="anonymous"></script>
     <br>   <br>   <br>   <br>  
    
@@ -79,8 +113,9 @@
 <!-- Itinerary Selection -->
 <div style="max-width: 1200px;" class="container" id="itineraryContainer">
     <header class="header">
-        <img class="logoss" src='{% static "media/valvista_logo.png" %}'alt="Valvista Logo" />
+        <img class="logoss" src='{% static "media/valvista_logo.png" %}' alt="Valvista Logo" />
     </header>
+
     <div class="right-box">
         <div class="header-text">
             <div class="fav-title-container">
@@ -108,6 +143,10 @@
                 <div class="loading-text">Please wait...</div>
             </div>
             <a id="mapButton" class="btn" href="{%url 'map'%}"> 🗺️ Map </a>
+
+
+
+          <!-- Hidden form to submit the itinerary data -->
             <form id="itinerary-form" method="POST" action="">
                 {% csrf_token %}
                 <input type="hidden" name="places" id="places-input">
@@ -120,7 +159,8 @@
                 <br>
                 {% csrf_token %}
 
-                <table class="table table-bordered table-striped">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Name of Place</th>
@@ -131,7 +171,7 @@
                             <th class="actions-column">Actions</th> 
                     </thead>
             
-            <tbody id="itineraryBody">
+            <tbody id="itineraryBody" class="responsive-table">
                 {% with place.0 as first_place %}
                 {% if first_place%}
    
@@ -264,23 +304,29 @@
                 {% endwith %}
             </tbody>
         </table>
+
+        </div>
+    </div>
+
+       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
         <p><strong>Total Duration:</strong> <span id="total-duration"></span> hours</p>
         <p><strong>Total Money Spent:</strong>₱<span id="total-spent">0.00</span></strong>
 
-            <footer class="puter">
-                <p class="footer-title">
-                    <img class="logoss" src='{% static "media/valvista_logo.png" %}' alt="Valvista Logo" />
-                </p>
-                <p class="footer-subtitle">&copy; 2024 All rights reserved.</p>
-                <p class="footer-subtitle">Explore Valenzuela City with us!</p>
-            </footer>
             
-</div>
+            <div class="bottom">
+                <!-- Main Content Here -->
+                <footer class="puter">
+                    <p class="footer-title">
+                        <img class="logoss" src='{% static "media/vlogos.png" %}' alt="Valvista Logo" />
+                    </p>
+                    <p class="footer-subtitle">&copy; 2024 All rights reserved.</p>
+                    <p class="footer-subtitle">Explore Valenzuela City with us!</p>
+                </footer>  
+            </div> 
+        </div>
     </div>
-    </div>
-</div>
-</div>
-</div>
+
+    
 <div id="notification" class="notification d-none">
     <p id="notification-message"></p>
 </div>

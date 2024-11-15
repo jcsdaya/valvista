@@ -21,20 +21,56 @@
 
     <nav>
         <div class="logo">
-            <a href="{%url 'home' %}"><img class="logo"src ='{% static "media/valvista_logo.png" %}' alt="logo"></a>
+            <a href="{% url 'home' %}"><img class="logo" src='{% static "media/valvista_logo.png" %}' alt="logo"></a>
         </div>
-
-        <ul class="nav-links">
-           
-            <li><a href="{%url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
-         </ul>
+    
+        <!-- Burger icon for mobile -->
+        <div class="burger" onclick="toggleMenu()">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    
+        <!-- Container for nav links and user-related elements -->
+        <div class="nav-links-container">
+            <!-- Nav links visible in the burger menu -->
+            <ul class="nav-links">
+                <li><a href="{% url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
+            </ul>
+    
+            <!-- User links visible in the burger menu -->
             <ul class="nav-links ul-user">
-            <li><a href="{%url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
-            
-         </ul>
-        
+                <li><a href="{% url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+            </ul>
+        </div>
     </nav>
-    </header>
+
+     <!-- Script for burger menu -->
+    <script>
+        // Toggle the navigation menu visibility on burger icon click
+        function toggleMenu() {
+            const navLinksContainer = document.querySelector('.nav-links-container');
+            navLinksContainer.classList.toggle('active'); // This will trigger the slide animation
+        }
+    
+        // Ensure burger visibility based on window size on page load
+        window.addEventListener("load", function () {
+            checkScreenSize();  // Check screen size when the page loads
+        });
+    
+        // Adjust the visibility of the burger menu based on screen size
+        function checkScreenSize() {
+            const burger = document.querySelector('.burger');
+            if (window.innerWidth <= 1024) { // Burger should be visible for screens <= 1024px
+                burger.style.display = 'block';
+            } else {
+                burger.style.display = 'none';
+            }
+        }
+    
+        // Add an event listener to handle window resizing
+        window.addEventListener("resize", function () {
+            checkScreenSize(); // Re-check screen size on window resize
+        });
+    </script>
       
     <div class="register-photo">
         <div class="form-container">
