@@ -576,6 +576,33 @@ document.addEventListener('DOMContentLoaded', main);
 
 
     </script>
+     <script>
+        // Toggle the navigation menu visibility on burger icon click
+        function toggleMenu() {
+            const navLinksContainer = document.querySelector('.nav-links-container');
+            navLinksContainer.classList.toggle('active'); // This will trigger the slide animation
+        }
+    
+        // Ensure burger visibility based on window size on page load
+        window.addEventListener("load", function () {
+            checkScreenSize();  // Check screen size when the page loads
+        });
+    
+        // Adjust the visibility of the burger menu based on screen size
+        function checkScreenSize() {
+            const burger = document.querySelector('.burger');
+            if (window.innerWidth <= 1024) { // Burger should be visible for screens <= 1024px
+                burger.style.display = 'block';
+            } else {
+                burger.style.display = 'none';
+            }
+        }
+    
+        // Add an event listener to handle window resizing
+        window.addEventListener("resize", function () {
+            checkScreenSize(); // Re-check screen size on window resize
+        });
+    </script>
 </body>
 
 </html>
