@@ -46,7 +46,7 @@
 
         <form method="post" action="{%url 'deletevisitor' user.id %} ">
             {% csrf_token %}
-            <p style="font-size: 20px;"> Are you sure you want to delete {{normal_user.username}}?</p>
+            <p style="font-size: 20px;"> Are you sure you want to delete {{user.username}}?</p>
             <button type="submit">Delete</button>
                 <a style="color: #c80000; font-size: 20px;" href ="{%url 'dashboard'%}">Cancel</a>
                 

@@ -744,6 +744,7 @@ def declinebus(request,pk):
     else:
         business = get_object_or_404(Business, pk=pk)
         if request.POST:
+            business = get_object_or_404(Business, pk=pk)
             user = User.objects.get(username=business.username)
             business.delete()
             user.delete()
@@ -759,6 +760,7 @@ def deleteowner(request,pk):
     else:
         business = get_object_or_404(Business, pk=pk)
         if request.POST:
+            business = get_object_or_404(Business, pk=pk)
             user = User.objects.get(username=business.username)
             business.delete()
             user.delete()
@@ -774,13 +776,15 @@ def deletevisitor(request,pk):
         return redirect('login')
     else:
         normaluser = get_object_or_404(NormalUser, pk=pk)
+        user = User.objects.get(username=normaluser.username)
         if request.POST:
+            normaluser = get_object_or_404(NormalUser, pk=pk)
             user = User.objects.get(username=normaluser.username)
             user.delete()
             normaluser.delete()
             messages.success(request, "Visitor account deleted successfully.")
             return redirect('dashboard')
-        context={'normaluser':normaluser}
+        context={'normaluser':normaluser,'user':user}
         return render(request,'deletevisitor.html',context)
     
 
