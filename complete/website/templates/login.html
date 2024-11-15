@@ -97,7 +97,15 @@
              Your browser does not support the video tag.
          </video>
      </div>
-     
+     {% if messages %}
+    <div class="alert-messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
       <form action=" "  class="login__form" method="POST">
          {% csrf_token %}
          {% if error_message %}
