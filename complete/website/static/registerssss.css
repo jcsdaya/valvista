@@ -6,6 +6,12 @@ body {
   font-family:"Exo", sans-serif;
 }
 
+.login__eye{
+  position:absolute;
+  bottom: 220px;
+  right: 80px;
+}
+
 /* Base styles for nav */
 nav {
   padding: 20px 30px;
@@ -353,6 +359,10 @@ nav ul li.no-hover a:hover {
     display: flex;
     justify-content: center;
   }
+  .login__eye{
+    bottom:195px;
+    right: 50px;
+  }
 
   .register-photo .form-container {
     flex-direction: column;
@@ -422,6 +432,9 @@ nav ul li.no-hover a:hover {
     padding: 60px 10px;
     display: flex;
     justify-content: center;
+  }
+  .login__eye{
+    bottom: 180px;
   }
 
   .register-photo .form-container {

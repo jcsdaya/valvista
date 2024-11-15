@@ -460,7 +460,6 @@ h2::after{
     position: absolute;
     top: 0;
     right: 0;
-    background-color: white;
     color: #c80000;
     border-radius: 50%;
     width: 20px;  /* Adjust size as needed */
@@ -469,7 +468,7 @@ h2::after{
     text-align: center;
     line-height: 20px;  /* Center the number vertically */
     font-weight: bold;
-    border: 2px solid #c80000; /* Red border around the white badge */
+   
   }
 
 

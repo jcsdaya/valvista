@@ -775,16 +775,15 @@ def deletevisitor(request,pk):
     if not request.user.groups.filter(name='Admin').exists():
         return redirect('login')
     else:
-        normaluser = get_object_or_404(NormalUser, pk=pk)
-        user = User.objects.get(username=normaluser.username)
+        user = get_object_or_404(NormalUser, pk=pk)
         if request.POST:
-            normaluser = get_object_or_404(NormalUser, pk=pk)
-            user = User.objects.get(username=normaluser.username)
+            user = get_object_or_404(NormalUser, pk=pk)
+            normaluser = User.objects.get(username=user.username)
             user.delete()
             normaluser.delete()
             messages.success(request, "Visitor account deleted successfully.")
             return redirect('dashboard')
-        context={'normaluser':normaluser,'user':user}
+        context={'user':user}
         return render(request,'deletevisitor.html',context)
     
 
