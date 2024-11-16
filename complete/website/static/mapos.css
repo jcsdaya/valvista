@@ -331,6 +331,7 @@ html, body {
     filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
 }
 
+
 @keyframes bounce {
     0%, 20%, 50%, 80%, 100% {
         transform: translateY(0);
