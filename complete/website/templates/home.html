@@ -111,7 +111,7 @@
     }
 
     // Ensure burger visibility based on window size on page load
-    window.addEventListener("load", function () {
+    window.addEventListener("DOMContentLoaded", function () {
         checkScreenSize();  // Check screen size when the page loads
     });
 
@@ -124,8 +124,6 @@
             burger.style.display = 'none';
         }
     }
-
-    
 
     // Add an event listener to handle window resizing
     window.addEventListener("resize", function () {

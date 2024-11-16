@@ -419,9 +419,9 @@ nav ul li.no-hover a:hover {
   cursor: pointer;
   font-size: 24px;
   color: #fff;
-  position: absolute;
-  right: 30px;
-  top: 20px;
+  position: relative;
+  left: 170px;
+  top: 5px;
 }
 
 /* Notification dropdown styling */
@@ -588,6 +588,11 @@ nav ul li.no-hover a:hover {
 
 /* For screens with max-width: 768px (tablets in portrait mode) */
 @media (max-width: 768px) {
+
+  .burger {
+    display: block;
+    margin-right: 10px;  /* Spacing adjustment for smaller screens */
+  }
   .nav-links-container {
     padding: 10px 0;
   }
@@ -605,6 +610,11 @@ nav ul li.no-hover a:hover {
 
 /* For screens with max-width: 600px (small tablets and large phones) */
 @media (max-width: 600px) {
+
+  .burger {
+    display: block;
+    margin-right: 10px;  /* Spacing adjustment for smaller screens */
+  }
   /* Styling for the search bar within burger menu */
   .nav-links-container.active .search-container {
       width: 100%;
@@ -662,6 +672,7 @@ nav ul li.no-hover a:hover {
   }
 
   .burger {
+    display: block;
     margin-right: 10px;  /* Spacing adjustment for smaller screens */
   }
 }
