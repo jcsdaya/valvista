@@ -673,7 +673,8 @@ nav ul li.no-hover a:hover {
 
   .burger {
     display: block;
-    margin-right: 10px;  /* Spacing adjustment for smaller screens */
+    margin-right: 10px;
+    left: 120px; /* Spacing adjustment for smaller screens */
   }
 }
 
