@@ -357,85 +357,110 @@ function redirectToMapDynamic(linkElement) {
     }
 }
 
-    function downloadItinerary() {
-        const button = document.getElementById("downloadItineraryBtn");
-        const loading = document.getElementById("loading");
-        const notification = document.getElementById("notification");
-        const itineraryContainer = document.getElementById('itineraryContainer');
-        const buttonsToHide = document.querySelectorAll('#favoriteButton, #downloadItineraryBtn, #mapButton, .selection-wrapper, .starttime');
-        const actionColumnsToHide = document.querySelectorAll('.actions-column, .button-container');
+function downloadItinerary() {
+    const button = document.getElementById("downloadItineraryBtn");
+    const loading = document.getElementById("loading");
+    const notification = document.getElementById("notification");
+    const itineraryContainer = document.getElementById('itineraryContainer');
+    const buttonsToHide = document.querySelectorAll('#favoriteButton, #downloadItineraryBtn, #mapButton, .selection-wrapper, .starttime');
+    const actionColumnsToHide = document.querySelectorAll('.actions-column, .button-container');
     
-        const toggleVisibility = (elements, display) => {
-            elements.forEach(element => {
-                element.style.display = display;
-            });
-        };
-    
-        // Show loading animation
-        button.disabled = true; // Disable button
-        loading.style.display = "flex"; // Show loading spinner
-    
-        // Hide buttons before generating the PDF
-        toggleVisibility(buttonsToHide, 'none');
-        toggleVisibility(actionColumnsToHide, 'none');
-    
-        // Wait 3 seconds before generating the PDF
-        setTimeout(() => {
-            // Temporarily hide the loading spinner for the screenshot
-            loading.style.display = "none"; 
-    
-            html2canvas(itineraryContainer, {
-                scale: 2,
-                backgroundColor: 'white',
-                useCORS: true,
-                logging: true,
-            }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF('p', 'mm', 'a4');
-    
-                const imgWidth = 190;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    
-                // Handle page breaks
-                const pageHeight = pdf.internal.pageSize.height;
-                let heightLeft = imgHeight;
-                let position = 10;
-    
-                while (heightLeft >= 0) {
-                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                    position -= pageHeight; // Move position down for the next page
-    
-                    if (heightLeft >= 0) {
-                        pdf.addPage(); // Add a new page
-                    }
+    const toggleVisibility = (elements, display) => {
+        elements.forEach(element => {
+            element.style.display = display;
+        });
+    };
+
+    // Function to temporarily apply desktop layout
+    const applyDesktopStyles = () => {
+        itineraryContainer.style.width = "1024px"; // Set fixed width for desktop view
+        itineraryContainer.style.margin = "0 auto"; // Center the content
+        itineraryContainer.style.transform = "scale(1)"; // Reset any scaling
+        itineraryContainer.style.overflow = "visible"; // Ensure full content is visible
+    };
+
+    // Function to restore original layout
+    const restoreOriginalStyles = () => {
+        itineraryContainer.style.width = ""; // Remove fixed width
+        itineraryContainer.style.margin = ""; // Reset margin
+        itineraryContainer.style.transform = ""; // Reset scaling
+        itineraryContainer.style.overflow = ""; // Reset overflow
+    };
+
+    // Show loading animation
+    button.disabled = true; // Disable button
+    loading.style.display = "flex"; // Show loading spinner
+
+    // Hide buttons before generating the PDF
+    toggleVisibility(buttonsToHide, 'none');
+    toggleVisibility(actionColumnsToHide, 'none');
+
+    // Apply desktop layout
+    applyDesktopStyles();
+
+    // Wait 3 seconds before generating the PDF
+    setTimeout(() => {
+        // Temporarily hide the loading spinner for the screenshot
+        loading.style.display = "none";
+
+        html2canvas(itineraryContainer, {
+            scale: 2,
+            backgroundColor: 'white',
+            useCORS: true,
+            logging: true,
+        }).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4');
+
+            const imgWidth = 190;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+            // Handle page breaks
+            const pageHeight = pdf.internal.pageSize.height;
+            let heightLeft = imgHeight;
+            let position = 10;
+
+            while (heightLeft >= 0) {
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                position -= pageHeight; // Move position down for the next page
+
+                if (heightLeft >= 0) {
+                    pdf.addPage(); // Add a new page
                 }
-    
-                pdf.save('itinerary.pdf');
-    
-                // Restore buttons and action columns after PDF is saved
-                loading.style.display = "none"; // Hide loading animation
-                button.disabled = false; // Re-enable button
-                toggleVisibility(buttonsToHide, '');
-                toggleVisibility(actionColumnsToHide, '');
-    
-                // Show notification
-                notification.textContent = "Download complete!";
-                notification.style.display = "block";
-    
-                // Hide notification after a few seconds
-                setTimeout(() => {
-                    notification.style.display = "none";
-                }, 3000);
-            }).catch(error => {
-                console.error('Error generating PDF:', error);
-                loading.style.display = "none"; // Hide loading animation
-                button.disabled = false; // Re-enable button
-                toggleVisibility(buttonsToHide, '');
-                toggleVisibility(actionColumnsToHide, '');
-            });
-        }, 2000); // Delay for 3 seconds
-    }
+            }
+
+            pdf.save('itinerary.pdf');
+
+            // Restore buttons and action columns after PDF is saved
+            loading.style.display = "none"; // Hide loading animation
+            button.disabled = false; // Re-enable button
+            toggleVisibility(buttonsToHide, '');
+            toggleVisibility(actionColumnsToHide, '');
+
+            // Restore original styles
+            restoreOriginalStyles();
+
+            // Show notification
+            notification.textContent = "Download complete!";
+            notification.style.display = "block";
+
+            // Hide notification after a few seconds
+            setTimeout(() => {
+                notification.style.display = "none";
+            }, 3000);
+        }).catch(error => {
+            console.error('Error generating PDF:', error);
+            loading.style.display = "none"; // Hide loading animation
+            button.disabled = false; // Re-enable button
+            toggleVisibility(buttonsToHide, '');
+            toggleVisibility(actionColumnsToHide, '');
+
+            // Restore original styles
+            restoreOriginalStyles();
+        });
+    }, 2000); // Delay for 3 seconds
+}
     </script>
 
 
