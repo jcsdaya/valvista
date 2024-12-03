@@ -809,24 +809,3 @@ setInterval(showNextItem, 5000);
     
   </script>
 
-
-<script>
-    function applyScale() {
-        const width = window.innerWidth;
-        if (width >= 1024 && width <= 1440) {
-            document.body.style.transform = "scale(0.80)";
-            document.body.style.transformOrigin = "top left";
-            document.body.style.width = "150%";
-            document.body.style.overflowX = "hidden";
-        } else {
-            document.body.style.transform = "";
-            document.body.style.width = "";
-            document.body.style.overflowX = "";
-        }
-    }
-
-    // Apply scaling on page load and resize
-    window.addEventListener("load", applyScale);
-    window.addEventListener("resize", applyScale);
-</script>
-
