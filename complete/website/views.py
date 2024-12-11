@@ -81,54 +81,57 @@ def home(request):
     context['notifications'] = notifications
     return render(request, 'home.html', context)
 
-
-from django.contrib.auth.models import Group
-from .models import Notification
-
+@login_required
 def ratingform(request, place_id):
-    place = get_object_or_404(Place, id=place_id)
-    if request.method == 'POST':
-        form = RatingForm(request.POST)
-        if form.is_valid():
-            rating = form.save(commit=False)
-            rating.user = request.user  # Set the user who is rating
-            rating.place = place
-            rating.save()
-            
-            # Create notifications for all users in the 'Admin' group
-            admin_group = Group.objects.get(name='Admin')
-            admins = User.objects.filter(groups=admin_group)
-
-            for admin in admins:
-                Notification.objects.create(
-                    user=admin,
-                    message=f"A new rating has been submitted for {place.name} by {rating.name}.",
-                    placeid=place.id,
-                    origin="rating"
-                )
-
-            messages.success(request, 'Your rating has been submitted successfully!')
-            return redirect('ratingform', place_id=place_id)
+    if not request.user.groups.filter(name='NormalUsers').exists():
+        return redirect('login')
     else:
-        form = RatingForm()
+        place = get_object_or_404(Place, id=place_id)
+        if request.method == 'POST':
+            form = RatingForm(request.POST)
+            if form.is_valid():
+                rating = form.save(commit=False)
+                rating.user = request.user  # Set the user who is rating
+                rating.place = place
+                rating.save()
+                
+                # Create notifications for all users in the 'Admin' group
+                admin_group = Group.objects.get(name='Admin')
+                admins = User.objects.filter(groups=admin_group)
+
+                for admin in admins:
+                    Notification.objects.create(
+                        user=admin,
+                        message=f"A new rating has been submitted for {place.name} by {rating.name}.",
+                        placeid=place.id,
+                        origin="rating"
+                    )
+
+                messages.success(request, 'Your rating has been submitted successfully!')
+                return redirect('ratingform', place_id=place_id)
+        else:
+            form = RatingForm()
 
     return render(request, 'rating.html', {'form': form, 'place': place})
 
-
+@login_required
 def businessrating(request,buss_id):
-    business = get_object_or_404(Business, id=buss_id) 
-    if request.method == 'POST':
-        form = BusinessRating(request.POST)
-        if form.is_valid():
-            rating = form.save(commit=False)
-            rating.user = request.user  # Set the user who is rating
-            rating.business = business 
-            rating.save()
-            messages.success(request, 'Your rating has been submitted successfully!')
-            return redirect('businessrating', buss_id=buss_id)  # Redirect to a success page or the place page
+    if not request.user.groups.filter(name='NormalUsers').exists():
+        return redirect('login')
     else:
-        form = BusinessRating()
-    
+        business = get_object_or_404(Business, id=buss_id) 
+        if request.method == 'POST':
+            form = BusinessRating(request.POST)
+            if form.is_valid():
+                rating = form.save(commit=False)
+                rating.user = request.user  # Set the user who is rating
+                rating.business = business 
+                rating.save()
+                messages.success(request, 'Your rating has been submitted successfully!')
+                return redirect('businessrating', buss_id=buss_id)  # Redirect to a success page or the place page
+        else:
+            form = BusinessRating()
+        
     return render(request, 'businessrating.html', {'form': form,'business': business})
 
 @login_required
