@@ -14,16 +14,20 @@ import os
 from pathlib import Path
 import dj_database_url
 
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = os.environ.get('DEBUG', 'False').lower() == 'True'
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-e(810k7&(a2osuccu0()ywt*20=&(*0=pgr-y+@ahv_@##$q53'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -41,7 +45,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -80,9 +83,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-database_url = os.environ.get("DATABASE_URL")
-DATABASES['default']=dj_database_url.parse(database_url)
-
+DATABASES['default']=dj_database_url.parse('postgresql://valvista_database_quk4_user:0nW70HZGUZr4F0aODwIExQLBXsdAAh6j@dpg-ctc30fl6l47c73fngbo0-a.singapore-postgres.render.com/valvista_database_quk4')
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -108,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Singapore'    
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -119,17 +120,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_URL = '/static/media'
-MEDIA_ROOT = "/mnt/data/media"
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, '/static/media/')
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -140,11 +139,11 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 26214400  # 25MB, adjust as needed
 FILE_UPLOAD_MAX_MEMORY_SIZE = 26214400  # 25MB, adjust as needed
 
 
-EMAIL_FROM_USER  = os.getenv('EMAIL_HOST_USER')
+EMAIL_FROM_USER = 'taranavalvista@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = 'taranavalvista@gmail.com'
+EMAIL_HOST_PASSWORD = 'kdiq oeqm cuyr yhuz'
 

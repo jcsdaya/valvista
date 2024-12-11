@@ -425,6 +425,7 @@ def dashboard(request):
                 )
         all_businesses = Business.objects.all()
         all_users = NormalUser.objects.all()
+        users_verified = NormalUser.objects.filter(verified=True).count()
         total_visitors = Visitor.objects.count()
         user_count = NormalUser.objects.count()
         business_count = Business.objects.filter(archived=False,approval=True).count()
@@ -434,6 +435,7 @@ def dashboard(request):
             'business_count': business_count,
             'user_count': user_count,
             'place_count': place_count,
+            'users_verified':users_verified,
             'total_visitors': total_visitors,
             'all_businesses': all_businesses,
             'all_users': all_users,
