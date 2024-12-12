@@ -51,7 +51,7 @@
                 <h1> ValVista Delete Owner</h1>
             </div>
         
-                <form method="post" action="{%url 'deletevisitor' user.id %} ">
+                <form method="post" action="{%url 'deleteowner' business.id %} ">
                     {% csrf_token %}
                     <p style="font-size: 20px;"> Are you sure you want to delete {{business.username}}?</p>
                     <button type="submit">Delete</button>

@@ -2,7 +2,7 @@ html, body {
     height: 100%;
     margin: 0;
     overflow: hidden;
-    font-family:"Exo", sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #map {
@@ -66,6 +66,11 @@ html, body {
     border: 1px solid transparent; /* Add border for better focus outline */
 }
 
+.ul-user {
+    margin-left:400px;
+    gap: 50px;
+}
+
 @media (max-width: 600px) {
     #controls {
         bottom: 10px;
@@ -102,6 +107,93 @@ html, body {
     100% {
         box-shadow: 0 0 0 rgba(200, 0, 0, 0.5);
     }
+}
+
+/* Media query for screen sizes between 1025px and 1280px */
+@media (min-width: 1025px) and (max-width: 1280px) {
+  nav ul li a {
+    font-size: 18px; /* Smaller font size for nav links */
+  }
+
+  .search-bar input {
+    font-size: 14px; /* Smaller input font size */
+    padding: 8px;
+  }
+
+  .search-bar button {
+    font-size: 14px; /* Smaller button font size */
+  }
+
+  .ul-user li a {
+    font-size: 16px; /* Smaller font for user-related items */
+  }
+}
+
+
+
+/* Media query for screen sizes between 1281px and 1366px */
+@media (min-width: 1281px) and (max-width: 1366px) {
+  nav ul li a {
+    font-size: 18px;/* Slightly smaller font size for nav links */
+  }
+
+  .logo {
+    height: 50px;
+    width: 120px;
+    margin-left: -10px;
+  }
+
+.search-bar input {
+    font-size: 14px; /* Smaller input font size */
+  }
+
+  .search-bar button {
+    font-size: 18px;/* Smaller button font size */
+    padding: 8px;
+  }
+
+
+  .ul-user li a {
+    font-size: 18px;/* Slightly smaller font for user-related items */
+  }
+
+  #controls {
+    bottom: 10px;
+    right: 10px;
+    padding: 15px 20px;
+    max-width: 30%;
+}
+
+}
+
+
+/* For large-screen laptops (1920px) */
+@media (min-width: 1367px) and (max-width: 1440px) {
+  nav ul li a {
+    font-size: 18x; /* Slightly smaller font size for nav links */
+  }
+
+  .logo {
+    height: 60px;
+    width: 130px;
+    margin-left: -10px;
+  }
+
+.search-bar input {
+    font-size: 18x; /* Smaller input font size */
+  }
+
+  .search-bar button {
+    font-size: 18px;/* Smaller button font size */
+    padding: 8px;
+  }
+
+
+  .ul-user li a {
+    font-size: 18px;/* Slightly smaller font for user-related items */
+    margin-left: auto;
+    justify-content: center;
+  }
 }
 
 
@@ -349,5 +441,4 @@ html, body {
 .leaflet-top leaflet-right {
     margin-top: 50px;
 }
-
 

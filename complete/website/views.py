@@ -422,11 +422,6 @@ def dashboard(request):
             notifications = request.user.notifications.all().order_by('-created_at')
         else:
             notifications = [] 
-        previous_visits = Visitor.objects.filter(ip_address=request.META.get('REMOTE_ADDR', None), user_agent=request.META.get('HTTP_USER_AGENT', None))
-        if  not previous_visits.exists():
-            Visitor.objects.create(
-                ip_address = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() or request.META.get('REMOTE_ADDR', None)
-            )
         all_businesses = Business.objects.all()
         all_users = NormalUser.objects.all()
         total_visitors = Visitor.objects.count()
