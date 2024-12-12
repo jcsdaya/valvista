@@ -77,6 +77,7 @@ class Place(models.Model):
                 return self.name
 
 class Rating(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     place = models.ForeignKey(Place, related_name='ratings', on_delete=models.CASCADE,null=True, blank=True)
     name = models.CharField(max_length=100,null=True, blank=True)
     score = models.IntegerField(choices=[(i, f"{i} Star") for i in range(1, 6)])
@@ -85,7 +86,7 @@ class Rating(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['place', 'name'], name='unique_place_name')
+            models.UniqueConstraint(fields=['place', 'name','user'], name='unique_place_name')
         ]
         
 class Category(models.Model):

@@ -85,34 +85,43 @@ def home(request):
 def ratingform(request, place_id):
     if not request.user.groups.filter(name='NormalUsers').exists():
         return redirect('login')
+    
+    place = get_object_or_404(Place, id=place_id)
+
+    # Check if the user has already rated this place
+    existing_rating = Rating.objects.filter(user=request.user, place=place).exists()
+    if existing_rating:
+        messages.error(request, 'You have already rated this place.')
+        return redirect('home')  # Redirect to home or any other relevant page
+
+    if request.method == 'POST':
+        form = RatingForm(request.POST)
+
+        if form.is_valid():
+            rating = form.save(commit=False)
+            rating.user = request.user  # Associate the rating with the logged-in user
+            rating.place = place  # Associate the rating with the specific place
+            rating.save()
+
+            # Create notifications for all users in the 'Admin' group
+            admin_group = Group.objects.get(name='Admin')
+            admins = User.objects.filter(groups=admin_group)
+
+            for admin in admins:
+                Notification.objects.create(
+                    user=admin,
+                    message=f"A new rating has been submitted for {place.name} by {request.user.username}.",
+                    placeid=place.id,
+                    origin="rating"
+                )
+
+            messages.success(request, 'Your rating has been submitted successfully!')
+            return redirect('ratingform', place_id=place_id)
     else:
-        place = get_object_or_404(Place, id=place_id)
-        if request.method == 'POST':
-            form = RatingForm(request.POST)
-            if form.is_valid():
-                rating = form.save(commit=False)
-                rating.user = request.user  # Set the user who is rating
-                rating.place = place
-                rating.save()
-                
-                # Create notifications for all users in the 'Admin' group
-                admin_group = Group.objects.get(name='Admin')
-                admins = User.objects.filter(groups=admin_group)
-
-                for admin in admins:
-                    Notification.objects.create(
-                        user=admin,
-                        message=f"A new rating has been submitted for {place.name} by {rating.name}.",
-                        placeid=place.id,
-                        origin="rating"
-                    )
-
-                messages.success(request, 'Your rating has been submitted successfully!')
-                return redirect('ratingform', place_id=place_id)
-        else:
-            form = RatingForm()
+        form = RatingForm()  # Create a blank form for GET requests
 
     return render(request, 'rating.html', {'form': form, 'place': place})
+
 
 @login_required
 def businessrating(request,buss_id):
@@ -414,15 +423,10 @@ def dashboard(request):
         else:
             notifications = [] 
         previous_visits = Visitor.objects.filter(ip_address=request.META.get('REMOTE_ADDR', None), user_agent=request.META.get('HTTP_USER_AGENT', None))
-        if previous_visits.exists():
-                # User is accessing from the same device and IP, don't create a new Visitor object
-                pass
-        else:
-                # User is accessing from a different device or IP, create a new Visitor object
-                Visitor.objects.create(
-                    ip_address=request.META.get('REMOTE_ADDR', None),
-                    user_agent=request.META.get('HTTP_USER_AGENT', None),
-                )
+        if  not previous_visits.exists():
+            Visitor.objects.create(
+                ip_address = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() or request.META.get('REMOTE_ADDR', None)
+            )
         all_businesses = Business.objects.all()
         all_users = NormalUser.objects.all()
         total_visitors = Visitor.objects.count()
@@ -524,11 +528,30 @@ def  deletebusiness(request,pk):
 
 def businesssign(request):
     if request.method == 'POST':
-        form = BusinessForm(request.POST or  None)
+        form = BusinessForm(request.POST or None)
         if form.is_valid():
-            form.save()
-        return redirect('login')
-    return render(request, 'businesssign.html',{})        
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            reference_number = form.cleaned_data.get('reference_number')
+            
+            # Check for duplicates
+            if Business.objects.filter(username=username).exists():
+                messages.error(request, 'This username is already taken.')
+            elif Business.objects.filter(email=email).exists():
+                messages.error(request, 'This email is already registered.')
+            elif Business.objects.filter(reference_number=reference_number).exists():
+                messages.error(request, 'This reference number is already in use.')
+            else:
+                # Save the form if no duplicates are found
+                form.save()
+                messages.success(request, 'Business account created successfully!')
+                return redirect('login')
+        else:
+            messages.error(request, 'There was an error in your submission. Please correct it.')
+    else:
+        form = BusinessForm()
+
+    return render(request, 'businesssign.html', {'form': form})
 
 @login_required
 def placelist(request):
